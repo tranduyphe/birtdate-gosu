@@ -28,22 +28,22 @@ const router = createRouter({
     routes, // short for `routes: routes`
 })
 
-// router.beforeEach((to, from, next) => {
-// 	let users = JSON.parse(localStorage.getItem('users') || "{}");
-//     document.title = to.meta.title;
-// 	let authenticated = Object.keys(users).length > 0 ? true : false;
-//     if (to.meta.middleware == "guest") {
-//         if (authenticated) {
-//             next({ name: "home" })
-//         }
-//         next();
-//     } else {
-//         if (authenticated) {
-//             next()
-//         } else {
-//             next({ name: "login" })
-//         }
-//     }
-// })
+router.beforeEach((to, from, next) => {
+	let users = JSON.parse(localStorage.getItem('users') || "{}");
+    document.title = to.meta.title;
+	let authenticated = Object.keys(users).length > 0 ? true : false;
+    if (to.meta.middleware == "guest") {
+        if (authenticated) {
+            next({ name: "home" })
+        }
+        next();
+    } else {
+        if (authenticated) {
+            next()
+        } else {
+            next({ name: "login" })
+        }
+    }
+})
 
 export default router
