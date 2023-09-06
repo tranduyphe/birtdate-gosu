@@ -19,6 +19,5 @@ Route::post('/login', [AuthController::class, 'login']);
 // private routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
     // logout 
-    Route::post('logout', [AuthController::class, 'logout']);
-    Route::post('post', [AuthController::class, 'post']);
+    Route::post('/logout', [AuthController::class, 'logout']);
 });

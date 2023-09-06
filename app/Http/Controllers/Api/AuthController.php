@@ -90,9 +90,12 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
+        //dd($request->json()->get('headers')['Authorization']);// get token
         Auth()->user()->tokens()->delete();
+        $data['logout'] = true;
         $results = array(
             'message' => 'Đăng xuất thành công.',
+            'data' => $data,
             'status' => Response::HTTP_OK
         );
         return response()->json($results);
