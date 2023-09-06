@@ -1,0 +1,108 @@
+@import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Homemade+Apple&family=Inter:wght@100;200;300;400;500;600;700;800&display=swap');
+:root {
+    --fontBlackHanSan: 'Black Han Sans', sans-serif;
+    --fontHomemadeApple: 'Homemade Apple', cursive;
+    --fontInter: 'Inter', sans-serif;
+    --green: #4a6f28;
+    --colorForm:#0B2525;
+}
+.main-login {
+    background-image: url('../images/bg_login.jpg');
+    background-size: cover;
+    font-size: 1.25rem;
+    color: var(--bs-white);
+    position: relative;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.main-login nav {
+    position: absolute;
+    width: 100%;
+}
+.content-login h1 {
+    color: var(--bs-white);
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    font-family: var(--fontBlackHanSan);
+    font-size: 9rem;
+    line-height: 100%;
+    margin: 0;
+}
+.content-login h2 {
+    color: var(--bs-white);
+    font-family: var(--fontHomemadeApple);
+    font-size: 5rem;
+    line-height: 100%;
+    color: #FFF;
+    margin: 0;
+}
+.main-login .nav-link {
+    color: var(--bs-white);
+    font-family: var(--fontInter);
+}
+.content-login .date {
+    font-size: 2.5rem;
+}
+.h-100vh {
+    height: 100vh;
+}
+.btn.btn-custom {
+    color: var(--bs-white);
+    font-family: var(--fontInter);
+    font-size: 1.25rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 150%;
+    text-transform: uppercase;
+    background-color: var(--green);
+    transition: all .3s ease-in-out;
+    -webkit-transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -ms-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+    border-color: var(--green);
+} 
+.btn.btn-custom:hover {
+    color:var(--green);
+    background-color: var(--bs-white);
+    transition: all .3s ease-in-out;
+    -webkit-transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -ms-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+}
+.mt-10 {
+    margin-top: 10rem;
+}
+.modalcustom .modal-content{
+    border-radius: 26px;
+    border: 1px solid #000;
+    background: rgba(110, 135, 134, 0.80);
+    backdrop-filter: blur(25px);
+}
+.modalcustom .modal-content .modal-body{
+    padding: 3rem 4.75rem;
+}
+.modalcustom .modal-dialog {
+    max-width: 1070px;
+}
+.frmLogin h4 {
+    color: var(--colorForm);
+    font-size: 2rem;
+    font-weight: 400;
+}
+.frmLogin label {
+    color: var(--colorForm);
+    font-size: 2rem;
+    font-weight: 400;
+}
+.frmLogin input {
+    border: 0;
+    border-radius: 0;
+    outline: none;
+}
+.error {
+    color: var(--bs-form-invalid-color);
+    display: block;
+    font-weight: 700;
+    font-size: 1rem;
+}
