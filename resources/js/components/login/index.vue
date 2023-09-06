@@ -24,7 +24,6 @@ export default {
         ...authMethods,
         async signIn(){
             let data = await this.login(this.dataLogin);
-            console.log('data: ' + data);
             if (data) {
                 this.message = data.message;
             }else{
