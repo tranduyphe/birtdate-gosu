@@ -16,6 +16,24 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
+
+
+Route::get('/login', function () {
+    return view('layouts.app');
+});
+
+Route::get('/logout', function () {
+    return view('layouts.app');
+});
+
+
+Route::get('/thu-vien-toan-tri', [App\Http\Controllers\HomeController::class, 'home'])->name('thu-vien-toan-tri');
+Route::get('/quest', [App\Http\Controllers\HomeController::class, 'quest'])->name('quest');
+Route::get('/minigame', [App\Http\Controllers\HomeController::class, 'home'])->name('home');
+Route::get('/launch', [App\Http\Controllers\HomeController::class, 'launch'])->name('launch');
+Route::get('/site-map', [App\Http\Controllers\HomeController::class, 'launch'])->name('launch');
+
+
 Route::get('{any}', function () {
     return view('layouts.app');
 })->where('any', '.*');
