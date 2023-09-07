@@ -54,7 +54,6 @@ export default {
             flag: false,
             diamond: 0,
             feathers: 0,
-
         };
     },
     created() {
@@ -64,21 +63,15 @@ export default {
     methods: {
         ...mapActions(["saveInfoUser", "saveGameId"]),
         getItemUser() {
-            let token = this.$store.getters.accessToken;
             let self = this;
             axios.get('/api/get-item', {
-                headers: {
-                    'Authorization': 'Bearer ' + token
-                }
             })
                 .then(function (response) {
                     if (response.data.status === 200 && response.data.success == true) {
                         self.diamond = response.data.data.diamond;
                         self.feathers = response.data.data.feathers;
                         console.log("response.data.data", response.data.data);
-
                     }
-
                 })
                 .catch((error) => {
                     console.log(error);
@@ -98,61 +91,52 @@ export default {
                 alert("Đá mặt trăng không đủ");
                 this.flag = false;
             } else {
-                alert("Đá mặt trăng -5");
-                let token = this.$store.getters.accessToken;
-                console.log("token", token);
+                // alert("Đá mặt trăng -5");
                 const formData = new FormData();
                 let self = this;
+                // const csrfToken = 'sai_csrf_token';
+                // axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken;
                 axios.post('/api/active-flip-tvtt', formData, {
-                    headers: {
-                        'Authorization': 'Bearer ' + token
-                    }
                 })
                     .then(function (response) {
-                        if (response.data.status === 200 && response.data.success == true) {
+                        if (response.data.status === 200) {
 
-
-                            if (response.data.data.user) {
-
-                                self.diamond = response.data.data.user.diamond
-                                self.feathers = response.data.data.user.feathers
-                            }
-                            if (response.data.data.reward) {
-                                let reward = response.data.data.reward;
-                                let message = "";
-                                for (let i = 0; i < reward.length; i++) {
-                                    console.log("reward[i]",reward[i].record);
-                                    console.log("reward[i].item_id: ",reward[i].item_id);
-                                    
-                                    if(reward[i].item_id == "1"){
-                                        console.log("message: ",message);
-                                        console.log("reward[i].record: ", reward[i].record);
-                                        message = message + " Lông phượng hoàng +"+ reward[i].record;
-                                        console.log("message: ",message);
-                                    }
-                                    if(reward[i].item_id == "2"){
-                                        message = message + " Đá mặt trăng +"+ reward[i].record;
-                                    }
+                            if (response.data.success == true) {
+                                if (response.data.data.user) {
+                                    self.diamond = response.data.data.user.diamond
+                                    self.feathers = response.data.data.user.feathers
                                 }
-                                alert(message);
-                                self.getFlip();
-                            }
+                                if (response.data.data.reward) {
+                                    let reward = response.data.data.reward;
+                                    let message = "";
+                                    for (let i = 0; i < reward.length; i++) {
+                                        console.log("reward[i]", reward[i].record);
+                                        console.log("reward[i].item_id: ", reward[i].item_id);
 
-                            // if (response.data.data.data_flip.choises && response.data.data.data_flip.choises.length == 0) {
-                            // setTimeout(() => {
-                            //     self.flipList = response.data.data.data_flip.active_flip;
-                            //     self.flag = false;
-                            // }, 500); // 500 milliseconds = 0.5 giây
-                            // } else {
-                            //     self.flag = false;
-                            // }
+                                        if (reward[i].item_id == "1") {
+                                            console.log("message: ", message);
+                                            console.log("reward[i].record: ", reward[i].record);
+                                            message = message + " Lông phượng hoàng +" + reward[i].record;
+                                            console.log("message: ", message);
+                                        }
+                                        if (reward[i].item_id == "2") {
+                                            message = message + " Đá mặt trăng +" + reward[i].record;
+                                        }
+                                    }
+                                    alert(message);
+                                    self.getFlip();
+                                    self.flag = false;
+                                }
+                            } else {
+                                alert(response.data.message);
+                                self.flag = false;
+                            }
                         } else {
                             self.flag = false;
                         }
                     })
                     .catch((error) => {
                         self.flag = false;
-                        console.log(error);
                     })
                     .finally();
             }

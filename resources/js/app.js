@@ -16,6 +16,8 @@ import Router from '@/routers';
 import config from './config';
 import VueAxios from 'vue-axios';
 import axios from 'axios';
+// const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+// axios.defaults.headers.common['X-CSRF-TOKEN'] = csrfToken;
 import store from '@/store';
 import Swal from 'sweetalert2';
 // import { saveAs } from "file-saver";

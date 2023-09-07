@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Cache;
 use App\Models\Minigame;
 use App\Models\LogItem;
 use App\Models\LogActivity;
+use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use App\Repositories\QuestRepository;
@@ -292,7 +293,7 @@ class FlipController extends Controller
                         }
                     }
                     if ($isWin) {
-                        $this->winGameReward($user,10);
+                        $this->winGameReward($user, 10);
                         // $user->feathers = $user->feathers + 10;
                         // $user->save();
                         // gửi thông tin để cập nhật quest:
@@ -384,9 +385,10 @@ class FlipController extends Controller
         //check win
 
     }
-    public function winGameReward($user,$record){
+    public function winGameReward($user, $record)
+    {
         // save history 
-        $this->saveLogItem($user,1,$record,"chiến thắng thử thách Bài Trùng tại Nhà Thi Đấu Xoẹt Xoẹt.");
+        $this->saveLogItem($user, 1, $record, "chiến thắng thử thách Bài Trùng tại Nhà Thi Đấu Xoẹt Xoẹt.");
         // $newLog = new LogItem();
         // $newLog->user_id = $user->id;  // Thiết lập user_id cho quest mới
         // $newLog->old = $user->feathers;
@@ -400,34 +402,27 @@ class FlipController extends Controller
         $QuestRepository = new QuestRepository();
         $questType = 4;
         $QuestRepository->updateQuest($user, $questType, 1);
-
     }
-    public function saveLogItem($user,$itemType,$record,$reason){
+    public function saveLogItem($user, $itemType, $record, $reason)
+    {
         // save history 
         $LogRepository = new LogRepository();
-        $LogRepository->saveLogItem($user,$itemType,$record,$reason);
-        // $newLog = new LogItem();
-        // $newLog->user_id = $user->id;  // Thiết lập user_id cho quest mới
-        
-        // if($itemType == 1){
-        //     $newLog->old = $user->feathers;
-        //     $newLog->new = $user->feathers + $record;
-        // }elseif($itemType == 2){
-        //     $newLog->old = $user->diamond;
-        //     $newLog->new = $user->diamond + $record;
-        // }
-        
-        // $newLog->item_type = $itemType;
-        // $newLog->reason = $reason;
-        // $newLog->save();
+        $LogRepository->saveLogItem($user, $itemType, $record, $reason);
     }
-    public function saveLogActivity($user,$activityType,$reason){
+    public function saveLogItemWithValue($user, $itemType, $record, $oldValue, $newValue, $reason)
+    {
         // save history 
         $LogRepository = new LogRepository();
-        $LogRepository->saveLogActivity($user,$activityType,$reason);
+        $LogRepository->saveLogItemWithValue($user, $itemType, $record, $oldValue, $newValue, $reason);
+    }
+    public function saveLogActivity($user, $activityType, $reason)
+    {
+        // save history 
+        $LogRepository = new LogRepository();
+        $LogRepository->saveLogActivity($user, $activityType, $reason);
         // $newLog = new LogActivity();
         // $newLog->user_id = $user->id;  // Thiết lập user_id cho quest mới
-        
+
         // $newLog->type = $activityType;
         // $newLog->reason = $reason;
         // $newLog->save();
@@ -441,76 +436,97 @@ class FlipController extends Controller
         if (!$user || $user->diamond < 5) {
             $response = [
                 "status" => 200,
-                "message" => "lông vũ đã hết!",
+                "message" => "Đá mặt trăng không đủ!",
                 "data" => ['data_flip' => []],
                 "success" => false
             ];
             return response()->json($response);
         }
-        // dump($user);die;
-        $listFlips = [];
-        $activeFlips = [];
-        $colors = [
-            'white',
-            'blue',
-            'red',
-            'green',
-            'pink',
-            'orange'
-        ];
-        $type = [
-            1, 1, 1, 1, 1, 1, 1, 1, 1,
-            2, 2, 2, 2, 2, 2, 2, 2, 2,
-            3, 3, 3, 3, 3, 3, 3, 3, 3,
-            4, 4, 4, 4, 4, 4, 4, 4, 4,
-            5, 5, 5, 5, 5, 5, 5, 5, 5,
-        ];
-        shuffle($type);
-        for ($i = 0; $i < 45; $i++) {
-            $activeFlips[] = [
-                'active' => 0,
-                'type' => 0
-            ];
-            $listFlips[] = [
-                'active' => 0,
-                'type' => $type[$i]
-            ];
-        }
-        $dataActionFlip = [
-            'active_flip' => $activeFlips,
-            'choises' => [],
-            'waiting' => []
-        ];
+        $response = null;
+        DB::transaction(function () use ($user, &$response) {
+            try {
+                $amount = 5;
+                $affectedRows = User::where('id', $user->id)
+                    ->whereRaw('diamond >= ?', [$amount])
+                    ->decrement('diamond', $amount);
 
-        $minigameData = new Minigame([
-            'user_id' => $user->id,
-            'list_flips' => json_encode($listFlips),
-            'active_flips' => json_encode($dataActionFlip),
-            'flag' => 0
-        ]);
-        
-        $this->saveLogItem($user,2,-5,"Tham gia thử thách Bài Trùng tại Nhà Thi Đấu Xoẹt Xoẹt.");
-        $this->saveLogActivity($user,2,"Tham gia thử thách Bài Trùng tại Nhà Thi Đấu Xoẹt Xoẹt.");
-        $user->diamond = $user->diamond - 5;
-        $user->save();
-        $minigameData->save();
-        // Cache::put('data_game_' . $user->id . 'gid' . $minigameData->id, json_encode(['list_flips' => $listFlips, 'active_flips' => $dataActionFlip]), now()->addMinutes(20));
+                if (!($affectedRows > 0)) {
+                    throw new \Exception("Đá mặt trăng không đủ!!");
+                };
 
-        // hoàn thành nhiệm vụ: 3
-        $QuestRepository = new QuestRepository();
-        $questType = 3;
-        $QuestRepository->updateQuest($user, $questType, 1);
+                $user->refresh();
+                $newValue = $user->diamond;
+                // $this->saveLogItem($user,2,-5,"Tham gia thử thách Tích Kỳ tại Thư Viện Toàn Tri.");
+                $this->saveLogItemWithValue($user, 2, $amount * (-1), $newValue + $amount, $newValue, "Tham gia thử thách Bài Trùng tại Nhà Thi Đấu Xoẹt Xoẹt.");
+                $this->saveLogActivity($user, 2, "Tham gia thử thách Bài Trùng tại Nhà Thi Đấu Xoẹt Xoẹt.");
+                // dump($user);die;
+                $listFlips = [];
+                $activeFlips = [];
+                $type = [
+                    1, 1, 1, 1, 1, 1, 1, 1, 1,
+                    2, 2, 2, 2, 2, 2, 2, 2, 2,
+                    3, 3, 3, 3, 3, 3, 3, 3, 3,
+                    4, 4, 4, 4, 4, 4, 4, 4, 4,
+                    5, 5, 5, 5, 5, 5, 5, 5, 5,
+                ];
+                shuffle($type);
+                for ($i = 0; $i < 45; $i++) {
+                    $activeFlips[] = [
+                        'active' => 0,
+                        'type' => 0
+                    ];
+                    $listFlips[] = [
+                        'active' => 0,
+                        'type' => $type[$i]
+                    ];
+                }
+                $dataActionFlip = [
+                    'active_flip' => $activeFlips,
+                    'choises' => [],
+                    'waiting' => []
+                ];
 
-        $response = [
-            "status" => 200,
-            "message" => "success",
-            "data" => [
-                'data_flip' => $dataActionFlip,
-                'user' => $user,
-                'game_id' => $minigameData->id
-            ],
-            "success" => true
-        ];
+                $minigameData = new Minigame([
+                    'user_id' => $user->id,
+                    'list_flips' => json_encode($listFlips),
+                    'active_flips' => json_encode($dataActionFlip),
+                    'flag' => 0
+                ]);
+                $minigameData->save();
+                // Cache::put('data_game_' . $user->id . 'gid' . $minigameData->id, json_encode(['list_flips' => $listFlips, 'active_flips' => $dataActionFlip]), now()->addMinutes(20));
+
+                // hoàn thành nhiệm vụ: 3
+                $QuestRepository = new QuestRepository();
+                $questType = 3;
+                $QuestRepository->updateQuest($user, $questType, 1);
+
+                DB::commit();
+                $response = [
+                    "status" => 200,
+                    "message" => "success",
+                    "data" => [
+                        'data_flip' => $dataActionFlip,
+                        'user' => $user,
+                        'game_id' => $minigameData->id
+                    ],
+                    "success" => true
+                ];
+            } catch (\Exception $e) {
+                // Nếu có lỗi, quay lại trạng thái ban đầu và xử lý lỗi
+                DB::rollback();
+                $user->refresh();
+                // Khôi phục giá trị "diamond" ban đầu
+                // Trả về thông báo lỗi hoặc thực hiện xử lý lỗi khác ở đây
+
+                $response = [
+                    "status" => 200,
+                    "message" => "Có lỗi trong lúc xử lý!",
+                    "data" => ['data_flip' => []],
+                    "success" => false
+                ];
+            }
+        });
+
         return response()->json($response);
     }
 
@@ -522,77 +538,121 @@ class FlipController extends Controller
         if (!$user || $user->diamond < 5) {
             $response = [
                 "status" => 200,
-                "message" => "lông vũ đã hết!",
+                "message" => "Đá mặt trăng không đủ!",
                 "data" => ['data_flip' => []],
                 "success" => false
             ];
             return response()->json($response);
         }
-        $this->saveLogItem($user,2,-5,"Tham gia thử thách Tích Kỳ tại Thư Viện Toàn Tri.");
-        $this->saveLogActivity($user,2,"Tham gia thử thách Tích Kỳ tại Thư Viện Toàn Tri.");
-        $user->diamond = $user->diamond - 5;
-        $user->save();
+        $response = null;
+        //start transaction
+        DB::transaction(function () use ($user, &$response) {
+            try {
+                // $oldValue = $user->diamond;
+                $amount = 5;
+                $affectedRows = User::where('id', $user->id)
+                    ->whereRaw('diamond >= ?', [$amount])
+                    ->decrement('diamond', $amount);
+                if (!($affectedRows > 0)) {
+                    throw new \Exception("Đá mặt trăng không đủ!");
+                };
+                $user->refresh();
+                $newValue = $user->diamond;
+                // $this->saveLogItem($user,2,-5,"Tham gia thử thách Tích Kỳ tại Thư Viện Toàn Tri.");
+                $this->saveLogItemWithValue($user, 2, $amount * (-1), $newValue + $amount, $newValue, "Tham gia thử thách Tích Kỳ tại Thư Viện Toàn Tri.");
+                $this->saveLogActivity($user, 2, "Tham gia thử thách Tích Kỳ tại Thư Viện Toàn Tri.");
 
-        $itemRandom = [
-            [
-                'item'=> [['item_id'=>1,'record'=>1]],
-                'weight'=>200
-            ],
-            [
-                'item'=> [['item_id'=>1,'record'=>5]],
-                'weight'=>200
-            ],
-            [
-                'item'=> [['item_id'=>1,'record'=>10]],
-                'weight'=>100
-            ],
-            [
-                'item'=> [['item_id'=>2,'record'=>1]],
-                'weight'=>200
-            ],
-            [
-                'item'=> [['item_id'=>2,'record'=>5]],
-                'weight'=>200
-            ],
-            [
-                'item'=> [['item_id'=>2,'record'=>10]],
-                'weight'=>100
-            ],
-        ];
-        $totalWeight = 0;
-        $randomWeight = rand(1, 1000);
-        $listItems = [];
-        foreach ($itemRandom as $element) {
-            $totalWeight = $totalWeight + $element['weight'];
-            if ($totalWeight >=$randomWeight) {
-                $listItems = $element['item'];
-                break;
-            }
-        }
-        foreach ($listItems as $element) {
-            if($element['record']>0){
-                
-                $this->saveLogItem($user,$element['item_id'],$element['record'],"Tham gia thử thách Tích Kỳ tại Thư Viện Toàn Tri.");
-                if($element['item_id'] == 1){
-                    $user->feathers = $user->feathers + $element['record'];
+                $itemRandom = [
+                    [
+                        'item' => [['item_id' => 1, 'record' => 1]],
+                        'weight' => 200
+                    ],
+                    [
+                        'item' => [['item_id' => 1, 'record' => 5]],
+                        'weight' => 200
+                    ],
+                    [
+                        'item' => [['item_id' => 1, 'record' => 10]],
+                        'weight' => 100
+                    ],
+                    [
+                        'item' => [['item_id' => 2, 'record' => 1]],
+                        'weight' => 200
+                    ],
+                    [
+                        'item' => [['item_id' => 2, 'record' => 5]],
+                        'weight' => 200
+                    ],
+                    [
+                        'item' => [['item_id' => 2, 'record' => 10]],
+                        'weight' => 100
+                    ],
+                ];
+                $totalWeight = 0;
+                $randomWeight = rand(1, 1000);
+                $listItems = [];
+                foreach ($itemRandom as $element) {
+                    $totalWeight = $totalWeight + $element['weight'];
+                    if ($totalWeight >= $randomWeight) {
+                        $listItems = $element['item'];
+                        break;
+                    }
                 }
-                if($element['item_id'] == 2){
-                    $user->diamond = $user->diamond + $element['record'];
-                }
-            }
-            $user->save();
-        }
+                foreach ($listItems as $element) {
+                    if ($element['record'] > 0) {
 
-        $response = [
-            "status" => 200,
-            "message" => "success",
-            "data" => [
-                'user' => $user,
-                'reward' => $listItems
-            ],
-            "success" => true
-        ];
+                        $this->saveLogItem($user, $element['item_id'], $element['record'], "Tham gia thử thách Tích Kỳ tại Thư Viện Toàn Tri.");
+                        if ($element['item_id'] == 1) {
+                            $user->increment('feathers', $element['record']);
+                        }
+                        if ($element['item_id'] == 2) {
+                            $user->increment('diamond', $element['record']);
+                            // $user->diamond = $user->diamond + $element['record'];
+                        }
+                    }
+                    $user->save();
+                }
+                // Nếu không có lỗi, commit giao dịch
+                DB::commit();
+                $response = [
+                    "status" => 200,
+                    "message" => "success",
+                    "data" => [
+                        'user' => $user,
+                        'reward' => $listItems
+                    ],
+                    "success" => true
+                ];
+            } catch (\Exception $e) {
+                // Nếu có lỗi, quay lại trạng thái ban đầu và xử lý lỗi
+                DB::rollback();
+                $user->refresh();
+                // Khôi phục giá trị "diamond" ban đầu
+                // Trả về thông báo lỗi hoặc thực hiện xử lý lỗi khác ở đây
+                $errorMessage = $e->getMessage() ?? "Có lỗi trong lúc xử lý!";
+                $response = [
+                    "status" => 200,
+                    "message" => $errorMessage ,
+                    "data" => ['data_flip' => []],
+                    "success" => false
+                ];
+            }
+        });
+
         return response()->json($response);
+
+        // $oldValue = $user->diamond;
+        // $user->diamond = $user->diamond - 5;
+        // $user->save();
+        // $newValue = $user->diamond;
+        // $this->saveLogItemWithValue($user, 2, -5, $oldValue, $newValue, "Tham gia thử thách Tích Kỳ tại Thư Viện Toàn Tri.");
+        // $this->saveLogActivity($user, 2, "Tham gia thử thách Tích Kỳ tại Thư Viện Toàn Tri.");
+
+        // $user->diamond = $user->diamond - 5;
+        // $user->save();
+
+
+
 
     }
 }

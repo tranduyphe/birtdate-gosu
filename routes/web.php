@@ -19,11 +19,11 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/login', function () {
-    return view('layouts.app');
+    return view('layouts.home');
 });
 
 Route::get('/logout', function () {
-    return view('layouts.app');
+    return view('layouts.home');
 });
 
 
@@ -31,11 +31,11 @@ Route::get('/thu-vien-toan-tri', [App\Http\Controllers\HomeController::class, 'h
 Route::get('/quest', [App\Http\Controllers\HomeController::class, 'quest'])->name('quest');
 Route::get('/minigame', [App\Http\Controllers\HomeController::class, 'home'])->name('home');
 Route::get('/launch', [App\Http\Controllers\HomeController::class, 'launch'])->name('launch');
-Route::get('/site-map', [App\Http\Controllers\HomeController::class, 'launch'])->name('launch');
+Route::get('/site-map', [App\Http\Controllers\HomeController::class, 'launch'])->name('sitemap');
 
 
 Route::get('{any}', function () {
-    return view('layouts.app');
+    return view('layouts.home');
 })->where('any', '.*');
 
 // Route::get('/login', [App\Http\Controllers\Api\AuthController::class, 'login']);

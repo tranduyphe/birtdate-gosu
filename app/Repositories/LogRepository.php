@@ -35,6 +35,26 @@ class LogRepository
         $newLog->record = $record;
         $newLog->save();
     }
+    public function saveLogItemWithValue($user,$itemType,$record,$oldValue,$newValue,$reason)
+    {
+        // save history 
+        $newLog = new LogItem();
+        $newLog->user_id = $user->id;  // Thiết lập user_id cho quest mới
+        
+        if($itemType == 1){
+            $newLog->old = $oldValue;
+            $newLog->new = $newValue;
+        }elseif($itemType == 2){
+            $newLog->old = $oldValue;
+            $newLog->new = $newValue;
+        }
+        
+        $newLog->item_type = $itemType;
+        $newLog->reason = $reason;
+        $newLog->record = $record;
+        $newLog->save();
+    }
+    
 
     public function saveLogActivity($user,$activityType,$reason)
     {

@@ -63,9 +63,10 @@
 </div> -->
 
 <script>
-import { mapGetters, mapMutations, mapActions } from "vuex";
-import Vue from 'vue';
-import { store } from '../../store/store';
+import {
+    authGetters,
+    authMethods,
+} from "@/store/store";
 // Tạo kết nối Socket.io
 // import io from "socket.io-client";
 export default {
@@ -100,14 +101,11 @@ export default {
         this.getItemUser();
     },
     methods: {
-        ...mapActions(["saveInfoUser","saveGameId"]),
+        ...authMethods,
+        ...authGetters,
         getItemUser() {
-            let token = this.$store.getters.accessToken;
             let self = this;
             axios.get('/api/get-item', {
-                headers: {
-                    'Authorization': 'Bearer ' + token
-                }
             })
                 .then(function (response) {
                     if (response.data.status === 200 && response.data.success == true) {
@@ -141,9 +139,9 @@ export default {
             }
         },
 
-        getFlip() {
-            let token = this.$store.getters.accessToken;
-            let gameId = this.$store.getters.gameId;
+        async getFlip() {
+            
+            let gameId = await this.getGameId();
             // let gameId = 0;
             console.log("check gameID: ",this.$store.getters.gameId)
             let self = this;
@@ -151,9 +149,6 @@ export default {
                 params: {
                     game_id: gameId
                 },
-                headers: {
-                    'Authorization': 'Bearer ' + token
-                }
             })
                 .then(function (response) {
                     if (response.data.status === 200 && response.data.success == true) {
@@ -168,12 +163,12 @@ export default {
                 })
                 .finally();
         },
-        flipCard(index) {
+        async flipCard(index) {
             if (!this.checkGameOver && !this.flag) {
 
                 if (this.flipList[index].active == 0 && this.flipList[index].type == 0) {
-                    let token = this.$store.getters.accessToken;
-                    let gameId = this.$store.getters.gameId;
+                    
+                    let gameId = await this.getGameId();
                     const formData = new FormData();
                     formData.append("id", index);
                     formData.append("game_id", gameId);
@@ -182,9 +177,6 @@ export default {
                     this.flag = true;
                     
                     axios.post('/api/active-flip', formData, {
-                        headers: {
-                            'Authorization': 'Bearer ' + token
-                        }
                     })
                         .then(function (response) {
                             if (response.data.status === 200 && response.data.success == true) {
@@ -249,12 +241,8 @@ export default {
 
 
         reloadFlip() {
-            let token = this.$store.getters.accessToken;
             let self = this;
             axios.get('/api/reload-flip', {
-                headers: {
-                    'Authorization': 'Bearer ' + token
-                }
             })
                 .then(function (response) {
                     if (response.data.status === 200 && response.data.success == true) {
