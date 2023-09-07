@@ -1,18 +1,26 @@
 <template>
     <div class="wrapper-content" :style="{ backgroundImage:backgroundImageUrl() }">
         <div class="div-content">
-            <div class="div-img thap-thanh-tuu" data-aos="fade-down" @click="openModalThapThanhTuu">
-                <img :src="thapthanhtuuimgUrl" alt="Tháp Thành Tựu" width="485">
+            <div class="div-img thap-thanh-tuu" data-aos="fade-down">
+                <button class="" data-bs-toggle="modal" data-bs-target="#ThapThanhTuuModal">
+                    <img :src="thapthanhtuuimgUrl" alt="Tháp Thành Tựu" width="485">
+                </button>
             </div>
             <!-- <button class="div-img thap-thanh-tuu" @click="showMedalPopupCKT"> <img :src="thapthanhtuuimgUrl" alt="Tháp Thành Tựu" width="485"></button> -->
-            <div class="div-img thu-vien-toan-tri" @click="openModalThuVien" data-aos="fade-right">
-                <img :src="thuvienimgUrl" alt="Thư Viện Toàn Tri" width="295">
+            <div class="div-img thu-vien-toan-tri"  data-aos="fade-right">
+                <button class="" data-bs-toggle="modal" data-bs-target="#ThuVienModal">
+                    <img :src="thuvienimgUrl" alt="Thư Viện Toàn Tri" width="295">
+                </button>
             </div>
             <div class="div-img nha-thi-dau" data-aos="fade-up">
-                <img :src="nhathidauimgUrl" alt="Nhà Thi Đấu" width="290">
+                <button class="" data-bs-toggle="modal" data-bs-target="#NhaThiDauModal">
+                    <img :src="nhathidauimgUrl" alt="Nhà Thi Đấu" width="290">
+                </button>
             </div>
             <div class="div-img sanh-hop-hep" data-aos="fade-left">
-                <img :src="sanhhophepimgUrl" alt="Sảnh Họp Hẹp" width="295">
+                <button class="" data-bs-toggle="modal" data-bs-target="#SanhHopHepModal">
+                    <img :src="sanhhophepimgUrl" alt="Sảnh Họp Hẹp" width="295">
+                </button>
             </div>
             <div class="div-img items thongbao" data-aos="fade-left">
                 <img :src="thongbaoimgUrl" alt="Thông báo" width="">
@@ -37,33 +45,49 @@
                 <a href="javascript:void(0)" @click="logoutSubmit" class="logout mb-0 pl-2">Thoát</a>
             </div>
         </div>
-        <b-modal v-model="showModalThuVien" id="ThuVienModal2" hide-footer centered hide-header>
-            <button class="btn-close btn" @click="closeModalThuVien"><img :src="closeimgUrl" alt=""></button>
-            <ModalThuVien ></ModalThuVien>
-        </b-modal>
-        <b-modal v-model="showModalThapThanhTuu" id="ThapThanhTuuModal" hide-footer centered hide-header>
-            <button class="btn-close btn" @click="closeModalThapThanhTuu"><img :src="closeimgUrl" alt=""></button>
-            <ModalThapThanhTuu></ModalThapThanhTuu>
-        </b-modal>
-        
-        <!-- Modal -->
-        <!-- <div class="modal fade" id="ThuVienModal" tabindex="-1" role="dialog" aria-labelledby="medalModalLabel"
-            aria-hidden="true">
-            
-            
-            <div class="modal-dialog" role="document">
+
+        <div class="modal fade modalNhaThiDau" id="NhaThiDauModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        
-                        <ModalThapThanhTuu></ModalThapThanhTuu>
-                        
-                    </div>
-                    <div class="modal-footer">
-                            <button class="btn-close btn" @click="closeMedalPopupCKT"><img :src="closeimgUrl" alt=""></button>
+                    <div class="modal-body">
+                        <button type="button" ref="closeModal" class="btn close-button" data-bs-dismiss="modal" aria-label="Close"><img :src="closeimgUrl" alt=""></button>
+                        <ModalNhaThiDau ></ModalNhaThiDau>
                     </div>
                 </div>
             </div>
-        </div> -->
+        </div>
+
+        <div class="modal fade modalThuVien" id="ThuVienModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <button type="button" ref="closeModal" class="btn close-button" data-bs-dismiss="modal" aria-label="Close"><img :src="closeimgUrl" alt=""></button>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade modalSanhHopHep" id="SanhHopHepModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <button type="button" ref="closeModal" class="btn close-button" data-bs-dismiss="modal" aria-label="Close"><img :src="closeimgUrl" alt=""></button>                       
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade modalThapThanhTuu" id="ThapThanhTuuModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <button type="button" ref="closeModal" class="btn close-button" data-bs-dismiss="modal" aria-label="Close"><img :src="closeimgUrl" alt=""></button>
+                        <ModalThapThanhTuu ></ModalThapThanhTuu>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     
 </template>
@@ -73,15 +97,15 @@
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
-import ModalThuVien from './modal-detail/thuvien-modal.vue';
+import ModalNhaThiDau from './modal-detail/nhathidau-modal.vue';
 import ModalThapThanhTuu from './modal-detail/thapthanhtuu-modal.vue';
 
 import { mapGetters, mapMutations, mapActions } from "vuex";
 
 export default {
     components: {
-        ModalThuVien,
-        ModalThapThanhTuu
+        ModalNhaThiDau,
+        ModalThapThanhTuu,
     },
     data() {
         return {
@@ -169,6 +193,20 @@ export default {
     position: absolute;
 }
 
+.wrapper-content .div-img button{
+    transition: all 500ms linear;
+    background: transparent;
+    border: none;
+}
+
+.wrapper-content .div-img button:focus,.wrapper-content .div-img button:active{
+    box-shadow: none;
+    border: none;
+    transform: none;
+}
+
+
+
 .wrapper-content .div-img img,.banner-name{
     transition: all 300ms linear;
     cursor: pointer;
@@ -252,22 +290,23 @@ export default {
     border: 2.5px solid #ffffff;
 }
 
-button.btn-close{
+button.close-button{
     position: absolute;
-    right: -13px;
-    top: 111px;
+    right: -53px;
+    top: 120px;
     transition: all 200ms linear;
 }
 
-button.btn-close:hover{
+button.close-button:hover{
     filter: brightness(130%);
 }
 
-button.btn-close:focus{
+button.close-button:focus,button.close-button:active{
     box-shadow: none;
+    border: none;
 }
 
-#ThapThanhTuuModal button.btn-close{
+#ThapThanhTuuModal button.close-button{
     right: -53px;
     top: 155px;
 }
