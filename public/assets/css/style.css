@@ -441,12 +441,35 @@ textarea {
   font-style: normal;
   font-display: swap;
 }
+#NhaThiDauModal .modal-dialog {
+  max-height: 830px;
+  max-width: 1472px;
+  width: 100%;
+  height: auto;
+}
+#NhaThiDauModal .modal-dialog .modal-content {
+  background-image: url(/images/detail-nha-thi-dau.png?8cf76bad9eedb8cafe83f2a7804dc03d);
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  height: 830px;
+}
+#NhaThiDauModal .modal-dialog .modal-content .modal-body {
+  padding-top: 15rem;
+  padding-left: 85px;
+  padding-right: 85px;
+}
+
 #ThuVienModal .modal-dialog {
-  min-height: 830px;
-  min-width: 1472px;
+  max-height: 830px;
+  max-width: 1472px;
+  width: 100%;
+  height: auto;
 }
 #ThuVienModal .modal-dialog .modal-content {
-  background-image: url(/images/detail-thu-vien-toan-tri.png?5a2169001a9a8cccd3e10826fcaadff5);
+  background-image: url(/images/detail-thu-vien.png?307cbce25881e359bc0eb02c5239d335);
   background-size: cover;
   background-repeat: no-repeat;
   width: 100%;
@@ -455,23 +478,48 @@ textarea {
   height: 830px;
 }
 #ThuVienModal .modal-dialog .modal-content .modal-body {
-  padding-top: 14rem;
+  padding-top: 15rem;
   padding-left: 85px;
-  padding-right: 130px;
+  padding-right: 85px;
+}
+
+#SanhHopHepModal .modal-dialog {
+  max-height: 830px;
+  max-width: 1472px;
+  width: 100%;
+  height: auto;
+}
+#SanhHopHepModal .modal-dialog .modal-content {
+  background-image: url(/images/detail-sanh-hop-hep.png?0b47876ca0aa8bc194e012ea1c864db6);
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  height: 830px;
+}
+#SanhHopHepModal .modal-dialog .modal-content .modal-body {
+  padding-top: 15rem;
+  padding-left: 85px;
+  padding-right: 85px;
 }
 
 #ThapThanhTuuModal .modal-dialog {
-  min-height: 862px;
-  min-width: 1433px;
+  max-height: 862px;
+  max-width: 1433px;
+  width: 100%;
+  height: auto;
+  margin-left: 310px;
 }
 #ThapThanhTuuModal .modal-dialog .modal-content {
-  background-image: url(/images/detail-thap-thanh-tuu.png?7081907c049123ec0ea1484d7ed660d6);
+  background-image: url(/images/detail-thap-thanh-tuu.png?f62af6dc2abcc28aad54aa227985540a);
   background-size: cover;
   background-repeat: no-repeat;
   width: 100%;
   background-color: transparent;
   border: none;
   height: 862px;
+  position: relative;
 }
 #ThapThanhTuuModal .modal-dialog .modal-content .modal-body {
   padding-top: 20rem;

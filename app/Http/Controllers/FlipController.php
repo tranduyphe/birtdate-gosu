@@ -138,19 +138,26 @@ class FlipController extends Controller
         $gameId = $request->input('game_id');
         $id = $request->input('id');
 
-        $colors = [
-            'white',
-            'blue',
-            'red',
-            'green',
-            'pink',
-            'orange'
+        $img_colors = [
+            'transparent',
+            'thuvien-itemPuple',
+            'thuvien-itemRed',
+            'thuvien-itemGreen',
+            'thuvien-itemPink',
+            'thuvien-itemYellow'
         ];
         $listFlips = [];
         $activeFlips = [];
         $choises = [];
         $saveWaiting = [];
         $waiting = [];
+
+        $colors = [];
+
+        foreach ($img_colors as $color) {
+            $imagePath = 'images/sinhnhat11nam/' . $color . '.png'; // Đường dẫn tương đối đến ảnh
+            $colors[] = asset($imagePath); // Sử dụng hàm asset để tạo đường dẫn tới ảnh
+        }
 
         // lấy thông tin flip
 

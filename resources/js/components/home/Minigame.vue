@@ -1,40 +1,41 @@
 <template>
     <div class="game-thuvientoantri">
         <h1 class="text-center mt-5" v-if="checkGameOver">Game Over</h1>
-        <button class="btn-start btn btn-primary" @click="reloadFlip()">Bắt đầu</button>
-        <div class="" v-if="flipList != nul">
+        <button class="btn-start" @click="reloadFlip()">Làm mới</button>
+        
             <div class="row justify-content-center align-items-center">
                 <div class="minigame-thuvien">
-                    <div v-for="row in 3" :key="row"  class="row justify-content-center align-items-center">
-                        <div v-for="col in 15" :key="col" class="cell">
-                            <div v-if="flipList[(row - 1) * 15 + col - 1]" class="card mb-0" 
-                            :class="{ flipped: flipList[(row - 1) * 15 + col - 1].active > 0,  }" 
-                            @click="flipCard((row - 1) * 15 + col - 1)" 
-                            :style="{ opacity: flipList[(row - 1) * 15 + col - 1].active == 2 ? '0' : '1'}">
-                                <div class="image" :style="{backgroundImage: backgroundImageUrl(flipList[(row - 1) * 15 + col - 1].type)}" style="height: 50px;width: 50px;">
-                                    <img :src="backgroundImageUrl(flipList[(row - 1) * 15 + col - 1].type)" alt="" width="65">
+                    <div class="" v-if="flipList != nul">
+                        <div v-for="row in 3" :key="row"  class="row justify-content-center align-items-center" data-aos="fade-up">
+                            <div v-for="col in 15" :key="col" class="cell p-0">
+                                <div v-if="flipList[(row - 1) * 15 + col - 1]" class="card mb-0" 
+                                :class="{ flipped: flipList[(row - 1) * 15 + col - 1].active > 0,  }" 
+                                @click="flipCard((row - 1) * 15 + col - 1)" 
+                                :style="{ opacity: flipList[(row - 1) * 15 + col - 1].active == 2 ? '0' : '1'}">
+                                    <div class="image">
+                                        <img data-aos="fade-up" :src="flipList[(row - 1) * 15 + col - 1].color == null ? imgtransparent : flipList[(row - 1) * 15 + col - 1].color" alt="" width="65" height="65">
+                                    </div>
                                 </div>
-                            </div>
-                        </div> 
-                    </div>
-                    <div class="line-break text-center my-3">
-                        <img :src="lineBrealimg" alt="">
+                            </div> 
+                        </div>
                     </div>
                 </div>
-
-                <div class="cell-wait col-md-6 mt-2">
-                    <p class="font-size-13">Số ô chờ đã fill/số ô chờ tổng&nbsp;<span class="p-1">{{ waiting.length }}/6</span></p>
+                <div class="line-break text-center my-3">
+                    <img :src="lineBrealimg" alt="">
+                </div>
+                <div class="cell-wait col-md-8 mt-2 pl-5">
+                    <p class="text-wait font-size-16">&#9830;&nbsp;Số ô chờ đã fill/số ô chờ tổng&nbsp;<span class="px-1">{{ waiting.length }}/6</span></p>
                     <div class="row mt-4">
-                        <div class="item-wait" v-for="col in 6">
-                            <div class="card-wait mb-0 mr-3" :class="{ flipped: waiting[col - 1] && waiting[col - 1] > 0 }">
-                                <div class="image">
-                                    <img :src="cardBackgroundColor(col - 1)" alt="" width="65">
+                        <div class="item-wait p-0 mr-5" v-for="col in 6">
+                            <div class="card-wait mb-0" :class="{ flipped: waiting[col - 1] && waiting[col - 1] > 0 }">
+                                <div class="image" v-if="waiting[col - 1] && waiting[col - 1] > 0">
+                                    <img :src="cardBackgroundColor(col - 1)" alt="" width="65" height="65">
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="attribute-items mt-4 d-flex col-md-6 justify-content-end align-items-end">
+                <div class="attribute-items mt-4 d-flex col-md-4 justify-content-end align-items-end">
                     <div class="div-img items thongbao mr-5" data-aos="fade-down">
                         <img :src="thongbaoimgUrl" alt="Thông báo" width="">
                         <span class="font-size-14 text-white">{{ attrThongbao }}</span>
@@ -50,7 +51,6 @@
                 </div>
             </div>
         </div>
-    </div>
 </template>
 
 <!-- <div class="front">
@@ -93,7 +93,7 @@ export default {
             itemPuple:'/images/sinhnhat11nam/img_main/thuvien-itemPuple.png',
             itemGreen:'/images/sinhnhat11nam/img_main/thuvien-itemGreen.png',
             itemPink:'/images/sinhnhat11nam/img_main/thuvien-itemPink.png',
-
+            imgtransparent: '/images/sinhnhat11nam/img_main/transparent.png',
         };
     },
     created() {
@@ -384,13 +384,20 @@ export default {
     transition: all 300ms linear !important;
 }
 
-.game-thuvientoantri .cell{
+.game-thuvientoantri .cell, .game-thuvientoantri .item-wait{
     margin-right: 20px;
     margin-bottom: 30px;
+    max-width: 65px;
+    max-height: 65px;
 }
 
 .game-thuvientoantri .cell:nth-child(15n + 0){
     margin-right: 0px;
+}
+
+.game-thuvientoantri .minigame-thuvien{
+    min-height: 285px;
+    transition: all 500ms linear
 }
 
 .game-thuvientoantri .card{
@@ -399,13 +406,20 @@ export default {
     background-size: cover !important;
 }
 
+/* .game-thuvientoantri .row>*{
+    width: auto;
+} */
 
 .minigame-thuvien .image img,.card-wait{
-    transition: all 500ms linear
+    transition: all 1s linear
 }
 
 .flipped {
     transform: rotateY(180deg);
+}
+
+.cell-wait{
+    min-height: 145px;
 }
 
 .front,
@@ -455,9 +469,17 @@ export default {
 .btn-start{
     position: absolute;
     z-index: 5;
-    top: 155px;
-    left: 85px
+    top: 170px;
+    left: 105px;
+    color: #292929;
+    background: linear-gradient(to bottom, #f1c461, #a1813f);
+    border-radius: 5px;
+    border: none;
+    padding: 10px 20px;
+    font-weight: bold;
+    transition: all 300ms linear;
 }
+
 
 .attribute-items .div-img{
     position: relative;
@@ -472,11 +494,11 @@ export default {
 }
 
 .attribute-items .div-img.items.longvu span{
-    bottom: 28px;
+    bottom: 30px;
     transform: translate(60%, 0%);
 }
 
-.attribute-items .div-img img:hover{
+.attribute-items .div-img img:hover,.btn-start:hover{
     filter: brightness(140%);
 }
 
