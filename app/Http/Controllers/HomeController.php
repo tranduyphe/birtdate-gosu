@@ -71,7 +71,7 @@ class HomeController extends Controller
             $questType = 0;
             $QuestRepository->updateQuest($user, $questType, 1);
         }
-        return view('layouts.home');
+        return view('layouts.launch');
     }
 
     /**
@@ -92,7 +92,7 @@ class HomeController extends Controller
             $QuestRepository->updateQuest($user, $questType, 1);
         }
         
-        return view('layouts.home');
+        return view('layouts.launch');
     }
     // public function getAccessToken(Request $request)
     // {

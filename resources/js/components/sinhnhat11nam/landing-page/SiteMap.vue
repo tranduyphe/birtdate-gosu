@@ -42,7 +42,7 @@
                     <img :src="sanhhophepimgUrl" alt="" class="avatar" width="65" height="65">
                     <p class="mb-0">&nbsp;Xin chào&nbsp;<strong>{{user_name}}</strong></p>
                 </div>
-                <a href="javascript:void(0)" @click="logoutSubmit" class="logout mb-0 pl-2">Thoát</a>
+                <a href="javascript:void(0)" @click="logoutSubmit" class="logout">Thoát</a>
             </div>
         </div>
 
@@ -298,8 +298,8 @@ export default {
 
 .banner-name{
     position: absolute;
-    top: 650px;
-    left: 523px;
+    top: 630px;
+    left: 450px;
 }
 
 .banner-name .infor-user{
@@ -312,10 +312,14 @@ export default {
 .banner-name p,.banner-name a{
     color: #66494e;
     font-size: 16px;
+    text-decoration: none;
 }
 
-.banner-name a{
-    border-left: 2px solid #66494e;
+.banner-name a::before{
+    content: '|';
+    color: #66494e;
+    margin-right: 5px;
+    font-weight: bold;
 }
 
 .banner-name img.avatar{
