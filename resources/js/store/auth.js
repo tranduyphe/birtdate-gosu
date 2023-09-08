@@ -22,7 +22,7 @@ const actions = {
                 commit('SET_AUTHENTICATED',true);
                 commit('SET_USER', data);
                 localStorage.setItem("users",JSON.stringify(data))
-                router.push( { name:'sitemap' } ) // redirect to the home page when login is successful
+                window.location.href = '/site-map';
             }else{
                 return results.data;
             }

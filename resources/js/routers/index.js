@@ -83,7 +83,7 @@ router.beforeEach((to, from, next) => {
 	let authenticated = Object.keys(users).length > 0 ? true : false;
 	if (to.meta.middleware == "guest") {
 		if (authenticated) {
-			next({ name: "home" })
+			next({ name: "sitemap" })
 		}
 		next();
 	} else {
@@ -91,6 +91,7 @@ router.beforeEach((to, from, next) => {
 			next()
 		} else {
 			next({ name: "login" })
+			
 		}
 	}
 })

@@ -29,7 +29,7 @@
                     role="tab"
                     aria-controls="v-tabs-profile"
                     aria-selected="false"
-                    >Lịch tưởng ký</a>
+                    >Chậu kỳ tích</a>
                 </div>
                 
                 <div class="nav-item mb-3">
@@ -41,7 +41,7 @@
                     role="tab"
                     aria-controls="v-tabs-messages"
                     aria-selected="false"
-                    >Chậu kỳ tích</a>
+                    >Lịch tưởng ký</a>
                 </div>
                 
             </div>

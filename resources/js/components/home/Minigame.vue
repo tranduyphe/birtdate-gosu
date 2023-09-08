@@ -2,55 +2,59 @@
     <div class="game-thuvientoantri">
         <h1 class="text-center mt-5" v-if="checkGameOver">Game Over</h1>
         <button class="btn-start" @click="reloadFlip()">Làm mới</button>
-        
-            <div class="row justify-content-center align-items-center">
-                <div class="minigame-thuvien">
-                    <div class="" v-if="flipList != nul">
-                        <div v-for="row in 3" :key="row"  class="row justify-content-center align-items-center" data-aos="fade-up">
-                            <div v-for="col in 15" :key="col" class="cell p-0">
-                                <div v-if="flipList[(row - 1) * 15 + col - 1]" class="card mb-0" 
-                                :class="{ flipped: flipList[(row - 1) * 15 + col - 1].active > 0,  }" 
-                                @click="flipCard((row - 1) * 15 + col - 1)" 
-                                :style="{ opacity: flipList[(row - 1) * 15 + col - 1].active == 2 ? '0' : '1'}">
-                                    <div class="image">
-                                        <img data-aos="fade-up" :src="flipList[(row - 1) * 15 + col - 1].color == null ? imgtransparent : flipList[(row - 1) * 15 + col - 1].color" alt="" width="65" height="65">
-                                    </div>
-                                </div>
-                            </div> 
-                        </div>
-                    </div>
-                </div>
-                <div class="line-break text-center my-3">
-                    <img :src="lineBrealimg" alt="">
-                </div>
-                <div class="cell-wait col-md-8 mt-2 pl-5">
-                    <p class="text-wait font-size-16">&#9830;&nbsp;Số ô chờ đã fill/số ô chờ tổng&nbsp;<span class="px-1">{{ waiting.length }}/6</span></p>
-                    <div class="row mt-4">
-                        <div class="item-wait p-0 mr-5" v-for="col in 6">
-                            <div class="card-wait mb-0" :class="{ flipped: waiting[col - 1] && waiting[col - 1] > 0 }">
-                                <div class="image" v-if="waiting[col - 1] && waiting[col - 1] > 0">
-                                    <img :src="cardBackgroundColor(col - 1)" alt="" width="65" height="65">
+
+        <div class="row justify-content-center align-items-center">
+            <div class="minigame-thuvien">
+                <div class="" v-if="flipList != nul">
+                    <div v-for="row in 3" :key="row" class="row justify-content-center align-items-center"
+                        data-aos="fade-up">
+                        <div v-for="col in 15" :key="col" class="cell p-0">
+                            <div v-if="flipList[(row - 1) * 15 + col - 1]" class="card mb-0"
+                                :class="{ flipped: flipList[(row - 1) * 15 + col - 1].active > 0, }"
+                                @click="flipCard((row - 1) * 15 + col - 1)"
+                                :style="{ opacity: flipList[(row - 1) * 15 + col - 1].active == 2 ? '0' : '1' }">
+                                <div class="image">
+                                    <img data-aos="fade-up"
+                                        :src="flipList[(row - 1) * 15 + col - 1].color == null ? imgtransparent : flipList[(row - 1) * 15 + col - 1].color"
+                                        alt="" width="65" height="65">
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="attribute-items mt-4 d-flex col-md-4 justify-content-end align-items-end">
-                    <div class="div-img items thongbao mr-5" data-aos="fade-down">
-                        <img :src="thongbaoimgUrl" alt="Thông báo" width="">
-                        <span class="font-size-14 text-white">{{ attrThongbao }}</span>
-                    </div>
-                    <div class="div-img items kimcuong mr-5" data-aos="fade-down">
-                        <img :src="kimcuongimgUrl" alt="Thông báo" width="">
-                        <span class="font-size-14 text-white">{{ diamond }}</span>
-                    </div>
-                    <div class="div-img items longvu" data-aos="fade-down">
-                        <img :src="longvuimgUrl" alt="Thông báo" width="">
-                        <span class="font-size-14 text-white">{{ feathers }}</span>
+            </div>
+            <div class="line-break text-center my-3">
+                <img :src="lineBrealimg" alt="">
+            </div>
+            <div class="cell-wait col-md-8 mt-2 pl-5">
+                <p class="text-wait font-size-16">&#9830;&nbsp;Số ô chờ đã fill/số ô chờ tổng&nbsp;<span class="px-1">{{
+                    waiting.length }}/6</span></p>
+                <div class="row mt-4">
+                    <div class="item-wait p-0 mr-5" v-for="col in 6">
+                        <div class="card-wait mb-0" :class="{ flipped: waiting[col - 1] && waiting[col - 1] > 0 }">
+                            <div class="image" v-if="waiting[col - 1] && waiting[col - 1] > 0">
+                                <img :src="cardBackgroundColor(col - 1)" alt="" width="65" height="65">
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+            <div class="attribute-items mt-4 d-flex col-md-4 justify-content-end align-items-end">
+                <div class="div-img items thongbao mr-5" data-aos="fade-down">
+                    <img :src="thongbaoimgUrl" alt="Thông báo" width="">
+                    <span class="font-size-14 text-white">{{ attrThongbao }}</span>
+                </div>
+                <div class="div-img items kimcuong mr-5" data-aos="fade-down">
+                    <img :src="kimcuongimgUrl" alt="Thông báo" width="">
+                    <span class="font-size-14 text-white">{{ diamond }}</span>
+                </div>
+                <div class="div-img items longvu" data-aos="fade-down">
+                    <img :src="longvuimgUrl" alt="Thông báo" width="">
+                    <span class="font-size-14 text-white">{{ feathers }}</span>
+                </div>
+            </div>
         </div>
+    </div>
 </template>
 
 <!-- <div class="front">
@@ -81,18 +85,18 @@ export default {
             flipList: [],
             waiting: [],
             flag: false,
-            diamond :0,
-            feathers:0,
+            diamond: 0,
+            feathers: 0,
             lineBrealimg: '/images/sinhnhat11nam/img_main/line-break.png',
             thongbaoimgUrl: '/images/sinhnhat11nam/img_main/thongbao.png',
             kimcuongimgUrl: '/images/sinhnhat11nam/img_main/kimcuong.png',
             longvuimgUrl: '/images/sinhnhat11nam/img_main/longvu.png',
-            attrThongbao: 340,
+            attrThongbao: 0,
             itemRed: '/images/sinhnhat11nam/img_main/thuvien-itemRed.png',
             itemYellow: '/images/sinhnhat11nam/img_main/thuvien-itemYellow.png',
-            itemPuple:'/images/sinhnhat11nam/img_main/thuvien-itemPuple.png',
-            itemGreen:'/images/sinhnhat11nam/img_main/thuvien-itemGreen.png',
-            itemPink:'/images/sinhnhat11nam/img_main/thuvien-itemPink.png',
+            itemPuple: '/images/sinhnhat11nam/img_main/thuvien-itemPuple.png',
+            itemGreen: '/images/sinhnhat11nam/img_main/thuvien-itemGreen.png',
+            itemPink: '/images/sinhnhat11nam/img_main/thuvien-itemPink.png',
             imgtransparent: '/images/sinhnhat11nam/img_main/transparent.png',
         };
     },
@@ -111,7 +115,7 @@ export default {
                     if (response.data.status === 200 && response.data.success == true) {
                         self.diamond = response.data.data.diamond;
                         self.feathers = response.data.data.feathers;
-                        console.log("response.data.data",response.data.data);
+                        console.log("response.data.data", response.data.data);
 
                     }
                 })
@@ -122,28 +126,28 @@ export default {
         },
 
         backgroundImageUrl(type) {
-            if(type == 1){
+            if (type == 1) {
                 return this.itemPuple;
             }
-            if(type == 2){
+            if (type == 2) {
                 return this.itemRed;
             }
-            if(type == 3){
+            if (type == 3) {
                 return this.itemGreen;
             }
-            if(type == 4){
+            if (type == 4) {
                 return this.itemPink;
             }
-            if(type == 5){
+            if (type == 5) {
                 return this.itemYellow;
             }
         },
 
         async getFlip() {
-            
+
             let gameId = await this.getGameId();
             // let gameId = 0;
-            console.log("check gameID: ",this.$store.getters.gameId)
+            console.log("check gameID: ", this.$store.getters.gameId)
             let self = this;
             axios.get('/api/get-flip', {
                 params: {
@@ -154,7 +158,7 @@ export default {
                     if (response.data.status === 200 && response.data.success == true) {
                         self.flipList = response.data.data.data_flip.active_flip;
                         self.waiting = response.data.data.data_flip.waiting ?? [];
-                        console.log("response.data.data",response.data.data);
+                        console.log("response.data.data", response.data.data);
 
                     }
                 })
@@ -167,7 +171,7 @@ export default {
             if (!this.checkGameOver && !this.flag) {
 
                 if (this.flipList[index].active == 0 && this.flipList[index].type == 0) {
-                    
+
                     let gameId = await this.getGameId();
                     const formData = new FormData();
                     formData.append("id", index);
@@ -175,7 +179,7 @@ export default {
                     let self = this;
                     let flipList = this.flipList;
                     this.flag = true;
-                    
+
                     axios.post('/api/active-flip', formData, {
                     })
                         .then(function (response) {
@@ -188,21 +192,41 @@ export default {
                                 if (response.data.data.user) {
                                     // const userResponseJSON = JSON.stringify(response.data.data.user);
                                     // self.saveInfoUser(userResponseJSON);
-                                    
+
                                     self.diamond = response.data.data.user.diamond
                                     self.feathers = response.data.data.user.feathers
                                     // this.$store.actions.saveInfoUser(response.data.data.user);
                                 }
                                 // if (response.data.data.data_flip.choises && response.data.data.data_flip.choises.length == 0) {
-                                    setTimeout(() => {
-                                        self.flipList = response.data.data.data_flip.active_flip;
-                                        self.waiting = response.data.data.data_flip.waiting;
-                                        self.flag = false;
-                                    }, 500); // 500 milliseconds = 0.5 giây
+                                setTimeout(() => {
+                                    self.flipList = response.data.data.data_flip.active_flip;
+                                    self.waiting = response.data.data.data_flip.waiting;
+                                    if (response.data.data.reward) {
+                                        let reward = response.data.data.reward;
+                                        let message = "";
+                                        for (let i = 0; i < reward.length; i++) {
+                                            console.log("reward[i]", reward[i].record);
+                                            console.log("reward[i].item_id: ", reward[i].item_id);
+
+                                            if (reward[i].item_id == "1") {
+                                                console.log("message: ", message);
+                                                console.log("reward[i].record: ", reward[i].record);
+                                                message = message + " Lông phượng hoàng +" + reward[i].record;
+                                                console.log("message: ", message);
+                                            }
+                                            if (reward[i].item_id == "2") {
+                                                message = message + " Đá mặt trăng +" + reward[i].record;
+                                            }
+                                        }
+                                        alert(message);
+                                    }
+                                    self.flag = false;
+                                }, 500); // 500 milliseconds = 0.5 giây
+
                                 // } else {
                                 //     self.flag = false;
                                 // }
-                            }else{
+                            } else {
                                 self.flag = false;
                             }
                         })
@@ -384,23 +408,24 @@ export default {
     transition: all 300ms linear !important;
 }
 
-.game-thuvientoantri .cell, .game-thuvientoantri .item-wait{
+.game-thuvientoantri .cell,
+.game-thuvientoantri .item-wait {
     margin-right: 20px;
     margin-bottom: 30px;
     max-width: 65px;
     max-height: 65px;
 }
 
-.game-thuvientoantri .cell:nth-child(15n + 0){
+.game-thuvientoantri .cell:nth-child(15n + 0) {
     margin-right: 0px;
 }
 
-.game-thuvientoantri .minigame-thuvien{
+.game-thuvientoantri .minigame-thuvien {
     min-height: 285px;
     transition: all 500ms linear
 }
 
-.game-thuvientoantri .card{
+.game-thuvientoantri .card {
     background-repeat: no-repeat !important;
     background-position: center center !important;
     background-size: cover !important;
@@ -410,7 +435,8 @@ export default {
     width: auto;
 } */
 
-.minigame-thuvien .image img,.card-wait{
+.minigame-thuvien .image img,
+.card-wait {
     transition: all 1s linear
 }
 
@@ -418,7 +444,7 @@ export default {
     transform: rotateY(180deg);
 }
 
-.cell-wait{
+.cell-wait {
     min-height: 145px;
 }
 
@@ -466,7 +492,7 @@ export default {
     animation: flip 0.5s;
 }
 
-.btn-start{
+.btn-start {
     position: absolute;
     z-index: 5;
     top: 170px;
@@ -481,11 +507,11 @@ export default {
 }
 
 
-.attribute-items .div-img{
+.attribute-items .div-img {
     position: relative;
 }
 
-.attribute-items .div-img.items span{
+.attribute-items .div-img.items span {
     position: absolute;
     bottom: 26px;
     right: 50%;
@@ -493,14 +519,14 @@ export default {
     transform: translate(50%, 0%);
 }
 
-.attribute-items .div-img.items.longvu span{
+.attribute-items .div-img.items.longvu span {
     bottom: 30px;
     transform: translate(60%, 0%);
 }
 
-.attribute-items .div-img img:hover,.btn-start:hover{
+.attribute-items .div-img img:hover,
+.btn-start:hover {
     filter: brightness(140%);
 }
 
-/* ... CSS sau đó ... */
-</style>
+/* ... CSS sau đó ... */</style>

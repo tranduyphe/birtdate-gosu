@@ -301,12 +301,6 @@ class FlipController extends Controller
                     }
                     if ($isWin) {
                         $this->winGameReward($user, 10);
-                        // $user->feathers = $user->feathers + 10;
-                        // $user->save();
-                        // gửi thông tin để cập nhật quest:
-                        // $QuestRepository = new QuestRepository();
-                        // $questType = 4;
-                        // $QuestRepository->updateQuest($user, $questType, 1);
 
 
                         $response = [
@@ -315,7 +309,8 @@ class FlipController extends Controller
                             "data" => [
                                 'data_flip' => $dataActionFlip,
                                 'game_status' => 2,
-                                'user' => $user
+                                'user' => $user,
+                                'reward' => [['item_id'=>1,'record'=>10]]
                             ],
                             "success" => true
                         ];
@@ -403,7 +398,8 @@ class FlipController extends Controller
         // $newLog->reason = "chiến thắng thử thách Bài Trùng tại Nhà Thi Đấu Xoẹt Xoẹt.";
         // $newLog->save();
 
-        $user->feathers = $user->feathers + $record;
+        // $user->feathers = $user->feathers + $record;
+        $user->increment('feathers', $record);
         $user->save();
         // gửi thông tin để cập nhật quest:
         $QuestRepository = new QuestRepository();

@@ -34,7 +34,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        
+
         return redirect(route("home"));
     }
 
@@ -46,11 +46,13 @@ class HomeController extends Controller
     public function launch(Request $request)
     {
         $user = $request->user();
-        // dump($user);die;
-        // gửi thông tin để cập nhật quest:
-        $QuestRepository = new QuestRepository();
-        $questType = 0;
-        $QuestRepository->updateQuest($user, $questType, 1);
+        if ($user) {
+            // dump($user);die;
+            // gửi thông tin để cập nhật quest:
+            $QuestRepository = new QuestRepository();
+            $questType = 0;
+            $QuestRepository->updateQuest($user, $questType, 1);
+        }
         return view('layouts.launch');
     }
 
@@ -62,14 +64,16 @@ class HomeController extends Controller
     public function home(Request $request)
     {
         $user = $request->user();
-        // dump($user);die;
-        // gửi thông tin để cập nhật quest:
-        $QuestRepository = new QuestRepository();
-        $questType = 0;
-        $QuestRepository->updateQuest($user, $questType, 1);
+        if ($user) {
+            // dump($user);die;
+            // gửi thông tin để cập nhật quest:
+            $QuestRepository = new QuestRepository();
+            $questType = 0;
+            $QuestRepository->updateQuest($user, $questType, 1);
+        }
         return view('layouts.home');
     }
-    
+
     /**
      * Show the application dashboard.
      *
@@ -78,20 +82,23 @@ class HomeController extends Controller
     public function quest(Request $request)
     {
         $user = $request->user();
-        // gửi thông tin để cập nhật quest:
-        $QuestRepository = new QuestRepository();
-        $questType = 5;
-        $QuestRepository->updateQuest($user, $questType, 1);
-        // gửi thông tin để cập nhật quest:
-        $questType = 0;
-        $QuestRepository->updateQuest($user, $questType, 1);
+        if ($user) {
+            // gửi thông tin để cập nhật quest:
+            $QuestRepository = new QuestRepository();
+            $questType = 5;
+            $QuestRepository->updateQuest($user, $questType, 1);
+            // gửi thông tin để cập nhật quest:
+            $questType = 0;
+            $QuestRepository->updateQuest($user, $questType, 1);
+        }
+        
         return view('layouts.home');
     }
-    public function getAccessToken(Request $request)
-    {
-        $accessToken = $request->session()->get('access_token_client');
-        return response()->json(['access_token' => $accessToken]);
-    }
+    // public function getAccessToken(Request $request)
+    // {
+    //     $accessToken = $request->session()->get('access_token_client');
+    //     return response()->json(['access_token' => $accessToken]);
+    // }
     public function getTopFeathers(Request $request)
     {
         $usersWithFeathers = User::select('id', 'name', 'email', 'feathers')
@@ -131,12 +138,17 @@ class HomeController extends Controller
     public function getItem(Request $request)
     {
         $user = $request->user();
+        $diamond = 0;
+        if($user){
+            $diamond =  $user->diamond;
+            $feathers = $user->feathers;
+        }
         $response = [
             "status" => 200,
             "message" => "success",
             "data" => [
-                'diamond' => $user->diamond,
-                'feathers' => $user->feathers
+                'diamond' => $diamond,
+                'feathers' => $feathers
             ],
             "success" => true
         ];

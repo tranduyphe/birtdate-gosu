@@ -116,8 +116,13 @@ class QuestController extends Controller
             return response()->json($response);
         }
     }
-    // public function updateQuests(Request $request)
-    // {
+    public function activeQuest(Request $request)
+    {
+        $user = $request->user();
+        $QuestRepository = new QuestRepository();
+        $questType = 5;
+        $QuestRepository->updateQuest($user, $questType, 1);
+    }
     //     $user = $request->user();
     //     $gameId = $request->input('game_id', 0);
     //     if ($gameId > 0) {

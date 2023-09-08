@@ -22209,7 +22209,7 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
       thongbaoimgUrl: '/images/sinhnhat11nam/img_main/thongbao.png',
       kimcuongimgUrl: '/images/sinhnhat11nam/img_main/kimcuong.png',
       longvuimgUrl: '/images/sinhnhat11nam/img_main/longvu.png',
-      attrThongbao: 340,
+      attrThongbao: 0,
       itemRed: '/images/sinhnhat11nam/img_main/thuvien-itemRed.png',
       itemYellow: '/images/sinhnhat11nam/img_main/thuvien-itemYellow.png',
       itemPuple: '/images/sinhnhat11nam/img_main/thuvien-itemPuple.png',
@@ -22332,8 +22332,27 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
                   setTimeout(function () {
                     self.flipList = response.data.data.data_flip.active_flip;
                     self.waiting = response.data.data.data_flip.waiting;
+                    if (response.data.data.reward) {
+                      var reward = response.data.data.reward;
+                      var message = "";
+                      for (var i = 0; i < reward.length; i++) {
+                        console.log("reward[i]", reward[i].record);
+                        console.log("reward[i].item_id: ", reward[i].item_id);
+                        if (reward[i].item_id == "1") {
+                          console.log("message: ", message);
+                          console.log("reward[i].record: ", reward[i].record);
+                          message = message + " Lông phượng hoàng +" + reward[i].record;
+                          console.log("message: ", message);
+                        }
+                        if (reward[i].item_id == "2") {
+                          message = message + " Đá mặt trăng +" + reward[i].record;
+                        }
+                      }
+                      alert(message);
+                    }
                     self.flag = false;
                   }, 500); // 500 milliseconds = 0.5 giây
+
                   // } else {
                   //     self.flag = false;
                   // }
@@ -23119,10 +23138,12 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
       showModalThapThanhTuu: false,
       attrKimcuong: 67,
       attrLongvu: 15,
-      attrThongbao: 340
+      attrThongbao: 0
     };
   },
-  created: function created() {},
+  created: function created() {
+    this.getItemUser();
+  },
   mounted: function mounted() {
     // Khởi tạo AOS và cấu hình tùy chọn theo ý muốn
     aos__WEBPACK_IMPORTED_MODULE_0___default().init({
@@ -23134,6 +23155,18 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
 
   computed: {},
   methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapActions)(["oLogout"])), {}, {
+    getItemUser: function getItemUser() {
+      var self = this;
+      axios.get('/api/get-item', {}).then(function (response) {
+        if (response.data.status === 200 && response.data.success == true) {
+          self.attrKimcuong = response.data.data.diamond;
+          self.attrLongvu = response.data.data.feathers;
+          console.log("response.data.data", response.data.data);
+        }
+      })["catch"](function (error) {
+        console.log(error);
+      })["finally"]();
+    },
     logoutSubmit: function logoutSubmit() {
       this.oLogout("");
     },
@@ -23141,7 +23174,19 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
       return "url(".concat(this.backgroundUrl, ")");
     },
     openModalThuVien: function openModalThuVien() {
-      this.showModalThuVien = true;
+      var self = this;
+      console.log("thuvien");
+      axios.post('/api/active-quest', {
+        params: {
+          quest_id: 5
+        }
+      }).then(function (response) {
+        if (response.data.status === 200) {
+          self.showModalThuVien = true;
+        }
+      })["catch"](function (error) {
+        console.log(error);
+      })["finally"]();
     },
     closeModalThuVien: function closeModalThuVien() {
       this.showModalThuVien = false;
@@ -24438,7 +24483,7 @@ var _hoisted_2 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementV
   role: "tab",
   "aria-controls": "v-tabs-profile",
   "aria-selected": "false"
-}, "Lịch tưởng ký")]), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+}, "Chậu kỳ tích")]), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
   "class": "nav-item mb-3"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
   "class": "nav-link",
@@ -24448,7 +24493,7 @@ var _hoisted_2 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementV
   role: "tab",
   "aria-controls": "v-tabs-messages",
   "aria-selected": "false"
-}, "Chậu kỳ tích")])])], -1 /* HOISTED */);
+}, "Lịch tưởng ký")])])], -1 /* HOISTED */);
 var _hoisted_3 = {
   "class": "row"
 };
@@ -24809,7 +24854,7 @@ router.beforeEach(function (to, from, next) {
   if (to.meta.middleware == "guest") {
     if (authenticated) {
       next({
-        name: "home"
+        name: "sitemap"
       });
     }
     next();
@@ -24882,9 +24927,7 @@ var actions = {
             commit('SET_AUTHENTICATED', true);
             commit('SET_USER', data);
             localStorage.setItem("users", JSON.stringify(data));
-            _routers__WEBPACK_IMPORTED_MODULE_1__["default"].push({
-              name: 'sitemap'
-            }); // redirect to the home page when login is successful
+            window.location.href = '/site-map';
             _context.next = 14;
             break;
           case 13:
@@ -37053,7 +37096,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.card {\r\n    perspective: 1000px;\r\n    position: relative;\r\n    transform-style: preserve-3d;\r\n    transition: transform 0.5s;\r\n    display: inline-block;\r\n    border: 1px solid transparent;\r\n    border-radius: 5px;\r\n    min-width: 65px;\r\n    width: 100%;\r\n    height: 65px !important;\r\n    background:\r\n        linear-gradient(to bottom, #292929, #453d69) padding-box,\r\n        linear-gradient(to bottom, #7b5d1c, #a1813f) border-box;\r\n    transition: all 300ms linear !important;\n}\n.game-thuvientoantri .cell, .game-thuvientoantri .item-wait{\r\n    margin-right: 20px;\r\n    margin-bottom: 30px;\r\n    max-width: 65px;\r\n    max-height: 65px;\n}\n.game-thuvientoantri .cell:nth-child(15n + 0){\r\n    margin-right: 0px;\n}\n.game-thuvientoantri .minigame-thuvien{\r\n    min-height: 285px;\r\n    transition: all 500ms linear\n}\n.game-thuvientoantri .card{\r\n    background-repeat: no-repeat !important;\r\n    background-position: center center !important;\r\n    background-size: cover !important;\n}\r\n\r\n/* .game-thuvientoantri .row>*{\r\n    width: auto;\r\n} */\n.minigame-thuvien .image img,.card-wait{\r\n    transition: all 1s linear\n}\n.flipped {\r\n    transform: rotateY(180deg);\n}\n.cell-wait{\r\n    min-height: 145px;\n}\n.front,\r\n.back {\r\n    position: absolute;\r\n    width: 100%;\r\n    height: 100%;\r\n    backface-visibility: hidden;\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: center;\r\n    transition: all 300ms linear;\r\n    border-radius: 5px;\n}\n.front {\r\n    transform: rotateY(0deg);\r\n    /* background-color: #f5f5f5; */\n}\n.back {\r\n    transform: rotateY(180deg);\r\n    background-color: #3498db;\r\n    /* color: white; */\r\n    /* border: solid #000; */\r\n    border-radius: 5px;\n}\r\n\r\n/* Thêm các hiệu ứng CSS keyframes animation tại đây */\r\n\r\n/* ... CSS trước đó ... */\n@keyframes flip {\nfrom {\r\n        transform: rotateY(0deg);\n}\nto {\r\n        transform: rotateY(180deg);\n}\n}\n.flipped {\r\n    animation: flip 0.5s;\n}\n.btn-start{\r\n    position: absolute;\r\n    z-index: 5;\r\n    top: 170px;\r\n    left: 105px;\r\n    color: #292929;\r\n    background: linear-gradient(to bottom, #f1c461, #a1813f);\r\n    border-radius: 5px;\r\n    border: none;\r\n    padding: 10px 20px;\r\n    font-weight: bold;\r\n    transition: all 300ms linear;\n}\n.attribute-items .div-img{\r\n    position: relative;\n}\n.attribute-items .div-img.items span{\r\n    position: absolute;\r\n    bottom: 26px;\r\n    right: 50%;\r\n    text-align: center;\r\n    transform: translate(50%, 0%);\n}\n.attribute-items .div-img.items.longvu span{\r\n    bottom: 30px;\r\n    transform: translate(60%, 0%);\n}\n.attribute-items .div-img img:hover,.btn-start:hover{\r\n    filter: brightness(140%);\n}\r\n\r\n/* ... CSS sau đó ... */\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.card {\r\n    perspective: 1000px;\r\n    position: relative;\r\n    transform-style: preserve-3d;\r\n    transition: transform 0.5s;\r\n    display: inline-block;\r\n    border: 1px solid transparent;\r\n    border-radius: 5px;\r\n    min-width: 65px;\r\n    width: 100%;\r\n    height: 65px !important;\r\n    background:\r\n        linear-gradient(to bottom, #292929, #453d69) padding-box,\r\n        linear-gradient(to bottom, #7b5d1c, #a1813f) border-box;\r\n    transition: all 300ms linear !important;\n}\n.game-thuvientoantri .cell,\r\n.game-thuvientoantri .item-wait {\r\n    margin-right: 20px;\r\n    margin-bottom: 30px;\r\n    max-width: 65px;\r\n    max-height: 65px;\n}\n.game-thuvientoantri .cell:nth-child(15n + 0) {\r\n    margin-right: 0px;\n}\n.game-thuvientoantri .minigame-thuvien {\r\n    min-height: 285px;\r\n    transition: all 500ms linear\n}\n.game-thuvientoantri .card {\r\n    background-repeat: no-repeat !important;\r\n    background-position: center center !important;\r\n    background-size: cover !important;\n}\r\n\r\n/* .game-thuvientoantri .row>*{\r\n    width: auto;\r\n} */\n.minigame-thuvien .image img,\r\n.card-wait {\r\n    transition: all 1s linear\n}\n.flipped {\r\n    transform: rotateY(180deg);\n}\n.cell-wait {\r\n    min-height: 145px;\n}\n.front,\r\n.back {\r\n    position: absolute;\r\n    width: 100%;\r\n    height: 100%;\r\n    backface-visibility: hidden;\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: center;\r\n    transition: all 300ms linear;\r\n    border-radius: 5px;\n}\n.front {\r\n    transform: rotateY(0deg);\r\n    /* background-color: #f5f5f5; */\n}\n.back {\r\n    transform: rotateY(180deg);\r\n    background-color: #3498db;\r\n    /* color: white; */\r\n    /* border: solid #000; */\r\n    border-radius: 5px;\n}\r\n\r\n/* Thêm các hiệu ứng CSS keyframes animation tại đây */\r\n\r\n/* ... CSS trước đó ... */\n@keyframes flip {\nfrom {\r\n        transform: rotateY(0deg);\n}\nto {\r\n        transform: rotateY(180deg);\n}\n}\n.flipped {\r\n    animation: flip 0.5s;\n}\n.btn-start {\r\n    position: absolute;\r\n    z-index: 5;\r\n    top: 170px;\r\n    left: 105px;\r\n    color: #292929;\r\n    background: linear-gradient(to bottom, #f1c461, #a1813f);\r\n    border-radius: 5px;\r\n    border: none;\r\n    padding: 10px 20px;\r\n    font-weight: bold;\r\n    transition: all 300ms linear;\n}\n.attribute-items .div-img {\r\n    position: relative;\n}\n.attribute-items .div-img.items span {\r\n    position: absolute;\r\n    bottom: 26px;\r\n    right: 50%;\r\n    text-align: center;\r\n    transform: translate(50%, 0%);\n}\n.attribute-items .div-img.items.longvu span {\r\n    bottom: 30px;\r\n    transform: translate(60%, 0%);\n}\n.attribute-items .div-img img:hover,\r\n.btn-start:hover {\r\n    filter: brightness(140%);\n}\r\n\r\n/* ... CSS sau đó ... */", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

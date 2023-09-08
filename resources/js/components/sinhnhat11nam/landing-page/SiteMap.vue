@@ -126,11 +126,11 @@ export default {
             showModalThapThanhTuu: false,
             attrKimcuong: 67,
             attrLongvu: 15,
-            attrThongbao: 340,
+            attrThongbao: 0,
         };
     },
     created() {
-
+        this.getItemUser();
     },
     mounted() {
         // Khởi tạo AOS và cấu hình tùy chọn theo ý muốn
@@ -144,6 +144,23 @@ export default {
     },
     methods: {
         ...mapActions(["oLogout"]),
+        getItemUser() {
+            let self = this;
+            axios.get('/api/get-item', {
+            })
+                .then(function (response) {
+                    if (response.data.status === 200 && response.data.success == true) {
+                        self.attrKimcuong = response.data.data.diamond;
+                        self.attrLongvu = response.data.data.feathers;
+                        console.log("response.data.data", response.data.data);
+
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+                .finally();
+        },
 
         logoutSubmit() {
             this.oLogout("");
@@ -153,7 +170,23 @@ export default {
             return `url(${this.backgroundUrl})`;
         },
         openModalThuVien() {
-            this.showModalThuVien = true;
+            let self = this;
+            console.log("thuvien");
+            axios.post('/api/active-quest', {
+                params: {
+                    quest_id: 5
+                },
+            })
+                .then(function (response) {
+                    if (response.data.status === 200 ) {
+                        self.showModalThuVien = true;
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+                .finally();
+            
         },
         closeModalThuVien(){
             this.showModalThuVien = false;

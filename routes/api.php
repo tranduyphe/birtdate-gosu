@@ -28,6 +28,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/get-item', [App\Http\Controllers\HomeController::class, 'getItem'])->name('list-item');
 
     Route::get('/get-quests', [App\Http\Controllers\QuestController::class, 'getQuests'])->name('quests');
+    
+    Route::post('/active-quest', [App\Http\Controllers\QuestController::class, 'activeQuest'])->name('active-quest');
     Route::get('/get-reward', [App\Http\Controllers\QuestController::class, 'getReward'])->name('get-reward-quest');
 
     Route::get('/get-top-feathers', [App\Http\Controllers\HomeController::class, 'getTopfeathers'])->name('top-feathers');
