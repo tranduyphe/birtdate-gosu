@@ -222,7 +222,14 @@ export default {
                                                 message = message + " Đá mặt trăng +" + reward[i].record;
                                             }
                                         }
-                                        alert(message);
+                                        // alert(message);
+                                        self.$swal.fire({
+                                            position: "center",
+                                            icon: "success",
+                                            title: message,
+                                            showConfirmButton: false,
+                                            timer: 1500
+                                        });
                                     }
                                     self.flag = false;
                                 }, 500); // 500 milliseconds = 0.5 giây
@@ -293,7 +300,14 @@ export default {
                             // this.$store.actions.saveInfoUser(response.data.data.user);
                         }
                     } else {
-                        alert(response.data.message);
+                        // alert(response.data.message);
+                        self.$swal.fire({
+                            position: "center",
+                            icon: "error",
+                            title: response.data.message,
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
                     }
                 })
                 .catch((error) => {
@@ -406,7 +420,7 @@ export default {
     perspective: 1000px;
     position: relative;
     transform-style: preserve-3d;
-    transition: transform 0.5s;
+    transition: transform 0.5s linear;
     display: inline-block;
     border: 1px solid transparent;
     border-radius: 5px;
@@ -416,7 +430,10 @@ export default {
     background:
         linear-gradient(to bottom, #292929, #453d69) padding-box,
         linear-gradient(to bottom, #7b5d1c, #a1813f) border-box;
-    transition: all 300ms linear !important;
+}
+
+.game-thuvientoantri .card:hover{
+    filter: brightness(140%);
 }
 
 .game-thuvientoantri .cell,

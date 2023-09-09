@@ -9,7 +9,7 @@
         <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
         <meta content="Themesdesign" name="author" />
         <!-- App favicon -->
-        <link rel="shortcut icon" href="{{ asset('images/logo-sm.png') }}">
+        <link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }}">
         
         <!-- jquery.vectormap css -->
         <link href="{{ asset('assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.css') }}" rel="stylesheet" type="text/css" />
@@ -48,17 +48,17 @@
 <!-- <script src="cdn.datatables.net/scroller/2.1.1/js/dataTables.scroller.min.js"></script> -->
 <script src="{{ mix('assets/js/app.js') }}" type="text/javascript"></script>
 <!-- JAVASCRIPT -->
-{{-- <script src="{{ asset('assets/libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ asset('assets/libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 <script src="{{ asset('assets/libs/metismenu/metisMenu.min.js') }}"></script>
 <script src="{{ asset('assets/libs/simplebar/simplebar.min.js') }}"></script>
-<script src="{{ asset('assets/libs/node-waves/waves.min.js') }}"></script> --}}
+<script src="{{ asset('assets/libs/node-waves/waves.min.js') }}"></script>
 
 <!-- apexcharts -->
 <script src="{{ asset('assets/libs/apexcharts/apexcharts.min.js') }}"></script>
 <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
 <!-- jquery.vectormap map -->
-{{-- <script src="{{ asset('assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.min.js') }}"></script>
-<script src="{{ asset('assets/libs/admin-resources/jquery.vectormap/maps/jquery-jvectormap-us-merc-en.js') }}"></script> --}}
+<script src="{{ asset('assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.min.js') }}"></script>
+<script src="{{ asset('assets/libs/admin-resources/jquery.vectormap/maps/jquery-jvectormap-us-merc-en.js') }}"></script>
 
 <!-- scroll datatable -->
 <!-- <script src="{{ asset('assets/libs/datatables.net-responsive/js/scroll.datatables.responsive.js') }}"></script> -->
