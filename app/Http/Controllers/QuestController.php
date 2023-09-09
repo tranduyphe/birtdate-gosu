@@ -197,17 +197,9 @@ class QuestController extends Controller
         $user = $request->user();
         
         $QuestRepository = new QuestRepository();
-        // dump($questId);
-
-        
-        // dump($cacheFlagReward);
         Cache::put($cacheKey, 1, now()->addMinutes(5)); // Lưu trong cache trong 5 phút
-        // dump($cacheFlagReward);
-        // die;
         if ($questId !== null) {
-            // dump("check quest id1");
             $getQuest = $QuestRepository->getQuests($user->id);
-            // dump($getQuest);
             if($getQuest[$questId] && $getQuest[$questId]['is_reward'] ==1 ){
                 Cache::forget($cacheKey); // Lưu trong cache trong 5 phút
                 $response = [
@@ -220,7 +212,6 @@ class QuestController extends Controller
                 return response()->json($response);
             }
             if ($getQuest[$questId] && $getQuest[$questId]['current_attempts'] >= $getQuest[$questId]['total_attempts']) {
-                // dump($getQuest[$questId]);die;
                 // ghi nhận đã nhận thưởng.
                 $getQuest = $QuestRepository->rewardQuest($user, $questId, 1);
 
@@ -231,6 +222,9 @@ class QuestController extends Controller
 
                     $user->diamond = $user->diamond + $record;
                     $user->save();
+                    // lưu lịch sử hoạt động
+                    $LogRepository = new LogRepository();
+                    $LogRepository->saveLogActivity($user, 2,[], "Nhận thưởng nhiệm vụ " . ($questId + 1) . " tại bảng thử thách.");
                 }
                 Cache::forget($cacheKey); // Lưu trong cache trong 5 phút
                 // Cache::forget($cacheKey);

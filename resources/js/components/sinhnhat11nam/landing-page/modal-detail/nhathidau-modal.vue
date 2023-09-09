@@ -1,13 +1,19 @@
 <template>
     <div id="NhaThiDau-Modal">
       <!-- Nội dung modal ở đây -->
-      <miniGame></miniGame>
+      <miniGame :attrKimcuong="attrKimcuong" @updateAttrKimcuongNtd="updateAttrKimcuongNtd"
+      :attrLongvu="attrLongvu" @updateAttrLongvuNtd="updateAttrLongvuNtd"
+      ></miniGame>
     </div>
 </template>
 
 <script>
 import miniGame from '../../../home/Minigame.vue';
 export default {
+    props: {
+        attrKimcuong:Number,
+        attrLongvu:Number,
+    },
     components: {
         miniGame
     },
@@ -19,8 +25,20 @@ export default {
             lineBrealimg: '/images/sinhnhat11nam/img_main/line-break.png',
         }
     },
-    methods: {
+    created() {
         
+    },
+    methods: {
+        updateAttrKimcuongNtd(newValue) {
+            console.log("updateAttrKimcuongNtd newValue",newValue);
+            // Cập nhật giá trị của attrKimcuong từ sự kiện
+            this.$emit("updateAttrKimcuong", newValue);
+        },
+        updateAttrLongvuNtd(newValue) {
+            console.log("updateAttrLongvuNtd newValue",newValue);
+            // Cập nhật giá trị của attrKimcuong từ sự kiện
+            this.$emit("updateAttrLongvu", newValue);
+        },
     },
 };
 </script>

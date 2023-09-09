@@ -441,6 +441,22 @@ textarea {
   font-style: normal;
   font-display: swap;
 }
+@font-face {
+  font-family: "UTMGodsWordBold";
+  src: url(/fonts/UTMGodsWordBold.eot?b8342ed547a40ea4fcc7601e48abb96c);
+  src: url(/fonts/UTMGodsWordBold.eot?b8342ed547a40ea4fcc7601e48abb96c?#iefix) format("embedded-opentype"), url(/fonts/UTMGodsWordBold.woff2?208988da4ab8f378a8a29ea5f944bda9) format("woff2"), url(/fonts/UTMGodsWordBold.woff?2ab89703a2b043572ae7e4355c441b3f) format("woff"), url(/fonts/UTMGodsWordBold.ttf?f9b2166a855612fa9c8c4f297aded141) format("truetype");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Tahoma";
+  src: url(/fonts/Tahoma-Bold.eot?7f78bf0295bd7e4cf31e075d14ccb157);
+  src: url(/fonts/Tahoma-Bold.eot?7f78bf0295bd7e4cf31e075d14ccb157?#iefix) format("embedded-opentype"), url(/fonts/Tahoma-Bold.woff2?4bca67781904f14d964dc9b5f2ee6f5d) format("woff2"), url(/fonts/Tahoma-Bold.woff?ad5310dae3163b90f6114fa5bf83f98a) format("woff"), url(/fonts/Tahoma-Bold.ttf?80c63be1d3c0c8f7d48777a0a09a9fc1) format("truetype"), url(/fonts/Tahoma-Bold.svg?30bc022ffc2f23d1e783b6f72101c9a0#Tahoma-Bold) format("svg");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
 #NhaThiDauModal .modal-dialog {
   max-height: 830px;
   max-width: 1472px;
@@ -522,7 +538,7 @@ textarea {
   position: relative;
 }
 #ThapThanhTuuModal .modal-dialog .modal-content .modal-body {
-  padding-top: 20rem;
+  padding-top: 15rem;
   padding-left: 7rem;
   padding-right: 7rem;
 }

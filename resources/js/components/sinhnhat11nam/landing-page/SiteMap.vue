@@ -3,7 +3,7 @@
         <div class="div-content">
             <div class="div-img thap-thanh-tuu" data-aos="fade-down">
                 <button class="" data-bs-toggle="modal" data-bs-target="#ThapThanhTuuModal">
-                    <img :src="thapthanhtuuimgUrl" alt="Tháp Thành Tựu" width="485">
+                    <img :src="thapthanhtuuimgUrl" alt="Tháp Thành Tựu" width="485" @click="getDataPhapThanhTuu">
                 </button>
             </div>
             <!-- <button class="div-img thap-thanh-tuu" @click="showMedalPopupCKT"> <img :src="thapthanhtuuimgUrl" alt="Tháp Thành Tựu" width="485"></button> -->
@@ -51,7 +51,7 @@
                 <div class="modal-content">
                     <div class="modal-body">
                         <button type="button" ref="closeModal" class="btn close-button" data-bs-dismiss="modal" aria-label="Close"><img :src="closeimgUrl" alt=""></button>
-                        <ModalNhaThiDau ></ModalNhaThiDau>
+                        <ModalNhaThiDau :attrKimcuong="attrKimcuong" :attrLongvu="attrLongvu" @updateAttrKimcuong="updateAttrKimcuong" @updateAttrLongvu="updateAttrLongvu"></ModalNhaThiDau>
                     </div>
                 </div>
             </div>
@@ -83,7 +83,10 @@
                 <div class="modal-content">
                     <div class="modal-body">
                         <button type="button" ref="closeModal" class="btn close-button" data-bs-dismiss="modal" aria-label="Close"><img :src="closeimgUrl" alt=""></button>
-                        <ModalThapThanhTuu ></ModalThapThanhTuu>
+                        <ModalThapThanhTuu :nhiemvu="nhiemvu" @updateNhiemvu="updateNhiemvu" 
+                        :logActivity="logActivity" @updateLogActivity="updateLogActivity" 
+                        :topFeathers="topFeathers" @updateTopFeathers="updateTopFeathers" 
+                        ></ModalThapThanhTuu>
                     </div>
                 </div>
             </div>
@@ -133,6 +136,9 @@ export default {
             attrLongvu: 15,
             attrThongbao: 0,
             friendCode: "",
+            nhiemvu: [],
+            logActivity: [],
+            topFeathers: []
         };
     },
     created() {
@@ -155,14 +161,71 @@ export default {
         ...authGetters,
         async user(){
             let user = await this.users();
-            console.log("check user: ",user);
             this.user_name = user.name;
             this.user_code = user.user_code;
-            this.avatar = user.avatar
+            this.avatar = user.avatar;
+        },
+        getDataPhapThanhTuu(){
+            this.getQuest();
+        this.getLogActivity();
+        this.getTopFeathers();
+        },
+        getQuest() {
+            let self = this;
+            axios.get('/api/get-quests', {
+            })
+                .then(function (response) {
+                    if (response.data.status === 200 && response.data.success == true) {
+                        self.nhiemvu = response.data.data.quests;
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                    if (error.response && error.response.status === 401) {
+                        this.logoutSubmit()
+                    }
+                })
+                .finally();
+        },
+        
+        getLogActivity() {
+            let self = this;
+            axios.get('/api/get-log-activity', {
+
+            })
+                .then(function (response) {
+                    if (response.data.status === 200 && response.data.success == true) {
+                        self.logActivity = response.data.data.log_activity;
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                    if (error.response && error.response.status === 401) {
+                        this.logoutSubmit()
+                    }
+                })
+                .finally();
+        },
+        getTopFeathers() {
+            let self = this;
+            axios.get('/api/get-top-feathers', {
+
+            })
+                .then(function (response) {
+                    if (response.data.status === 200 && response.data.success == true) {
+                        self.topFeathers = response.data.data.top_feathers;
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                    if (error.response && error.response.status === 401) {
+                        this.logoutSubmit()
+                    }
+                })
+                .finally();
         },
         activeQuest(){
             let self = this;
-            console.log("thuvien");
             axios.post('/api/active-quest', {
                 params: {
                     quest_id: 5
@@ -182,16 +245,14 @@ export default {
                 .finally();
             
         },
-        getItemUser() {
+         getItemUser() {
             let self = this;
             axios.get('/api/get-item', {
             })
-                .then(function (response) {
-                    console.log("check get-item login response:",response);
+                .then(async function (response) {
                     if (response.data.status === 200 && response.data.success == true) {
                         self.attrKimcuong = response.data.data.diamond;
                         self.attrLongvu = response.data.data.feathers;
-                        console.log("response.data.data", response.data.data);
 
                     }
                 })
@@ -229,6 +290,28 @@ export default {
         closeMedalPopupCKT() {
             $('#ThuVienModal').modal('hide');
         },
+
+        updateAttrKimcuong(newValue) {
+            // Cập nhật giá trị của attrKimcuong từ sự kiện
+            this.attrKimcuong = newValue;
+        },
+        updateAttrLongvu(newValue) {
+            // Cập nhật giá trị của attrKimcuong từ sự kiện
+            this.attrLongvu = newValue;
+        },
+        updateNhiemvu(newValue) {
+            // Cập nhật giá trị của attrKimcuong từ sự kiện
+            this.nhiemvu = newValue;
+        },
+        updateLogActivity(newValue) {
+            // Cập nhật giá trị của attrKimcuong từ sự kiện
+            this.logActivity = newValue;
+        },
+        updateTopFeathers(newValue) {
+            // Cập nhật giá trị của attrKimcuong từ sự kiện
+            this.topFeathers = newValue;
+        },
+        
     },
 };
 </script>

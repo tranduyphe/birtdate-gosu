@@ -112,7 +112,10 @@ export default {
                                 if (response.data.data.reward) {
                                     let reward = response.data.data.reward;
                                     let message = "";
-                                    for (let i = 0; i < reward.length; i++) {
+                                    if(reward.length == 0){
+                                        message = "Chúc bạn may mắn lần sau";
+                                    }else{
+                                        for (let i = 0; i < reward.length; i++) {
                                         console.log("reward[i]", reward[i].record);
                                         console.log("reward[i].item_id: ", reward[i].item_id);
 
@@ -125,7 +128,13 @@ export default {
                                         if (reward[i].item_id == "2") {
                                             message = message + " Đá mặt trăng +" + reward[i].record;
                                         }
+
+                                        if (reward[i].item_id == "3") {
+                                            message = message + " Thẻ tiềm long +" + reward[i].record;
+                                        }
                                     }
+                                    }
+                                    
                                     alert(message);
                                     self.getFlip();
                                     self.flag = false;

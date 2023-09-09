@@ -418,11 +418,11 @@ class FlipController extends Controller
         $LogRepository = new LogRepository();
         $LogRepository->saveLogItemWithValue($user, $itemType, $record, $oldValue, $newValue, $reason);
     }
-    public function saveLogActivity($user, $activityType, $reason)
+    public function saveLogActivity($user, $activityType,$listITemReward, $reason)
     {
         // save history 
         $LogRepository = new LogRepository();
-        $LogRepository->saveLogActivity($user, $activityType, $reason);
+        $LogRepository->saveLogActivity($user, $activityType,[], $reason);
         // $newLog = new LogActivity();
         // $newLog->user_id = $user->id;  // Thiết lập user_id cho quest mới
 
@@ -461,7 +461,7 @@ class FlipController extends Controller
                 $newValue = $user->diamond;
                 // $this->saveLogItem($user,2,-5,"Tham gia thử thách Tích Kỳ tại Thư Viện Toàn Tri.");
                 $this->saveLogItemWithValue($user, 2, $amount * (-1), $newValue + $amount, $newValue, "Tham gia thử thách Bài Trùng tại Nhà Thi Đấu Xoẹt Xoẹt.");
-                $this->saveLogActivity($user, 2, "Tham gia thử thách Bài Trùng tại Nhà Thi Đấu Xoẹt Xoẹt.");
+                $this->saveLogActivity($user, 2,[], "Tham gia thử thách Bài Trùng tại Nhà Thi Đấu Xoẹt Xoẹt.");
                 // dump($user);die;
                 $listFlips = [];
                 $activeFlips = [];
@@ -563,34 +563,44 @@ class FlipController extends Controller
                 $newValue = $user->diamond;
                 // $this->saveLogItem($user,2,-5,"Tham gia thử thách Tích Kỳ tại Thư Viện Toàn Tri.");
                 $this->saveLogItemWithValue($user, 2, $amount * (-1), $newValue + $amount, $newValue, "Tham gia thử thách Tích Kỳ tại Thư Viện Toàn Tri.");
-                $this->saveLogActivity($user, 2, "Tham gia thử thách Tích Kỳ tại Thư Viện Toàn Tri.");
-
-                $itemRandom = [
-                    [
-                        'item' => [['item_id' => 1, 'record' => 1]],
-                        'weight' => 200
-                    ],
-                    [
-                        'item' => [['item_id' => 1, 'record' => 5]],
-                        'weight' => 200
-                    ],
-                    [
-                        'item' => [['item_id' => 1, 'record' => 10]],
-                        'weight' => 100
-                    ],
-                    [
-                        'item' => [['item_id' => 2, 'record' => 1]],
-                        'weight' => 200
-                    ],
-                    [
-                        'item' => [['item_id' => 2, 'record' => 5]],
-                        'weight' => 200
-                    ],
-                    [
-                        'item' => [['item_id' => 2, 'record' => 10]],
-                        'weight' => 100
-                    ],
-                ];
+                $this->saveLogActivity($user, 2, [], "Tham gia thử thách Tích Kỳ tại Thư Viện Toàn Tri.");
+                if($user->the_tiem_long >0){
+                    $itemRandom = [
+                        [
+                            'item' => [['item_id' => 2, 'record' => 10]],
+                            'weight' => 200
+                        ],
+                        [
+                            'item' => [['item_id' => 1, 'record' => 5]],
+                            'weight' => 100
+                        ],
+                        [
+                            'item' => [],
+                            'weight' => 700
+                        ],
+                        
+                    ];
+                }else{
+                    $itemRandom = [
+                        [
+                            'item' => [['item_id' => 3, 'record' => 1]], // 3 là thẻ tiềm long
+                            'weight' => 200
+                        ],
+                        [
+                            'item' => [['item_id' => 2, 'record' => 10]], // 2 là đá mặt trăng
+                            'weight' => 200
+                        ],
+                        [
+                            'item' => [['item_id' => 1, 'record' => 5]],// 1 là lông kỳ lân
+                            'weight' => 100
+                        ],
+                        [
+                            'item' => [],
+                            'weight' => 600
+                        ],
+                    ];
+                }
+                
                 $totalWeight = 0;
                 $randomWeight = rand(1, 1000);
                 $listItems = [];
@@ -610,6 +620,10 @@ class FlipController extends Controller
                         }
                         if ($element['item_id'] == 2) {
                             $user->increment('diamond', $element['record']);
+                            // $user->diamond = $user->diamond + $element['record'];
+                        }
+                        if ($element['item_id'] == 3) {
+                            $user->increment('the_tiem_long', $element['record']);
                             // $user->diamond = $user->diamond + $element['record'];
                         }
                     }
@@ -649,7 +663,7 @@ class FlipController extends Controller
         // $user->save();
         // $newValue = $user->diamond;
         // $this->saveLogItemWithValue($user, 2, -5, $oldValue, $newValue, "Tham gia thử thách Tích Kỳ tại Thư Viện Toàn Tri.");
-        // $this->saveLogActivity($user, 2, "Tham gia thử thách Tích Kỳ tại Thư Viện Toàn Tri.");
+        // $this->saveLogActivity($user, 2,[], "Tham gia thử thách Tích Kỳ tại Thư Viện Toàn Tri.");
 
         // $user->diamond = $user->diamond - 5;
         // $user->save();

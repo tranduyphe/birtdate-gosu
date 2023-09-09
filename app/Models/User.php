@@ -25,7 +25,8 @@ class User extends Authenticatable
         'avatar',
         'email',
         'password',
-        'user_code'
+        'user_code',
+        'the_tiem_long'
     ];
 
     /**
