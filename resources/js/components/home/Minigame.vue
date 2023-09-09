@@ -1,8 +1,7 @@
 <template>
     <div class="game-thuvientoantri">
-        <h1 class="text-center mt-5" v-if="checkGameOver">Game Over</h1>
         <button class="btn-start" @click="reloadFlip()">Làm mới</button>
-
+        <p class="text-center text-white" v-if="checkGameOver">Bạn đã thua cuộc, vui lòng "Làm mới" để tiếp tục (Trừ 5 đá mặt trăng)</p>
         <div class="row justify-content-center align-items-center">
             <div class="minigame-thuvien">
                 <div class="" v-if="flipList != nul">
@@ -53,6 +52,9 @@
                     <span class="font-size-14 text-white">{{ feathers }}</span>
                 </div>
             </div>
+            <div class="modalGameOver" data-aos="zoom-in-up" id="GameOverModal">
+                <img :src="imgloser" width="800">
+            </div>
         </div>
     </div>
 </template>
@@ -98,6 +100,7 @@ export default {
             itemGreen: '/images/sinhnhat11nam/img_main/thuvien-itemGreen.png',
             itemPink: '/images/sinhnhat11nam/img_main/thuvien-itemPink.png',
             imgtransparent: '/images/sinhnhat11nam/img_main/transparent.png',
+            imgloser: '/images/sinhnhat11nam/img_main/loser.png',
         };
     },
     created() {
@@ -321,7 +324,15 @@ export default {
     },
     // code test keyboard
     watch: {
-
+        checkGameOver(newValue) {
+            if (newValue) {
+                // Hiển thị modal khi game over
+                $('#GameOverModal').css('display','flex');
+                setTimeout(() => {
+                    $('#GameOverModal').hide();
+                }, 5000);
+            }
+        },
     },
     computed: {
         UserInfo() {
@@ -556,6 +567,27 @@ export default {
 .attribute-items .div-img img:hover,
 .btn-start:hover {
     filter: brightness(140%);
+}
+
+#GameOverModal{
+    display: none;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    text-align: center;
+    transform-origin: center;
+    /* transform: rotate(90deg) translateY(-50%); */
+    white-space: nowrap;
+    transition: transform 1s ease-in-out, opacity 1s ease-in-out;
+    flex-direction: column;
 }
 
 /* ... CSS sau đó ... */

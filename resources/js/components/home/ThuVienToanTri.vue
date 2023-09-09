@@ -2,7 +2,7 @@
     <div class="thuvientoantri container" v-if="flipList != nul">
         <div class="row">
             <div class="col-md-12 d-flex justify-content-evenly">
-                <div class="row-card" v-for="col in 8" :key="col">
+                <div class="row-card" v-for="col in 8" :key="col" data-aos="zoom-in-up">
                     <div class="cell-card mb-3" v-for="row in 4" :key="row">
                         <div class="card" @click="flipCard((row - 1) * 8 + col - 1)"
                             :style="{ backgroundColor: flipList[(row - 1) * 8 + col - 1].color }">
@@ -121,6 +121,7 @@ export default {
                                 }
                                 if (response.data.data.reward) {
                                     let reward = response.data.data.reward;
+                                    let user = response.data.data.user.name;
                                     let message = "";
                                     for (let i = 0; i < reward.length; i++) {
                                         console.log("reward[i]", reward[i].record);
@@ -129,11 +130,11 @@ export default {
                                         if (reward[i].item_id == "1") {
                                             console.log("message: ", message);
                                             console.log("reward[i].record: ", reward[i].record);
-                                            message = message + " Lông phượng hoàng +" + reward[i].record;
+                                            message = message + "Chúc mừng " + user + " đã nhận được " + reward[i].record + " Lông Phượng Hoàng";
                                             console.log("message: ", message);
                                         }
                                         if (reward[i].item_id == "2") {
-                                            message = message + " Đá mặt trăng +" + reward[i].record;
+                                            message = message + "Chúc mừng " + user + " đã nhận được " + reward[i].record + " Đá mặt trăng";
                                         }
                                     }
                                     // alert(message);
@@ -142,7 +143,7 @@ export default {
                                         icon: "success",
                                         title: message,
                                         showConfirmButton: false,
-                                        timer: 1500
+                                        timer: 5000
                                     });
                                     self.getFlip();
                                     self.flag = false;
