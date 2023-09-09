@@ -1,0 +1,528 @@
+body {
+  background-color: #f7f7f7 !important;
+}
+body .none-element {
+  display: none;
+}
+body .btn-all-add-edit {
+  background: #252b3b;
+  color: #fff;
+  border: none;
+}
+body .btn-all-add-edit:hover {
+  background: #4b5a83;
+  color: #fff;
+}
+body .text-login-register {
+  color: #5664d2;
+}
+body .modal {
+  --bs-modal-width: none !important;
+}
+body .modal .modal-content .close {
+  position: absolute;
+  top: 0;
+  font-size: 30px;
+  right: 10px;
+}
+
+textarea {
+  overflow: hidden;
+}
+
+.app_vue .container-xl {
+  max-width: 100% !important;
+}
+.app_vue .container {
+  max-width: 1140px !important;
+}
+
+.login_register .container-fluid .row {
+  margin: 0 !important;
+}
+.login_register .container-fluid .row .custom-control-input {
+  height: 17px;
+  width: 30px !important;
+}
+.login_register .login-challenge-email {
+  padding-left: 35px;
+  display: initial;
+  border-radius: 25px;
+  text-align: center;
+  padding-right: 35px;
+  font-weight: 600;
+}
+
+.navbar_home .navbar {
+  padding: 0;
+}
+.navbar_home .navbar .btn-logout:hover {
+  color: blue !important;
+}
+.navbar_home .navbar .navbar_menu {
+  margin-right: 30px;
+  position: relative;
+}
+.navbar_home .bg-main {
+  background-color: rgba(9, 30, 66, 0.9490196078);
+}
+
+.translate {
+  padding-bottom: 20px;
+}
+.translate .translate-body {
+  margin: 10px 0;
+}
+.translate .result {
+  min-height: 100px;
+}
+.translate .custom-search {
+  height: 50px;
+  position: relative;
+  border: 1px solid #ccc;
+  border-radius: 24px;
+  overflow: hidden;
+}
+.translate .custom-search .search-input {
+  width: 100%;
+  height: 100%;
+  font-size: 18px;
+  padding: 0 220px 4px 24px;
+  color: #333;
+  border: none;
+  outline: none;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: #fff;
+}
+.translate .custom-search .search-input:focus {
+  background-color: #fff;
+}
+.translate .custom-search .right-custom-search {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+.translate .custom-search .right-custom-search button {
+  border: none;
+  width: 100px;
+  height: 50px;
+  background-color: rgba(9, 30, 66, 0.9490196078);
+  color: #fff;
+}
+.translate .search_data {
+  background-color: #fff;
+  border-radius: 9px;
+  padding: 30px;
+}
+.translate .search_data .title {
+  color: #e13a33;
+  font-size: 1.5rem;
+  font-weight: 500;
+  min-height: 40px;
+}
+.translate .search_data .search_content {
+  position: relative;
+  background-color: #fff;
+}
+.translate .search_data .search_content .icon-dot {
+  position: absolute;
+  top: 3px;
+  color: #707070;
+  font-size: 0.9rem;
+}
+.translate .search_data .search_content .box_mean {
+  margin-left: 25px;
+}
+.translate .search_data .search_content .bonx_mean .bonx_mea-language,
+.translate .search_data .bonx_mea-description,
+.translate .search_data .bonx_mea-translate {
+  color: #363636;
+}
+.translate .search_data .search_content button:hover {
+  color: #53b5fc;
+  cursor: pointer;
+}
+.translate .language {
+  margin-bottom: 10px;
+  margin-right: 10px;
+  background: #252b3b;
+  color: #fff;
+  width: 150px;
+  font-size: 1rem;
+}
+.translate .language .btn-check {
+  width: 0;
+  height: 0;
+}
+.translate .language .btn-check:checked + .btn {
+  border-color: #252b3b !important;
+}
+.translate .language label {
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  margin-bottom: 0 !important;
+  border: 1px solid #252b3b;
+  background: #fff;
+  color: #252b3b;
+}
+.translate .language label:hover {
+  background: #252b3b;
+  color: #fff;
+}
+.translate .language .btn {
+  border-color: none !important;
+}
+.translate .btn-keyboard i {
+  cursor: pointer;
+  color: rgba(9, 30, 66, 0.9490196078);
+  font-size: 35px;
+  position: absolute;
+  right: 120px;
+  top: 5px;
+}
+.translate .btn-clear-input i {
+  cursor: pointer;
+  color: rgba(9, 30, 66, 0.9490196078);
+  font-size: 25px;
+  position: absolute;
+  right: 180px;
+  top: 10px;
+}
+.translate .result:hover {
+  border: 1px solid #53b5fc;
+  transition: all 0.4ms;
+  cursor: pointer;
+}
+.translate .box_mean-description {
+  color: rgba(9, 30, 66, 0.9490196078);
+}
+
+.add_language .card,
+.edit_translate .card,
+.edit_language .card,
+.edit_word .card,
+.import_word_from_excel .card,
+.translate_word_from_excel .card,
+.change_role_user .card,
+.change_password_user .card,
+.create_user .card {
+  width: initial;
+}
+.add_language .card form .choose-file,
+.edit_translate .card form .choose-file,
+.edit_language .card form .choose-file,
+.edit_word .card form .choose-file,
+.import_word_from_excel .card form .choose-file,
+.translate_word_from_excel .card form .choose-file,
+.change_role_user .card form .choose-file,
+.change_password_user .card form .choose-file,
+.create_user .card form .choose-file {
+  position: relative;
+  width: 100% !important;
+}
+.add_language .card form .choose-file input[type=file],
+.edit_translate .card form .choose-file input[type=file],
+.edit_language .card form .choose-file input[type=file],
+.edit_word .card form .choose-file input[type=file],
+.import_word_from_excel .card form .choose-file input[type=file],
+.translate_word_from_excel .card form .choose-file input[type=file],
+.change_role_user .card form .choose-file input[type=file],
+.change_password_user .card form .choose-file input[type=file],
+.create_user .card form .choose-file input[type=file] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  width: 10px;
+  height: 10px;
+  cursor: pointer;
+}
+.add_language .card form .choose-file .btn-choose-file,
+.edit_translate .card form .choose-file .btn-choose-file,
+.edit_language .card form .choose-file .btn-choose-file,
+.edit_word .card form .choose-file .btn-choose-file,
+.import_word_from_excel .card form .choose-file .btn-choose-file,
+.translate_word_from_excel .card form .choose-file .btn-choose-file,
+.change_role_user .card form .choose-file .btn-choose-file,
+.change_password_user .card form .choose-file .btn-choose-file,
+.create_user .card form .choose-file .btn-choose-file {
+  position: relative;
+  z-index: 1;
+}
+.add_language .card form .choose-file span,
+.edit_translate .card form .choose-file span,
+.edit_language .card form .choose-file span,
+.edit_word .card form .choose-file span,
+.import_word_from_excel .card form .choose-file span,
+.translate_word_from_excel .card form .choose-file span,
+.change_role_user .card form .choose-file span,
+.change_password_user .card form .choose-file span,
+.create_user .card form .choose-file span {
+  position: relative;
+  z-index: 0;
+  padding-left: 5px;
+}
+.add_language .card form p,
+.edit_translate .card form p,
+.edit_language .card form p,
+.edit_word .card form p,
+.import_word_from_excel .card form p,
+.translate_word_from_excel .card form p,
+.change_role_user .card form p,
+.change_password_user .card form p,
+.create_user .card form p {
+  color: red;
+}
+
+.import_word_from_excel .form-container,
+.translate_word_from_excel .form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.import_word_from_excel .upload-files-container,
+.translate_word_from_excel .upload-files-container {
+  border-radius: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.import_word_from_excel .drag-file-area,
+.translate_word_from_excel .drag-file-area {
+  border: 2px dashed #f4a03f;
+  border-radius: 40px;
+  margin: 10px 0 15px;
+  padding: 30px 50px;
+  text-align: center;
+}
+.import_word_from_excel .drag-file-area .upload-icon,
+.translate_word_from_excel .drag-file-area .upload-icon {
+  font-size: 50px;
+}
+.import_word_from_excel .drag-file-area h3,
+.translate_word_from_excel .drag-file-area h3 {
+  font-size: 26px;
+  margin: 15px 0;
+}
+.import_word_from_excel .drag-file-area label,
+.translate_word_from_excel .drag-file-area label {
+  font-size: 19px;
+}
+
+.profile .form-group .label-item::before {
+  content: "*";
+  color: #ff4949;
+  margin-right: 4px;
+}
+.profile .background-avatar {
+  height: 130px;
+}
+.profile .avatar {
+  top: 70px;
+}
+.profile .avatar img {
+  width: 120px;
+}
+.profile .description-profile {
+  padding-top: 100px;
+}
+
+.word_default .word-default-data {
+  background-color: #fff;
+  border: 1px solid #959595;
+  border-radius: 9px;
+  padding: 40px;
+  min-height: 20px;
+  margin: 10px 0;
+  font-size: 21.8px;
+}
+.word_default .word-default-data .title {
+  color: #e13a33;
+  font-size: 1.5rem;
+  font-weight: 500;
+  min-height: 40px;
+}
+.word_default .title {
+  color: #e13a33;
+  font-size: 1.5rem;
+  font-weight: 500;
+  min-height: 40px;
+}
+.word_default .word-content {
+  position: relative;
+  background-color: #fff;
+}
+.word_default .word-content .icon-dot {
+  position: absolute;
+  top: 3px;
+  color: #707070;
+  font-size: 0.9rem;
+}
+.word_default .word-content .bonx_mean .bonx_mea-language,
+.word_default .word-content .bonx_mea-description,
+.word_default .word-content .bonx_mea-translate {
+  color: #363636;
+}
+.word_default .word-content .language {
+  margin-right: 10px;
+}
+.word_default .word-content .language label {
+  color: #000;
+  width: 150px;
+}
+.word_default .word-content .box_mean_router {
+  min-height: 40px;
+  position: relative;
+}
+.word_default .word-content .box_mean_router .word-botton {
+  right: 0;
+  position: absolute;
+}
+
+.ul-list {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  min-width: 300px;
+}
+.ul-list li {
+  margin-right: 5px;
+}
+
+.profile-card-body {
+  min-height: 400px !important;
+}
+
+@media screen and (max-width: 768px) {
+  .btn-clear-input i {
+    right: 130px !important;
+  }
+  .import_word_from_excel .drag-file-area .upload-icon,
+  .translate_word_from_excel .drag-file-area .upload-icon {
+    font-size: 20px;
+  }
+  .import_word_from_excel .drag-file-area h3,
+  .translate_word_from_excel .drag-file-area h3 {
+    font-size: 16px;
+    margin: 15px 0;
+  }
+  .import_word_from_excel .drag-file-area label,
+  .translate_word_from_excel .drag-file-area label {
+    font-size: 11px;
+  }
+  .import_word_from_excel .drag-file-area .choose-file,
+  .translate_word_from_excel .drag-file-area .choose-file {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}
+#modal-login .modal-content {
+  border-radius: 26px;
+  border: 1px solid #000;
+  background: rgba(110, 135, 134, 0.6) !important;
+  -webkit-backdrop-filter: blur(25px);
+          backdrop-filter: blur(25px);
+}
+
+#modal-login .modal-body {
+  padding: 48px 73px;
+}
+
+@font-face {
+  font-family: "UVNLacLongQuan";
+  src: url(/fonts/UVNLacLongQuan.woff2?ef8ad241e99a72276a1545e750b2d396) format("woff2"), url(/fonts/UVNLacLongQuan.woff?d07fe241d6a3d94f133c171e506fcdc9) format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+#NhaThiDauModal .modal-dialog {
+  max-height: 830px;
+  max-width: 1472px;
+  width: 100%;
+  height: auto;
+}
+#NhaThiDauModal .modal-dialog .modal-content {
+  background-image: url(/images/detail-nha-thi-dau.png?8cf76bad9eedb8cafe83f2a7804dc03d);
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  height: 830px;
+}
+#NhaThiDauModal .modal-dialog .modal-content .modal-body {
+  padding-top: 15rem;
+  padding-left: 85px;
+  padding-right: 85px;
+}
+
+#ThuVienModal .modal-dialog {
+  max-height: 830px;
+  max-width: 1472px;
+  width: 100%;
+  height: auto;
+}
+#ThuVienModal .modal-dialog .modal-content {
+  background-image: url(/images/detail-thu-vien.png?307cbce25881e359bc0eb02c5239d335);
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  height: 830px;
+}
+#ThuVienModal .modal-dialog .modal-content .modal-body {
+  padding-top: 15rem;
+  padding-left: 85px;
+  padding-right: 85px;
+}
+
+#SanhHopHepModal .modal-dialog {
+  max-height: 830px;
+  max-width: 1472px;
+  width: 100%;
+  height: auto;
+}
+#SanhHopHepModal .modal-dialog .modal-content {
+  background-image: url(/images/detail-sanh-hop-hep.png?0b47876ca0aa8bc194e012ea1c864db6);
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  height: 830px;
+}
+#SanhHopHepModal .modal-dialog .modal-content .modal-body {
+  padding-top: 15rem;
+  padding-left: 85px;
+  padding-right: 85px;
+}
+
+#ThapThanhTuuModal .modal-dialog {
+  max-height: 862px;
+  max-width: 1433px;
+  width: 100%;
+  height: auto;
+  margin-left: 310px;
+}
+#ThapThanhTuuModal .modal-dialog .modal-content {
+  background-image: url(/images/detail-thap-thanh-tuu.png?f62af6dc2abcc28aad54aa227985540a);
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  height: 862px;
+  position: relative;
+}
+#ThapThanhTuuModal .modal-dialog .modal-content .modal-body {
+  padding-top: 20rem;
+  padding-left: 7rem;
+  padding-right: 7rem;
+}
