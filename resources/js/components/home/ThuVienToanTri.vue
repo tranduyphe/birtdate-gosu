@@ -75,6 +75,9 @@ export default {
                 })
                 .catch((error) => {
                     console.log(error);
+                    if (error.response && error.response.status === 401) {
+                        this.logoutSubmit()
+                    }
                 })
                 .finally();
         },
@@ -136,7 +139,10 @@ export default {
                         }
                     })
                     .catch((error) => {
-                        self.flag = false;
+                        console.log(error);
+                        if (error.response && error.response.status === 401) {
+                            this.logoutSubmit()
+                        }
                     })
                     .finally();
             }

@@ -59,7 +59,7 @@ const routes = [
 		path: '/launch',
 		component: Launch,
 		meta: {
-			middleware: "auth"
+			middleware: "launch"
 		},
 	},
 	{
@@ -85,6 +85,8 @@ router.beforeEach((to, from, next) => {
 		if (authenticated) {
 			next({ name: "sitemap" })
 		}
+		next();
+	}else if (to.meta.middleware == "launch") {
 		next();
 	} else {
 		if (authenticated) {

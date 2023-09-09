@@ -8,7 +8,7 @@
             </div>
             <!-- <button class="div-img thap-thanh-tuu" @click="showMedalPopupCKT"> <img :src="thapthanhtuuimgUrl" alt="Tháp Thành Tựu" width="485"></button> -->
             <div class="div-img thu-vien-toan-tri"  data-aos="fade-right">
-                <button class="" data-bs-toggle="modal" data-bs-target="#ThuVienModal">
+                <button class="" data-bs-toggle="modal" data-bs-target="#ThuVienModal"  @click="activeQuest">
                     <img :src="thuvienimgUrl" alt="Thư Viện Toàn Tri" width="295">
                 </button>
             </div>
@@ -39,8 +39,8 @@
             <img :src="bannerNameimgUrl" alt="" width="425" class="banner">
             <div class="infor-user d-flex align-items-center justify-content-between">
                 <div class="group-info d-flex align-items-center">
-                    <img :src="sanhhophepimgUrl" alt="" class="avatar" width="65" height="65">
-                    <p class="mb-0">&nbsp;Xin chào&nbsp;<strong>{{user_name}}</strong></p>
+                    <img :src="avatar" alt="" class="avatar" width="65" height="65">
+                    <p class="mb-0">&nbsp;Xin chào&nbsp;<strong>{{user_name}} - {{user_code}}</strong></p>
                 </div>
                 <a href="javascript:void(0)" @click="logoutSubmit" class="logout mb-0 pl-2">Thoát</a>
             </div>
@@ -100,7 +100,10 @@ import 'aos/dist/aos.css';
 import ModalNhaThiDau from './modal-detail/nhathidau-modal.vue';
 import ModalThapThanhTuu from './modal-detail/thapthanhtuu-modal.vue';
 
-import { mapGetters, mapMutations, mapActions } from "vuex";
+import {
+    authGetters,
+    authMethods,
+} from "@/store/store";
 
 export default {
     components: {
@@ -122,15 +125,19 @@ export default {
             kimcuongimgUrl: '/images/sinhnhat11nam/img_main/kimcuong.png',
             longvuimgUrl: '/images/sinhnhat11nam/img_main/longvu.png',
             user_name: "minhtam.nguyen",
+            user_code:"test",
+            avatar: '/images/sinhnhat11nam/img_main/banner-name.png',
             showModalThuVien: false,
             showModalThapThanhTuu: false,
             attrKimcuong: 67,
             attrLongvu: 15,
             attrThongbao: 0,
+            friendCode: "",
         };
     },
     created() {
         this.getItemUser();
+        this.user();
     },
     mounted() {
         // Khởi tạo AOS và cấu hình tùy chọn theo ý muốn
@@ -138,38 +145,22 @@ export default {
             duration: 1000, // Thời gian hoàn thành hiệu ứng (milliseconds)
             easing: 'ease', // Thuật toán điều chỉnh (có thể sử dụng các giá trị khác nhau)
         });
+        
     },
     computed: {
         
     },
     methods: {
-        ...mapActions(["oLogout"]),
-        getItemUser() {
-            let self = this;
-            axios.get('/api/get-item', {
-            })
-                .then(function (response) {
-                    if (response.data.status === 200 && response.data.success == true) {
-                        self.attrKimcuong = response.data.data.diamond;
-                        self.attrLongvu = response.data.data.feathers;
-                        console.log("response.data.data", response.data.data);
-
-                    }
-                })
-                .catch((error) => {
-                    console.log(error);
-                })
-                .finally();
+        ...authMethods,
+        ...authGetters,
+        async user(){
+            let user = await this.users();
+            console.log("check user: ",user);
+            this.user_name = user.name;
+            this.user_code = user.user_code;
+            this.avatar = user.avatar
         },
-
-        logoutSubmit() {
-            this.oLogout("");
-        },
-
-        backgroundImageUrl() {
-            return `url(${this.backgroundUrl})`;
-        },
-        openModalThuVien() {
+        activeQuest(){
             let self = this;
             console.log("thuvien");
             axios.post('/api/active-quest', {
@@ -179,15 +170,50 @@ export default {
             })
                 .then(function (response) {
                     if (response.data.status === 200 ) {
-                        self.showModalThuVien = true;
+                        
                     }
                 })
                 .catch((error) => {
                     console.log(error);
+                    if (error.response && error.response.status === 401) {
+                    this.logoutSubmit()
+                    }
                 })
                 .finally();
             
         },
+        getItemUser() {
+            let self = this;
+            axios.get('/api/get-item', {
+            })
+                .then(function (response) {
+                    console.log("check get-item login response:",response);
+                    if (response.data.status === 200 && response.data.success == true) {
+                        self.attrKimcuong = response.data.data.diamond;
+                        self.attrLongvu = response.data.data.feathers;
+                        console.log("response.data.data", response.data.data);
+
+                    }
+                })
+                .catch((error) => {
+                    if (error.response && error.response.status === 401) {
+                    this.logoutSubmit()
+                    }
+                })
+                .finally();
+        },
+
+        async logoutSubmit() {
+            console.log("signOut");
+            await this.logout();
+        },
+
+        backgroundImageUrl() {
+            return `url(${this.backgroundUrl})`;
+        },
+        openModalThuVien() {
+            self.showModalThuVien = true;
+            },
         closeModalThuVien(){
             this.showModalThuVien = false;
         },

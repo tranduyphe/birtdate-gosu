@@ -3,8 +3,8 @@ import { login, logout } from '@/helper/auth.js';
 import router from '@/routers'
 
 const state = {
-    authenticated:false,
-    user:{},
+    authenticated: false,
+    user: {},
 
 };
 
@@ -18,44 +18,49 @@ const actions = {
         let results = await login(loginData);
         if (results.status == 200) {
             const data = results.data.data;
-            if ( data.token && data.token.length > 0 ) {
-                commit('SET_AUTHENTICATED',true);
+            if (data.token && data.token.length > 0) {
+                commit('SET_AUTHENTICATED', true);
                 commit('SET_USER', data);
-                localStorage.setItem("users",JSON.stringify(data))
+                localStorage.setItem("users", JSON.stringify(data))
                 window.location.href = '/site-map';
-            }else{
+            } else {
                 return results.data;
             }
         }
     },
 
-    async logout( { commit } ) {       
+    async logout({ commit }) {
         const users = JSON.parse(localStorage.getItem('users') || "{}");
-        if (Object.keys(users).length > 0){
+        if (Object.keys(users).length > 0) {
             let token = users.token;
             let results = await logout(token);
             console.log('results', results)
             if (results.status == 200) {
                 const data = results.data.data;
-                if ( data.logout ) {
+                if (data.logout) {
                     commit('SET_AUTHENTICATED', false);
                     commit('SET_USER', {});
                     localStorage.removeItem("users");
-                    router.push( { name:'login' } ) // redirect to the home page when login is successful
+                    router.push({ name: 'login' }) // redirect to the home page when login is successful
                 }
+            } else {
+                commit('SET_AUTHENTICATED', false);
+                commit('SET_USER', {});
+                localStorage.removeItem("users");
+                router.push({ name: 'login' }) // redirect to the home page when login is successful
             }
-        }            
-    },   
+        }
+    },
 
-    users(){
+    users() {
         let data = JSON.parse(localStorage.getItem('users') || "{}");
         return data;
     }
 };
 
 const mutations = {
-    SET_AUTHENTICATED: ( state, payload ) => ( state.authenticated = payload ),
-    SET_USER: ( state, payload ) => ( state.user = payload )
+    SET_AUTHENTICATED: (state, payload) => (state.authenticated = payload),
+    SET_USER: (state, payload) => (state.user = payload)
 };
 
 export default {

@@ -147,6 +147,9 @@ export default {
                 })
                 .catch((error) => {
                     console.log(error);
+                    if (error.response && error.response.status === 401) {
+                        this.logoutSubmit()
+                    }
                 })
                 .finally();
         },
@@ -163,6 +166,9 @@ export default {
                 })
                 .catch((error) => {
                     console.log(error);
+                    if (error.response && error.response.status === 401) {
+                        this.logoutSubmit()
+                    }
                 })
                 .finally();
         },
@@ -188,13 +194,13 @@ export default {
                 })
                 .catch((error) => {
                     console.log(error);
+                    if (error.response && error.response.status === 401) {
+                        this.logoutSubmit()
+                    }
                 })
                 .finally();
         },
         getTopFeathers() {
-            let gameId = this.$store.getters.gameId;
-            // let gameId = 0;
-            console.log("check gameID: ", this.$store.getters.gameId)
             let self = this;
             axios.get('/api/get-top-feathers', {
 
@@ -207,6 +213,9 @@ export default {
                 })
                 .catch((error) => {
                     console.log(error);
+                    if (error.response && error.response.status === 401) {
+                        this.logoutSubmit()
+                    }
                 })
                 .finally();
         },
@@ -231,7 +240,8 @@ export default {
 .quest-button {
     margin-left: 10px;
     /* Tùy chỉnh margin nếu cần */
-}</style>
+}
+</style>
     
   
   

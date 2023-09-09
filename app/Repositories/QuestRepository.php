@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Models\MinigameQuests;
 use Illuminate\Support\Carbon;
 use App\Models\LogActivity;
+use App\Models\UserInvite;
 use App\Repositories\LogRepository;
 
 class QuestRepository
@@ -104,8 +105,20 @@ class QuestRepository
         $questData = MinigameQuests::where('user_id', $userId)
             ->whereDate('created_at', Carbon::today())
             ->first();
+            // dump( Carbon::today());
+            // dump($questData);die;
         if ($questData) {
+            // tìm dữ liệu được mời của bản thân
+
             $quests = json_decode($questData->quests, true);
+            $count = UserInvite::where('friend_id', $userId)
+                ->whereDate('created_at', Carbon::today())
+                ->count();
+            if ($quests[2]["current_attempts"] < $quests[2]["total_attempts"] && $quests[2]["current_attempts"] < $count) {
+                $quests[2]["current_attempts"] = $count;
+                $questData->quests =  json_encode($quests);
+                $questData->save();
+            }
         } else {
             $newQuest = new MinigameQuests();
             $newQuest->user_id = $userId;  // Thiết lập user_id cho quest mới
@@ -136,11 +149,11 @@ class QuestRepository
             if ($listQuest[$questType]['current_attempts'] < $listQuest[$questType]['total_attempts']) {
                 $listQuest[$questType]['current_attempts'] = min($listQuest[$questType]['current_attempts'] + $record, $listQuest[$questType]['total_attempts']);
                 $questData->quests = json_encode($listQuest);
-                $questData->save();
+                
                 if ($listQuest[$questType]['current_attempts'] >= $listQuest[$questType]['total_attempts']) {
                     // lưu lịch sử hoạt động
                     $LogRepository = new LogRepository();
-                    $LogRepository->saveLogActivity($user, 2, "Hoàn thành nhiệm vụ" . ($questType + 1) . " tại bảng thử thách.");
+                    $LogRepository->saveLogActivity($user, 2, "Hoàn thành nhiệm vụ " . ($questType + 1) . " tại bảng thử thách.");
                     $newLog = new LogActivity();
                     $newLog->user_id = $userId;
 
@@ -149,21 +162,24 @@ class QuestRepository
                         $checkQuest6 = true;
                         for ($i = 0; $i < 6; $i++) {
                             if ($listQuest[$i]['current_attempts'] < $listQuest[$questType]['total_attempts']) {
+                                // dump($listQuest[$i]);
                                 $checkQuest6 = false;
                             }
                         }
+                        // dump($checkQuest6);die;
                         if ($checkQuest6) {
                             $listQuest[6]['current_attempts'] = 1;
                             $questData->quests = json_encode($listQuest);
-                            $questData->save();
+                            
                             // lưu lịch sử hoạt động
                             $LogRepository = new LogRepository();
-                            $LogRepository->saveLogActivity($user, 2, "Hoàn thành nhiệm vụ" . (6 + 1) . " tại bảng thử thách.");
+                            $LogRepository->saveLogActivity($user, 2, "Hoàn thành nhiệm vụ " . (6 + 1) . " tại bảng thử thách.");
                             $newLog = new LogActivity();
                             $newLog->user_id = $userId;
                         }
                     }
                 }
+                $questData->save();
             }
         }
     }

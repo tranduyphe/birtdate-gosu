@@ -121,6 +121,9 @@ export default {
                 })
                 .catch((error) => {
                     console.log(error);
+                    if (error.response && error.response.status === 401) {
+                        this.logoutSubmit()
+                    }
                 })
                 .finally();
         },
@@ -146,8 +149,6 @@ export default {
         async getFlip() {
 
             let gameId = await this.getGameId();
-            // let gameId = 0;
-            console.log("check gameID: ", this.$store.getters.gameId)
             let self = this;
             axios.get('/api/get-flip', {
                 params: {
@@ -164,6 +165,9 @@ export default {
                 })
                 .catch((error) => {
                     console.log(error);
+                    if (error.response && error.response.status === 401) {
+                        this.logoutSubmit()
+                    }
                 })
                 .finally();
         },
@@ -231,7 +235,11 @@ export default {
                             }
                         })
                         .catch((error) => {
+                            this.flag = true;
                             console.log(error);
+                            if (error.response && error.response.status === 401) {
+                                this.logoutSubmit()
+                            }
                         })
                         .finally();
                 }
@@ -290,6 +298,9 @@ export default {
                 })
                 .catch((error) => {
                     console.log(error);
+                    if (error.response && error.response.status === 401) {
+                        this.logoutSubmit()
+                    }
                 })
                 .finally();
         },
@@ -529,4 +540,5 @@ export default {
     filter: brightness(140%);
 }
 
-/* ... CSS sau đó ... */</style>
+/* ... CSS sau đó ... */
+</style>
