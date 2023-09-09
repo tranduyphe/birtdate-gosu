@@ -1,38 +1,38 @@
 <template>
-    <h3 class="text-center mt-5">Game mini</h3>
-    <div>Lông phượng hoàng:{{ feathers }}</div>
-    <div>Đá mặt trăng: {{ diamond }}</div>
-    <h1 class="text-center mt-5" v-if="checkGameOver">Game Over</h1>
-    <!-- <button @click="reloadFlip()">
-        Start
-    </button> -->
-    <div class="container" v-if="flipList != nul">
+    <div class="thuvientoantri container" v-if="flipList != nul">
         <div class="row">
-            <div class="col-md-12">
-                <table class="table table-bordered" style="background-color: gray;">
-                    <thead>
-                    </thead>
-                    <tbody>
-                        <tr v-for="row in 4" :key="row">
-                            <td v-for="col in 8" :key="col">
-                                <div class="card" @click="flipCard((row - 1) * 8 + col - 1)"
-                                    :style="{ backgroundColor: flipList[(row - 1) * 8 + col - 1].color }">
-                                    <div class="front">
-                                    </div>
-                                    <div v-if="flipList[(row - 1) * 8 + col - 1].active == 1"
-                                        :style="{ backgroundColor: flipList[(row - 1) * 8 + col - 1].color }">
-                                    </div>
-                                    <div v-else-if="flipList[(row - 1) * 8 + col - 1].active == 2" class="back"
-                                        :style="{ backgroundColor: 'black' }">
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="col-md-12 d-flex justify-content-evenly">
+                <div class="row-card" v-for="col in 8" :key="col" data-aos="zoom-in-up">
+                    <div class="cell-card mb-3" v-for="row in 4" :key="row">
+                        <div class="card" @click="flipCard((row - 1) * 8 + col - 1)"
+                            :style="{ backgroundColor: flipList[(row - 1) * 8 + col - 1].color }">
+                            <img :src="flipList[(row - 1) * 8 + col - 1].color" alt="" width="65" height="65">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="line-break text-center my-3">
+                <img :src="lineBrealimg" alt="">
+            </div>
+            <div class="col-md-8"></div>
+            <div class="attribute-items d-flex col-md-4 justify-content-around align-items-end">
+                <div class="div-img items thongbao mr-5" data-aos="fade-down">
+                    <img :src="thongbaoimgUrl" alt="Thông báo" width="">
+                    <span class="font-size-14 text-white">{{ attrThongbao }}</span>
+                </div>
+                <div class="div-img items kimcuong mr-5" data-aos="fade-down">
+                    <img :src="kimcuongimgUrl" alt="Thông báo" width="">
+                    <span class="font-size-14 text-white">{{ diamond }}</span>
+                </div>
+                <div class="div-img items longvu" data-aos="fade-down">
+                    <img :src="longvuimgUrl" alt="Thông báo" width="">
+                    <span class="font-size-14 text-white">{{ feathers }}</span>
+                </div>
             </div>
         </div>
     </div>
+
 </template>
   
 <script>
@@ -48,12 +48,22 @@ export default {
             socket: null,
             pageConnected: true,
             accessToken: "", // Khởi tạo access token rỗng
-            colors: ['blue', 'red', 'green', 'pink'],
+            colors: ['/images/sinhnhat11nam/img_main/thuvien-itemRed.png', '/images/sinhnhat11nam/img_main/thuvien-itemYellow.png', '/images/sinhnhat11nam/img_main/thuvien-itemPuple.png', '/images/sinhnhat11nam/img_main/thuvien-itemPink.png','/images/sinhnhat11nam/img_main/thuvien-itemGreen.png'],
             // flipList: new Array(33).fill({ active: false, color: '' }), // Tạo mảng 9 phần tử với giá trị ban đầu là false
             flipList: [],
             flag: false,
             diamond: 0,
             feathers: 0,
+            attrThongbao: 0,
+            lineBrealimg: '/images/sinhnhat11nam/img_main/line-break.png',
+            thongbaoimgUrl: '/images/sinhnhat11nam/img_main/thongbao.png',
+            kimcuongimgUrl: '/images/sinhnhat11nam/img_main/kimcuong.png',
+            longvuimgUrl: '/images/sinhnhat11nam/img_main/longvu.png',
+            itemRed: '/images/sinhnhat11nam/img_main/thuvien-itemRed.png',
+            itemYellow: '/images/sinhnhat11nam/img_main/thuvien-itemYellow.png',
+            itemPuple: '/images/sinhnhat11nam/img_main/thuvien-itemPuple.png',
+            itemGreen: '/images/sinhnhat11nam/img_main/thuvien-itemGreen.png',
+            itemPink: '/images/sinhnhat11nam/img_main/thuvien-itemPink.png',
         };
     },
     created() {
@@ -111,6 +121,7 @@ export default {
                                 }
                                 if (response.data.data.reward) {
                                     let reward = response.data.data.reward;
+                                    let user = response.data.data.user.name;
                                     let message = "";
                                     if(reward.length == 0){
                                         message = "Chúc bạn may mắn lần sau";
@@ -122,20 +133,25 @@ export default {
                                         if (reward[i].item_id == "1") {
                                             console.log("message: ", message);
                                             console.log("reward[i].record: ", reward[i].record);
-                                            message = message + " Lông phượng hoàng +" + reward[i].record;
+                                            message = message + "Chúc mừng " + user + " đã nhận được " + reward[i].record + " Lông Phượng Hoàng";
                                             console.log("message: ", message);
                                         }
                                         if (reward[i].item_id == "2") {
-                                            message = message + " Đá mặt trăng +" + reward[i].record;
+                                            message = message + "Chúc mừng " + user + " đã nhận được " + reward[i].record + " Đá mặt trăng";
                                         }
 
                                         if (reward[i].item_id == "3") {
                                             message = message + " Thẻ tiềm long +" + reward[i].record;
                                         }
                                     }
-                                    }
-                                    
-                                    alert(message);
+                                    // alert(message);
+                                    self.$swal.fire({
+                                        position: "center",
+                                        icon: "success",
+                                        title: message,
+                                        showConfirmButton: false,
+                                        timer: 5000
+                                    });
                                     self.getFlip();
                                     self.flag = false;
                                 }
@@ -143,8 +159,9 @@ export default {
                                 alert(response.data.message);
                                 self.flag = false;
                             }
-                        } else {
-                            self.flag = false;
+                            } else {
+                                self.flag = false;
+                            }
                         }
                     })
                     .catch((error) => {
@@ -162,25 +179,25 @@ export default {
 
     },
     computed: {
-        cardBackgroundColor() {
-            return (col) => {
-                if (this.waiting[col] === 1) {
-                    return 'blue';
-                } else if (this.waiting[col] === 2) {
-                    return 'red';
-                } else if (this.waiting[col] === 3) {
-                    return 'green';
-                } else if (this.waiting[col] === 4) {
-                    return 'pink';
+        // cardBackgroundColor() {
+        //     return (col) => {
+        //         if (this.waiting[col] === 1) {
+        //             return 'blue';
+        //         } else if (this.waiting[col] === 2) {
+        //             return 'red';
+        //         } else if (this.waiting[col] === 3) {
+        //             return 'green';
+        //         } else if (this.waiting[col] === 4) {
+        //             return 'pink';
 
-                } else if (this.waiting[col] === 5) {
-                    return 'orange';
+        //         } else if (this.waiting[col] === 5) {
+        //             return 'orange';
 
-                } else {
-                    return '';
-                }
-            };
-        }
+        //         } else {
+        //             return '';
+        //         }
+        //     };
+        // }
     },
     mounted() {
         // Lắng nghe sự kiện storage để cập nhật tên người dùng từ tab khác
@@ -249,38 +266,16 @@ export default {
     perspective: 1000px;
     position: relative;
     transform-style: preserve-3d;
-    transition: transform 0.5s;
+    transition: transform 0.3s linear;
 }
 
 .flipped {
     transform: rotateY(180deg);
 }
 
-.front,
-.back {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-}
-
-.front {
-    transform: rotateY(0deg);
-    /* background-color: #f5f5f5; */
-
-
-}
-
-.back {
-    transform: rotateY(180deg);
-    background-color: #3498db;
-    color: white;
-    border: solid #000;
-}
+.thuvientoantri .card:hover{
+    filter: brightness(140%);
+} 
 
 /* Thêm các hiệu ứng CSS keyframes animation tại đây */
 

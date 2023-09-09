@@ -1,4 +1,8 @@
 <template>
+    <div class="landscape-notification">
+        <img src="https://dl.dir.freefiremobile.com/common/web_event/common/images/scape.png" alt="" width="300">
+        <p>Vui lòng xoay thiết bị của bạn sang chế độ nằm ngang để có trải nghiệm tốt hơn.</p>
+    </div>
     <div class="wrapper-content" :style="{ backgroundImage:backgroundImageUrl() }">
         <div class="div-content">
             <div class="div-img thap-thanh-tuu" data-aos="fade-down">
@@ -40,7 +44,7 @@
             <div class="infor-user d-flex align-items-center justify-content-between">
                 <div class="group-info d-flex align-items-center">
                     <img :src="avatar" alt="" class="avatar" width="65" height="65">
-                    <p class="mb-0">&nbsp;Xin chào&nbsp;<strong>{{user_name}} - {{user_code}}</strong></p>
+                    <p class="mb-0">&nbsp;Xin chào&nbsp;<strong>{{user_name}}</strong></p>
                 </div>
                 <a href="javascript:void(0)" @click="logoutSubmit" class="logout">Thoát</a>
             </div>
@@ -62,7 +66,7 @@
                 <div class="modal-content">
                     <div class="modal-body">
                         <button type="button" ref="closeModal" class="btn close-button" data-bs-dismiss="modal" aria-label="Close"><img :src="closeimgUrl" alt=""></button>
-                        
+                        <ModalThuVienToanTri></ModalThuVienToanTri>
                     </div>
                 </div>
             </div>
@@ -102,6 +106,7 @@ import 'aos/dist/aos.css';
 
 import ModalNhaThiDau from './modal-detail/nhathidau-modal.vue';
 import ModalThapThanhTuu from './modal-detail/thapthanhtuu-modal.vue';
+import ModalThuVienToanTri from './modal-detail/thuvien-modal.vue';
 
 import {
     authGetters,
@@ -111,6 +116,7 @@ import {
 export default {
     components: {
         ModalNhaThiDau,
+        ModalThuVienToanTri,
         ModalThapThanhTuu,
     },
     data() {
@@ -272,24 +278,6 @@ export default {
         backgroundImageUrl() {
             return `url(${this.backgroundUrl})`;
         },
-        openModalThuVien() {
-            self.showModalThuVien = true;
-            },
-        closeModalThuVien(){
-            this.showModalThuVien = false;
-        },
-        openModalThapThanhTuu() {
-            this.showModalThapThanhTuu = true;
-        },
-        closeModalThapThanhTuu(){
-            this.showModalThapThanhTuu = false;
-        },
-        showMedalPopupCKT() {
-            $('#ThuVienModal').modal('show');
-        },
-        closeMedalPopupCKT() {
-            $('#ThuVienModal').modal('hide');
-        },
 
         updateAttrKimcuong(newValue) {
             // Cập nhật giá trị của attrKimcuong từ sự kiện
@@ -341,10 +329,11 @@ export default {
     border: none;
 }
 
-.wrapper-content .div-img button:focus,.wrapper-content .div-img button:active{
+.wrapper-content .div-img button:focus,.wrapper-content .div-img button:active,.wrapper-content .div-img button:focus-visible{
     box-shadow: none;
     border: none;
     transform: none;
+    outline: none;
 }
 
 
@@ -434,6 +423,7 @@ export default {
 .banner-name img.avatar{
     border-radius: 50%;
     border: 2.5px solid #ffffff;
+    object-fit: cover;
 }
 
 button.close-button{
@@ -447,9 +437,10 @@ button.close-button:hover{
     filter: brightness(130%);
 }
 
-button.close-button:focus,button.close-button:active{
+button.close-button:focus,button.close-button:active,button.close-button:focus-visible{
     box-shadow: none;
-    border: none;
+    border: transparent;
+    outline: none;
 }
 
 #ThapThanhTuuModal button.close-button{
@@ -460,4 +451,55 @@ button.close-button:focus,button.close-button:active{
     position: absolute;
 } */
 /* Định dạng cho phần giao diện của component (CSS có phạm vi scoped) */
+
+.landscape-notification {
+  display: none;
+  background-color: rgba(0, 0, 0, 0.9);
+  color: white;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  text-align: center;
+  transform-origin: center;
+  /* transform: rotate(90deg) translateY(-50%); */
+  white-space: nowrap;
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  flex-direction: column;
+}
+
+.landscape-notification img{
+    animation: swingOne 1.5s ease infinite alternate;
+    margin-bottom: 100px;
+}
+
+.landscape-notification p{
+    font-size: 20px;
+}
+
+@keyframes swingOne{
+    0% {
+        transform: rotate(-90deg);
+    }
+    30% {
+        transform: rotate(-90deg);
+    }
+    70% {
+        transform: rotate(0);
+    }
+    100% {
+        transform: rotate(0);
+    }
+}
+
+@media screen and (orientation: portrait) {
+  .landscape-notification {
+    display: flex;
+  }
+}
 </style>

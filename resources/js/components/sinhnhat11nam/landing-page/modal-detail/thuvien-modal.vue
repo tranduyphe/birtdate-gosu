@@ -1,20 +1,18 @@
 <template>
-    <div id="NhaThiDau-Modal">
-      <miniGame></miniGame>
+    <div id="ThuVien-Modal">
+      <ThuVienToanTri></ThuVienToanTri>
     </div>
 </template>
 
 <script>
-import miniGame from '../../../home/Minigame.vue';
+import ThuVienToanTri from '../../../home/ThuVienToanTri.vue';
 export default {
     components: {
-        miniGame
+        ThuVienToanTri
     },
     data() {
         return {
-            itemRed: '/images/sinhnhat11nam/img_main/thuvien-itemRed.png',
-            itemYellow: '/images/sinhnhat11nam/img_main/thuvien-itemYellow.png',
-            itemPuple:'/images/sinhnhat11nam/img_main/thuvien-itemPuple.png',
+
             lineBrealimg: '/images/sinhnhat11nam/img_main/line-break.png',
         }
     },
@@ -26,13 +24,5 @@ export default {
 
 <style>
 
-.cell-wait p{
-    color: #e7ca8e;
-}
-
-.cell-wait span{
-    background-color: #292929;
-    color: white;
-}
 </style>
   

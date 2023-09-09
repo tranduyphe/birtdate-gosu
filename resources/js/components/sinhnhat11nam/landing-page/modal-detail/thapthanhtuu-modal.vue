@@ -41,15 +41,15 @@
                                 class="item-task col-lg-5 d-flex align-items-center justify-content-between">
                                 <span class="star"
                                     :style="{ color: item.is_reward == 0 ? '#b2ad8a' : '#289e11' }">&#10022;</span>
-                                <div class="item-info col-8">
+                                <div class="item-info col-8 d-flex align-items-center">
                                     <p class="m-0">{{ item.name }}</p>
+                                    <div class="friendcode d-flex" v-if="index == 1"><input class="form-control w-75" v-model="friendCode"><button class="btn btn-success" type="button" @click="invite">Mời</button></div>
                                 </div>
                                 <div class="point">
                                     <p class="m-0" :style="{ color: item.is_reward == 0 ? '#b2ad8a' : '#289e11' }">{{
                                         item.current_attempts }}/{{ item.total_attempts }}</p>
                                 </div>
-<div v-if="index == 1"><input v-model="friendCode"> <button type="button"
-                                            @click="invite">mời bạn</button></div>
+                                
                                 <div class="item-button" v-if="item.is_reward == 0">
                                     <button class="btn p-0" @click="getReWard(item.type)"><img :src="iconBtn"
                                             title="Bấm vào đây để nhận thưởng"></button>
@@ -174,7 +174,24 @@ export default {
                             if (response.data.status === 200 && response.data.success == true) {
                                 // self.nhiemvu = response.data.data.nhiemvu;
                                 self.updateNhiemvuTtt(response.data.data.quests)
-                                alert(response.data.message);
+                                if(response.data.message == 'Không tìm thấy Bạn học này'){
+                                    self.$swal.fire({
+                                        position: "center",
+                                        icon: "error",
+                                        title: response.data.message,
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                    });
+                                }else{
+                                    self.$swal.fire({
+                                        position: "center",
+                                        icon: "success",
+                                        title: response.data.message,
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                    });
+                                }
+                               
                             }
                         })
                         .catch((error) => {
@@ -213,14 +230,28 @@ export default {
                                 
                                 console.log("response.data.data.quests",response.data.data.quests);
                                     self.updateNhiemvuTtt(response.data.data.quests);
-                                alert(response.data.message);
+                                // alert(response.data.message);
+                                self.$swal.fire({
+                                    position: "center",
+                                    icon: "success",
+                                    title: response.data.message,
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                });
                             } else {
                                 if (response.data.data.quests) {
                                     // self.nhiemvu = response.data.data.nhiemvu;
                                     console.log("response.data.data.quests",response.data.data.quests);
                                     self.updateNhiemvuTtt(response.data.data.quests);
                                 }
-                                alert(response.data.message);
+                                // alert(response.data.message);
+                                self.$swal.fire({
+                                    position: "center",
+                                    icon: "error",
+                                    title: response.data.message,
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                });
                             }
                         }
                     })
@@ -383,5 +414,19 @@ export default {
 .lich-tuong-ky .item-reason,
 .item-task .item-created-at {
     background: #edebdc;
+}
+
+.friendcode {
+    max-height: 45px;
+}
+
+.friendcode input{
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.friendcode button{
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
 }
 </style>

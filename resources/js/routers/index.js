@@ -67,8 +67,10 @@ const routes = [
 		path: '/site-map',
 		component: SiteMap,
 		meta: {
-			middleware: "auth"
+			middleware: "auth",
+			title: `Sinh Nhật GOSU 11 Năm`
 		},
+		
 	},
 ]
 
