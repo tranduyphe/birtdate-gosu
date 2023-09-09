@@ -53,7 +53,7 @@ const actions = {
     },
     users: () => {
         let data = JSON.parse(localStorage.getItem('users') || "{}");
-        commit('SET_USER', data);
+        return data;
     }
     
 };
