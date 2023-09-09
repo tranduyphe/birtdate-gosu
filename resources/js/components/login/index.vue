@@ -1,12 +1,12 @@
 <script>
-import Header from '@/components/layouts/Header';
+
 import {
     authMethods,
 } from "@/store/store";
 
 export default {
     components: {
-        Header
+        
     }, 
     data: () => {
         return{
@@ -43,7 +43,6 @@ export default {
 </script>
 <template>    
     <div class="main-login h-100vh">
-        <Header></Header>
         <div class="content-login">
             <div class="d-flex h-100vh flex-column justify-content-center">
                 <div class="content w-50 mx-auto text-center mt-10">
@@ -58,7 +57,7 @@ export default {
         </div>
         <div class="modal fade modalcustom" id="modalLogin" tabindex="-1" aria-labelledby="modalLoginLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-header">
+                <div class="modal-header d-none">
                     <button type="button" ref="closeModal" class="" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-content">

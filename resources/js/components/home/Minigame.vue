@@ -39,7 +39,7 @@
                     </div>
                 </div>
             </div>
-            <div class="attribute-items mt-4 d-flex col-md-4 justify-content-end align-items-end">
+            <div class="attribute-items mt-4 d-flex col-md-4 justify-content-around align-items-end">
                 <div class="div-img items thongbao mr-5" data-aos="fade-down">
                     <img :src="thongbaoimgUrl" alt="Thông báo" width="">
                     <span class="font-size-14 text-white">{{ attrThongbao }}</span>
@@ -457,6 +457,7 @@ export default {
 
 .cell-wait {
     min-height: 145px;
+    padding-left: 50px;
 }
 
 .front,

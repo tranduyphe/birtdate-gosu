@@ -28,7 +28,7 @@ class QuestRepository
                 'name' => 'Mời 10 phù thủy đi học chung',
                 'type' => '1',
                 'total_attempts' => 10,
-                'current_attempts' => 0,
+                'current_attempts' => 9,
                 'is_reward' => 0,
                 'diamond_reward' => 10
             ],
