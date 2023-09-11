@@ -7,7 +7,7 @@
     --colorForm:#0B2525;
 }
 .main-login {
-    background-image: url('../images/bg_login.jpg');
+    background-image: url('../images/sinhnhat11nam/img_main/bg-login.png');
     background-size: cover;
     font-size: 1.25rem;
     color: var(--bs-white);
@@ -45,6 +45,11 @@
 .h-100vh {
     height: 100vh;
 }
+
+.w-100vw {
+    width: 100vw;
+}
+
 .btn.btn-custom {
     color: var(--bs-white);
     font-family: var(--fontInter);
@@ -87,11 +92,13 @@
 }
 .frmLogin h4 {
     color: var(--colorForm);
+    font-family: 'UVNLacLongQuan';
     font-size: 2rem;
     font-weight: 400;
 }
 .frmLogin label {
     color: var(--colorForm);
+    font-family: 'UVNLacLongQuan';
     font-size: 2rem;
     font-weight: 400;
 }
@@ -99,10 +106,16 @@
     border: 0;
     border-radius: 0;
     outline: none;
+    font-family: 'UVNLacLongQuan';
 }
 .error {
     color: var(--bs-form-invalid-color);
     display: block;
     font-weight: 700;
     font-size: 1rem;
+    font-family: 'UVNLacLongQuan';
+}
+
+.frmLogin button{
+    font-family: 'UVNLacLongQuan' !important;
 }

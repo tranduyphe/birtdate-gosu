@@ -36,7 +36,7 @@
                             <img :src="lineBreak" class="mb-3">
                         </div>
 
-                        <div class="task row justify-content-evenly">
+                        <div class="task row justify-content-evenly flex-column align-items-center">
                             <div v-for="(item, index) in quests" :key="index"
                                 class="item-task col-lg-5 d-flex align-items-center justify-content-between">
                                 <span class="star"
