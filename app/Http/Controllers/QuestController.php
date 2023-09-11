@@ -161,11 +161,12 @@ class QuestController extends Controller
         $questType = 1;
         $QuestRepository->updateQuest($user, $questType, 1);
         $newQuest = $QuestRepository->getQuests($user->id);
+        
         $response = [
             "status" => 200,
             "message" => "Mời bạn đi học thành công!",
             "data" => [
-                'quests' => $newQuest
+                'quests' => $newQuest,
             ],
             "success" => true
         ];
@@ -228,11 +229,14 @@ class QuestController extends Controller
                 }
                 Cache::forget($cacheKey); // Lưu trong cache trong 5 phút
                 // Cache::forget($cacheKey);
+                
+                $user->refresh();
                 $response = [
                     "status" => 200,
                     "message" => "Đá mặt trăng +" . $record,
                     "data" => [
-                        'quests' => $getQuest
+                        'quests' => $getQuest,
+                        'user' => $user
                     ],
                     "success" => true
                 ];

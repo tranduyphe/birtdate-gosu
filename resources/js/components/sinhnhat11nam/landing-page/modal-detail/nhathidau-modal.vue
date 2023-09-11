@@ -1,9 +1,8 @@
 <template>
     <div id="NhaThiDau-Modal">
-      <!-- Nội dung modal ở đây -->
-      <miniGame :attrKimcuong="attrKimcuong" @updateAttrKimcuongNtd="updateAttrKimcuongNtd"
-      :attrLongvu="attrLongvu" @updateAttrLongvuNtd="updateAttrLongvuNtd"
-      ></miniGame>
+        <!-- Nội dung modal ở đây -->
+        <miniGame :attrKimcuong="attrKimcuong" @updateAttrKimcuongNtd="updateAttrKimcuongNtd" 
+            :attrLongvu="attrLongvu" @updateAttrLongvuNtd="updateAttrLongvuNtd"></miniGame>
     </div>
 </template>
 
@@ -11,8 +10,8 @@
 import miniGame from '../../../home/Minigame.vue';
 export default {
     props: {
-        attrKimcuong:Number,
-        attrLongvu:Number,
+        attrKimcuong: Number,
+        attrLongvu: Number,
     },
     components: {
         miniGame
@@ -21,21 +20,21 @@ export default {
         return {
             itemRed: '/images/sinhnhat11nam/img_main/thuvien-itemRed.png',
             itemYellow: '/images/sinhnhat11nam/img_main/thuvien-itemYellow.png',
-            itemPuple:'/images/sinhnhat11nam/img_main/thuvien-itemPuple.png',
+            itemPuple: '/images/sinhnhat11nam/img_main/thuvien-itemPuple.png',
             lineBrealimg: '/images/sinhnhat11nam/img_main/line-break.png',
         }
     },
     created() {
-        
+
     },
     methods: {
         updateAttrKimcuongNtd(newValue) {
-            console.log("updateAttrKimcuongNtd newValue",newValue);
+            console.log("updateAttrKimcuongNtd newValue", newValue);
             // Cập nhật giá trị của attrKimcuong từ sự kiện
             this.$emit("updateAttrKimcuong", newValue);
         },
         updateAttrLongvuNtd(newValue) {
-            console.log("updateAttrLongvuNtd newValue",newValue);
+            console.log("updateAttrLongvuNtd newValue", newValue);
             // Cập nhật giá trị của attrKimcuong từ sự kiện
             this.$emit("updateAttrLongvu", newValue);
         },
@@ -44,12 +43,11 @@ export default {
 </script>
 
 <style>
-
-.cell-wait p{
+.cell-wait p {
     color: #e7ca8e;
 }
 
-.cell-wait span{
+.cell-wait span {
     background-color: #292929;
     color: white;
 }

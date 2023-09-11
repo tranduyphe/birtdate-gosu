@@ -66,7 +66,7 @@
                 <div class="modal-content">
                     <div class="modal-body">
                         <button type="button" ref="closeModal" class="btn close-button" data-bs-dismiss="modal" aria-label="Close"><img :src="closeimgUrl" alt=""></button>
-                        <ModalThuVienToanTri></ModalThuVienToanTri>
+                        <ModalThuVienToanTri :attrKimcuong="attrKimcuong" :attrLongvu="attrLongvu" @updateAttrKimcuong="updateAttrKimcuong" @updateAttrLongvu="updateAttrLongvu"></ModalThuVienToanTri>
                     </div>
                 </div>
             </div>
@@ -87,9 +87,12 @@
                 <div class="modal-content">
                     <div class="modal-body">
                         <button type="button" ref="closeModal" class="btn close-button" data-bs-dismiss="modal" aria-label="Close"><img :src="closeimgUrl" alt=""></button>
-                        <ModalThapThanhTuu :nhiemvu="nhiemvu" @updateNhiemvu="updateNhiemvu" 
+                        <ModalThapThanhTuu 
+                        :nhiemvu="nhiemvu" @updateNhiemvu="updateNhiemvu" 
                         :logActivity="logActivity" @updateLogActivity="updateLogActivity" 
                         :topFeathers="topFeathers" @updateTopFeathers="updateTopFeathers" 
+                        :attrKimcuong="attrKimcuong" @updateAttrKimcuong="updateAttrKimcuong"
+                        :attrLongvu="attrLongvu"  @updateAttrLongvu="updateAttrLongvu"
                         ></ModalThapThanhTuu>
                     </div>
                 </div>
@@ -281,6 +284,7 @@ export default {
 
         updateAttrKimcuong(newValue) {
             // Cập nhật giá trị của attrKimcuong từ sự kiện
+            console.log("check updateAttrKimcuong: ",newValue);
             this.attrKimcuong = newValue;
         },
         updateAttrLongvu(newValue) {

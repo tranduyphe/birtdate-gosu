@@ -135,6 +135,8 @@ export default {
         nhiemvu:Array,
         logActivity: Array,
         topFeathers: Array,
+        attrKimcuong: Number,
+        attrLongvu: Number,
     },
     data() {
         return {
@@ -174,6 +176,18 @@ export default {
                             if (response.data.status === 200 && response.data.success == true) {
                                 // self.nhiemvu = response.data.data.nhiemvu;
                                 self.updateNhiemvuTtt(response.data.data.quests)
+                                // if (response.data.data.user) {
+                                //     // const userResponseJSON = JSON.stringify(response.data.data.user);
+                                //     // self.saveInfoUser(userResponseJSON);
+
+                                //     // self.diamond = response.data.data.user.diamond
+                                    
+                                //     // self.attrKimcuong = response.data.user.diamond;
+                                //     // self.feathers = response.data.data.user.feathers
+                                //     self.$emit("updateAttrKimcuong", response.data.data.user.diamond);
+                                //     self.$emit("updateAttrLongvu", response.data.data.user.feathers);
+                                //     // this.$store.actions.saveInfoUser(response.data.data.user);
+                                // }
                                 if(response.data.message == 'Không tìm thấy Bạn học này'){
                                     self.$swal.fire({
                                         position: "center",
@@ -230,6 +244,10 @@ export default {
                                 
                                 console.log("response.data.data.quests",response.data.data.quests);
                                     self.updateNhiemvuTtt(response.data.data.quests);
+                                    if (response.data.data.user) {
+                                    self.$emit("updateAttrKimcuong", response.data.data.user.diamond);
+                                    self.$emit("updateAttrLongvu", response.data.data.user.feathers);
+                                }
                                 // alert(response.data.message);
                                 self.$swal.fire({
                                     position: "center",
@@ -269,7 +287,7 @@ export default {
         updateNhiemvuTtt(newValue){
             console.log("updateNhiemvuTtt newValue:",newValue);
             this.$emit("updateNhiemvu", newValue);
-        }
+        },
     },
 };
 </script>

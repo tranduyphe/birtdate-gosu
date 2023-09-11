@@ -20,7 +20,7 @@ class QuestRepository
                 'name' => 'Điểm danh đến trường hàng ngày 1',
                 'type' => '0',
                 'total_attempts' => 1,
-                'current_attempts' => 1,
+                'current_attempts' => 0,
                 'is_reward' => 0,
                 'diamond_reward' => 5
             ],
@@ -28,7 +28,7 @@ class QuestRepository
                 'name' => 'Mời 10 phù thủy đi học chung',
                 'type' => '1',
                 'total_attempts' => 10,
-                'current_attempts' => 10,
+                'current_attempts' => 0,
                 'is_reward' => 0,
                 'diamond_reward' => 10
             ],
@@ -36,7 +36,7 @@ class QuestRepository
                 'name' => 'Được 10 phù thủy khác nhau rủ đi học chung',
                 'type' => '2',
                 'total_attempts' => 10,
-                'current_attempts' => 10,
+                'current_attempts' => 0,
                 'is_reward' => 0,
                 'diamond_reward' => 10
             ],
@@ -52,7 +52,7 @@ class QuestRepository
                 'name' => 'Chiến thắng thử thách tại Nhà Thi Đấu Xoẹt Xoẹt',
                 'type' => '4',
                 'total_attempts' => 3,
-                'current_attempts' => 3,
+                'current_attempts' => 0,
                 'is_reward' => 0,
                 'diamond_reward' => 15
             ],

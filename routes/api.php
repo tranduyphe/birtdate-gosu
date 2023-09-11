@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\Api\AuthController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -29,7 +29,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/get-top-feathers', [App\Http\Controllers\HomeController::class, 'getTopfeathers'])->name('top-feathers');
     Route::get('/get-log-activity', [App\Http\Controllers\HomeController::class, 'getLogActivity'])->name('log-activity');
     Route::get('/get-item', [App\Http\Controllers\HomeController::class, 'getItem'])->name('list-item');
-    
+
     Route::get('/get-quests', [App\Http\Controllers\QuestController::class, 'getQuests'])->name('quests');
     Route::post('/active-quest', [App\Http\Controllers\QuestController::class, 'activeQuest'])->name('active-quest');
     Route::get('/get-reward', [App\Http\Controllers\QuestController::class, 'getReward'])->name('get-reward-quest');
