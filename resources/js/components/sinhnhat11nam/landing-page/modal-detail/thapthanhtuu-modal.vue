@@ -138,7 +138,6 @@ import {
     authMethods,
 } from "@/store/store";
 
-import ClipboardJS from 'clipboard';
 export default {
     props: {
         nhiemvu:Array,
