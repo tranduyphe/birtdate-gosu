@@ -115,11 +115,11 @@ export default {
                                             if (reward[i].item_id == "1") {
                                                 console.log("message: ", message);
                                                 console.log("reward[i].record: ", reward[i].record);
-                                                message = message + "Chúc mừng " + user + " đã nhận được " + reward[i].record + " Lông Phượng Hoàng";
+                                                message = message + "Chúc mừng " + user + " đã nhận được " + reward[i].record + " LÔNG KỲ LÂN";
                                                 console.log("message: ", message);
                                             }
                                             if (reward[i].item_id == "2") {
-                                                message = message + "Chúc mừng " + user + " đã nhận được " + reward[i].record + " Đá mặt trăng";
+                                                message = message + "Chúc mừng " + user + " đã nhận được " + reward[i].record + " ĐÁ MẶT TRĂNG";
                                             }
 
                                             if (reward[i].item_id == "3") {
@@ -135,7 +135,8 @@ export default {
                                             icon: "success",
                                             title: message,
                                             showConfirmButton: false,
-                                            timer: 5000
+                                            timer: 3000,
+                                            customClass: 'swal-wide',
                                         });
                                         self.getFlip();
                                         self.flag = false;

@@ -4,7 +4,7 @@
             <div class="div-img">
                 <img class="image-launch" :src="imagelaunchUrl" alt="" width="870">
             </div>
-            <div class="countdown-parts d-flex align-items-center mt-4" v-if="!countdownExpired">
+            <div class="countdown-parts d-flex align-items-center mt-4">
                 <div class="countdown-part text-center p-3 mx-3">
                     <div class="countdown-value">{{ days }}</div>
                     <div class="countdown-label">Ngày</div>

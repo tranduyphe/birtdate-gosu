@@ -35,7 +35,11 @@
                             <h2 class="title-modal">Bảng thử thách</h2>
                             <img :src="lineBreak" class="mb-3">
                         </div>
-
+                        <div class="user_code">
+                            <p class="mb-0">Mã của bạn: </p>
+                            <strong>{{ user_code }}</strong>
+                            <button class="btn btn-success" @click="copyContent">Sao chép mã của bạn</button>
+                        </div>
                         <div class="task row justify-content-evenly flex-column align-items-center">
                             <div v-for="(item, index) in nhiemvu" :key="index"
                                 class="item-task col-lg-5 d-flex align-items-center justify-content-between">
@@ -66,18 +70,21 @@
                             <h2 class="title-modal">Chậu kỳ tích</h2>
                             <img :src="lineBreak" class="mb-3">
                         </div>
-                        <div class="task row justify-content-evenly">
+                        <div class="task row justify-content-between">
+                            <div class="img-phoenix col-5">
+                                <img :src="img_chauthanhtich" alt="">
+                            </div>
                             <div class="thanhtich col-7">
-                                <div v-for="(item, index) in topFeathers" :key="index" class="item-task p-3">
+                                <div v-for="(item, index) in topFeathers" :key="index" class="item-task p-1">
                                     <div class="item-info d-flex align-items-center justify-content-between">
                                         <div class="rank col-1">
-                                            <img v-if="index + 1 == 1" :src="img_rank1" alt="" width="60">
-                                            <img v-else-if="index + 1 == 2" :src="img_rank2" alt="" width="60">
-                                            <img v-else-if="index + 1 == 3" :src="img_rank3" alt="" width="60">
+                                            <img v-if="index + 1 == 1" :src="img_rank1" alt="" width="40">
+                                            <img v-else-if="index + 1 == 2" :src="img_rank2" alt="" width="40">
+                                            <img v-else-if="index + 1 == 3" :src="img_rank3" alt="" width="40">
                                             <p class="m-0" v-else>{{ index + 1 }}</p>
                                         </div>
                                         <div class="avatar">
-                                            <img :src="iconBtn" width="60" height="60">
+                                            <img :src="iconBtn" width="40" height="40">
                                         </div>
                                         <div class="col-5">
                                             <p class="m-0">{{ item.name }}</p>
@@ -130,6 +137,8 @@ import {
     authGetters,
     authMethods,
 } from "@/store/store";
+
+import ClipboardJS from 'clipboard';
 export default {
     props: {
         nhiemvu:Array,
@@ -137,16 +146,18 @@ export default {
         topFeathers: Array,
         attrKimcuong: Number,
         attrLongvu: Number,
+        user_code: String,
     },
     data() {
         return {
             lineBreak: '/images/sinhnhat11nam/img_main/linebreak-title.png',
             iconBtn: '/images/sinhnhat11nam/img_main/icon-button-task.png',
             iconLongvu: '/images/sinhnhat11nam/img_main/icon-longvu.png',
-            img_chauthanhtich: '/images/sinhnhat11nam/img_main/img_chauthanhtich.png',
+            img_chauthanhtich: '/images/sinhnhat11nam/img_main/321.png',
             img_rank1: '/images/sinhnhat11nam/img_main/rank1.png',
             img_rank2: '/images/sinhnhat11nam/img_main/rank2.png',
             img_rank3: '/images/sinhnhat11nam/img_main/rank3.png',
+
             friendCode: "",
             rewardFlag: false,
             inviteFlag: false,
@@ -288,6 +299,20 @@ export default {
             console.log("updateNhiemvuTtt newValue:",newValue);
             this.$emit("updateNhiemvu", newValue);
         },
+
+        copyContent() {
+
+            const el = document.createElement('textarea');
+            el.value = this.user_code;
+            const existingElement = document.querySelector('.modalThapThanhTuu');
+            existingElement.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            
+            this.$toast.success('Liên kết đã được sao chép', {
+                autoClose: 1500,
+            });
+        },
     },
 };
 </script>
@@ -384,7 +409,7 @@ export default {
 
 .item-task {
     background: #edebdc;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 .item-button {
@@ -446,5 +471,21 @@ export default {
 .friendcode button{
     border-bottom-left-radius: 0;
     border-top-left-radius: 0;
+}
+
+.user_code{
+    margin-left: 40px;
+    display: flex;
+    margin-bottom: 10px;
+    align-items: center;
+}
+
+.user_code button{
+    margin-left: 5px;
+}
+
+.img-phoenix img{
+    position: fixed;
+    top: 30%;
 }
 </style>

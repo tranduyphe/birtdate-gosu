@@ -11,6 +11,8 @@ import ThuVienToanTri from '../components/home/ThuVienToanTri.vue';
 
 import Launch from '../components/sinhnhat11nam/landing-page/Launch.vue';
 
+import BachNhat from '../components/sinhnhat11nam/landing-page/BachNhat.vue';
+
 import SiteMap from '../components/sinhnhat11nam/landing-page/SiteMap.vue';
 const routes = [
 	{
@@ -36,6 +38,15 @@ const routes = [
 		component: Minigame,
 		meta: {
 			middleware: "auth"
+		},
+	},
+	{
+		path: '/bach-nhat',
+		name: 'bachnhat',
+		component: BachNhat,
+		meta: {
+			middleware: "guest",
+			title: `Bách Nhật`
 		},
 	},
 	{

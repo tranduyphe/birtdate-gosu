@@ -6,37 +6,70 @@
     <div class="wrapper-content" :style="{ backgroundImage:backgroundImageUrl() }">
         <div class="div-content">
             <div class="div-img thap-thanh-tuu" data-aos="fade-down">
-                <button class="" data-bs-toggle="modal" data-bs-target="#ThapThanhTuuModal">
-                    <img :src="thapthanhtuuimgUrl" alt="Tháp Thành Tựu" width="485" @click="getDataPhapThanhTuu">
-                </button>
+                <div class="group-img">
+                    <button class="" data-bs-toggle="modal" data-bs-target="#ThapThanhTuuModal">
+                        <img :src="thapthanhtuuimgUrl" alt="Tháp Thành Tựu" width="485" @click="getDataPhapThanhTuu">
+                    </button>
+                    <div class="bubble-content">
+                        <p>Điểm danh và làm nhiệm vụ ngày.</p>
+                    </div>
+                </div>
             </div>
             <!-- <button class="div-img thap-thanh-tuu" @click="showMedalPopupCKT"> <img :src="thapthanhtuuimgUrl" alt="Tháp Thành Tựu" width="485"></button> -->
             <div class="div-img thu-vien-toan-tri"  data-aos="fade-right">
-                <button class="" data-bs-toggle="modal" data-bs-target="#ThuVienModal"  @click="activeQuest">
-                    <img :src="thuvienimgUrl" alt="Thư Viện Toàn Tri" width="295">
-                </button>
+                <div class="group-img">
+                    <button class="" data-bs-toggle="modal" data-bs-target="#ThuVienModal"  @click="activeQuest">
+                        <img :src="thuvienimgUrl" alt="Thư Viện Toàn Tri" width="295">
+                    </button>
+                    <div class="bubble-content">
+                        <p>Săn nguyên liệu.</p>
+                    </div>
+                </div>
             </div>
             <div class="div-img nha-thi-dau" data-aos="fade-up">
-                <button class="" data-bs-toggle="modal" data-bs-target="#NhaThiDauModal">
-                    <img :src="nhathidauimgUrl" alt="Nhà Thi Đấu" width="290">
-                </button>
+                <div class="group-img">
+                    <button class="" data-bs-toggle="modal" data-bs-target="#NhaThiDauModal">
+                        <img :src="nhathidauimgUrl" alt="Nhà Thi Đấu" width="290">
+                    </button>
+                    <div class="bubble-content">
+                        <p>Thu thập Lông Kỳ Lân.</p>
+                    </div>
+                </div>
+                
             </div>
             <div class="div-img sanh-hop-hep" data-aos="fade-left">
-                <button class="" data-bs-toggle="modal" data-bs-target="#SanhHopHepModal">
-                    <img :src="sanhhophepimgUrl" alt="Sảnh Họp Hẹp" width="295">
-                </button>
+                <div class="group-img">
+                    <button class="" data-bs-toggle="modal" data-bs-target="#SanhHopHepModal">
+                        <img :src="sanhhophepimgUrl" alt="Sảnh Họp Hẹp" width="295">
+                    </button>
+                    <div class="bubble-content">
+                        <p>Thắp sáng GOSU11.</p>
+                    </div>
+                </div>
             </div>
             <div class="div-img items thongbao" data-aos="fade-left">
-                <img :src="thongbaoimgUrl" alt="Thông báo" width="">
-                <span class="font-size-16 text-white">{{ attrThongbao }}</span>
+                <button class="" data-bs-toggle="modal" data-bs-target="#ThapThanhTuuModal">
+                    <img :src="thongbaoimgUrl" alt="Thông báo" width="" @click="getDataPhapThanhTuu">
+                    <span class="font-size-16 text-white">{{ attrThongbao }}</span>
+                </button>
+                <div class="bubble-content">
+                    <p>Thông báo</p>
+                </div>
             </div>
             <div class="div-img items kimcuong" data-aos="fade-left">
                 <img :src="kimcuongimgUrl" alt="Thông báo" width="">
                 <span class="font-size-16 text-white">{{ attrKimcuong }}</span>
+                <div class="bubble-content">
+                    <p>Đá mặt trăng</p>
+                </div>
+
             </div>
             <div class="div-img items longvu" data-aos="fade-left">
                 <img :src="longvuimgUrl" alt="Thông báo" width="">
                 <span class="font-size-16 text-white">{{ attrLongvu }}</span>
+                <div class="bubble-content">
+                    <p>Lông kỳ lân</p>
+                </div>
             </div>
         </div>
         <div class="banner-name" data-aos="fade-up-right">
@@ -93,6 +126,7 @@
                         :topFeathers="topFeathers" @updateTopFeathers="updateTopFeathers" 
                         :attrKimcuong="attrKimcuong" @updateAttrKimcuong="updateAttrKimcuong"
                         :attrLongvu="attrLongvu"  @updateAttrLongvu="updateAttrLongvu"
+                        :user_code="user_code"
                         ></ModalThapThanhTuu>
                     </div>
                 </div>
@@ -136,8 +170,8 @@ export default {
             thongbaoimgUrl: '/images/sinhnhat11nam/img_main/thongbao.png',
             kimcuongimgUrl: '/images/sinhnhat11nam/img_main/kimcuong.png',
             longvuimgUrl: '/images/sinhnhat11nam/img_main/longvu.png',
-            user_name: "minhtam.nguyen",
-            user_code:"test",
+            user_name: "",
+            user_code:"",
             avatar: '/images/sinhnhat11nam/img_main/banner-name.png',
             showModalThuVien: false,
             showModalThapThanhTuu: false,
@@ -327,6 +361,10 @@ export default {
     position: absolute;
 }
 
+.wrapper-content .group-img{
+    position: relative;
+}
+
 .wrapper-content .div-img button{
     transition: all 500ms linear;
     background: transparent;
@@ -505,5 +543,55 @@ button.close-button:focus,button.close-button:active,button.close-button:focus-v
   .landscape-notification {
     display: flex;
   }
+}
+
+.bubble-content {
+  position: absolute;
+  background-color: rgba(255, 187, 0, 0.6);
+  border: 1px solid #ccc;
+  padding: 10px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  /* display: none;  */
+  opacity: 0;
+  transition: all 300ms linear;
+  color: #ffffff;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.thap-thanh-tuu .bubble-content{
+    top: 20%;
+    right: -60px;
+}
+
+.thu-vien-toan-tri .bubble-content{
+    bottom: 30%;
+    left: -25%;
+}
+
+.sanh-hop-hep .bubble-content{
+    top: 20%;
+    left: -30%;
+}
+
+.nha-thi-dau .bubble-content{
+    top: 15%;
+    left: -33%;
+}
+
+.wrapper-content .div-img.items .bubble-content{
+    width: 120px;
+    top: 10%;
+    left: 105%;
+}
+
+.wrapper-content .group-img:hover .bubble-content,.wrapper-content .div-img.items:hover .bubble-content {
+  /* display: block; */
+  opacity: 1;
+}
+
+.bubble-content p{
+    margin: 0;
 }
 </style>
