@@ -45,7 +45,6 @@ const routes = [
 		name: 'bachnhat',
 		component: BachNhat,
 		meta: {
-			middleware: "guest",
 			title: `Bách Nhật`
 		},
 	},

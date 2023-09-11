@@ -28,6 +28,6 @@ export default {
 .nav-main{
     position: fixed;
     width: 100%;
-    z-index: 1;
+    z-index: 2;
 }
 </style>
