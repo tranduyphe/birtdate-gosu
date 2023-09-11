@@ -104,6 +104,7 @@ class HomeController extends Controller
         $usersWithFeathers = User::select('id', 'name', 'email', 'feathers')
             ->orderBy('feathers', 'desc')
             ->orderBy('id', 'asc') // Sắp xếp tiếp theo id nếu feathers bằng nhau
+            ->limit(10)
             ->get();
         $response = [
             "status" => 200,
@@ -122,6 +123,7 @@ class HomeController extends Controller
             ->join('users', 'users.id', '=', 'log_activity.user_id')
             ->where('log_activity.user_id', $user->id)
             ->orderBy('log_activity.id', 'desc')
+            // ->limit(30) // Thêm dòng này để giới hạn kết quả thành 30 hàng
             ->get();
         // dump($logActivity);die;
         $response = [

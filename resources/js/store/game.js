@@ -13,10 +13,10 @@ const actions = {
         sessionStorage.setItem('gameId', gameId);
     },
     getGameId(){
-        console.log("check getGameId");
         let data = sessionStorage.getItem('gameId') || 0;
         return data;
-    }
+    },
+    
     
 };
 

@@ -45,11 +45,11 @@
                 </div>
                 <div class="div-img items kimcuong mr-5" data-aos="fade-down">
                     <img :src="kimcuongimgUrl" alt="Thông báo" width="">
-                    <span class="font-size-14 text-white">{{ diamond }}</span>
+                    <span class="font-size-14 text-white">{{ attrKimcuong }}</span>
                 </div>
                 <div class="div-img items longvu" data-aos="fade-down">
                     <img :src="longvuimgUrl" alt="Thông báo" width="">
-                    <span class="font-size-14 text-white">{{ feathers }}</span>
+                    <span class="font-size-14 text-white">{{ attrLongvu }}</span>
                 </div>
             </div>
             <div class="modalGameOver" data-aos="zoom-in-up" id="GameOverModal">
@@ -76,7 +76,10 @@ import {
 // Tạo kết nối Socket.io
 // import io from "socket.io-client";
 export default {
-    props: {},
+    props: {
+        attrKimcuong:Number,
+        attrLongvu:Number,
+    },
     data() {
         return {
             socket: null,
@@ -105,31 +108,32 @@ export default {
     },
     created() {
         this.getFlip();
-        this.getItemUser();
+        // this.getItemUser();
     },
     methods: {
         ...authMethods,
         ...authGetters,
-        getItemUser() {
-            let self = this;
-            axios.get('/api/get-item', {
-            })
-                .then(function (response) {
-                    if (response.data.status === 200 && response.data.success == true) {
-                        self.diamond = response.data.data.diamond;
-                        self.feathers = response.data.data.feathers;
-                        console.log("response.data.data", response.data.data);
+        // getItemUser() {
+        //     let self = this;
+        //     axios.get('/api/get-item', {
+        //     })
+        //         .then(function (response) {
+        //             if (response.data.status === 200 && response.data.success == true) {
+        //                 // self.diamond = response.data.data.diamond;
+        //                 // self.attrKimcuong = response.data.data.diamond;
+        //                 self.feathers = response.data.data.feathers;
+        //                 console.log("response.data.data", response.data.data);
 
-                    }
-                })
-                .catch((error) => {
-                    console.log(error);
-                    if (error.response && error.response.status === 401) {
-                        this.logoutSubmit()
-                    }
-                })
-                .finally();
-        },
+        //             }
+        //         })
+        //         .catch((error) => {
+        //             console.log(error);
+        //             if (error.response && error.response.status === 401) {
+        //                 this.logoutSubmit()
+        //             }
+        //         })
+        //         .finally();
+        // },
 
         backgroundImageUrl(type) {
             if (type == 1) {
@@ -150,7 +154,7 @@ export default {
         },
 
         async getFlip() {
-
+            console.log("check  minigame: this.attrKimcuong =",this.attrKimcuong);
             let gameId = await this.getGameId();
             let self = this;
             axios.get('/api/get-flip', {
@@ -200,8 +204,12 @@ export default {
                                     // const userResponseJSON = JSON.stringify(response.data.data.user);
                                     // self.saveInfoUser(userResponseJSON);
 
-                                    self.diamond = response.data.data.user.diamond
-                                    self.feathers = response.data.data.user.feathers
+                                    // self.diamond = response.data.data.user.diamond
+                                    
+                                    // self.attrKimcuong = response.data.user.diamond;
+                                    // self.feathers = response.data.data.user.feathers
+                                    self.$emit("updateAttrKimcuongNtd", response.data.data.user.diamond);
+                                    self.$emit("updateAttrLongvuNtd", response.data.data.user.feathers);
                                     // this.$store.actions.saveInfoUser(response.data.data.user);
                                 }
                                 // if (response.data.data.data_flip.choises && response.data.data.data_flip.choises.length == 0) {
@@ -292,8 +300,12 @@ export default {
                         self.waiting = response.data.data.data_flip.waiting;
                         if (response.data.data.user) {
                             // const userResponseJSON = JSON.stringify(response.data.data.user);
-                            self.diamond = response.data.data.user.diamond
-                            self.feathers = response.data.data.user.feathers
+                            // self.saveDiamond(response.data.data.user.diamond);
+                            
+                            self.$emit("updateAttrKimcuongNtd", response.data.data.user.diamond);
+                            self.$emit("updateAttrLongvuNtd", response.data.data.user.feathers);
+                            // self.diamond = response.data.data.user.diamond
+                            // self.feathers = response.data.data.user.feathers
                             // self.saveInfoUser(userResponseJSON);
                             // this.$store.actions.saveInfoUser(response.data.data.user);
                         }
@@ -320,6 +332,10 @@ export default {
                     }
                 })
                 .finally();
+        },
+        async logoutSubmit() {
+            console.log("signOut");
+            await this.logout();
         },
     },
     // code test keyboard

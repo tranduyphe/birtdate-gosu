@@ -23,16 +23,15 @@
                 </div>
                 <div class="div-img items kimcuong mr-5" data-aos="fade-down">
                     <img :src="kimcuongimgUrl" alt="Thông báo" width="">
-                    <span class="font-size-14 text-white">{{ diamond }}</span>
+                    <span class="font-size-14 text-white">{{ attrKimcuong }}</span>
                 </div>
                 <div class="div-img items longvu" data-aos="fade-down">
                     <img :src="longvuimgUrl" alt="Thông báo" width="">
-                    <span class="font-size-14 text-white">{{ feathers }}</span>
+                    <span class="font-size-14 text-white">{{ attrLongvu }}</span>
                 </div>
             </div>
         </div>
     </div>
-
 </template>
   
 <script>
@@ -42,18 +41,19 @@ import { store } from '../../store/store';
 // Tạo kết nối Socket.io
 // import io from "socket.io-client";
 export default {
-    props: {},
+    props: {
+        attrKimcuong:Number,
+        attrLongvu:Number,
+    },
     data() {
         return {
             socket: null,
             pageConnected: true,
             accessToken: "", // Khởi tạo access token rỗng
-            colors: ['/images/sinhnhat11nam/img_main/thuvien-itemRed.png', '/images/sinhnhat11nam/img_main/thuvien-itemYellow.png', '/images/sinhnhat11nam/img_main/thuvien-itemPuple.png', '/images/sinhnhat11nam/img_main/thuvien-itemPink.png','/images/sinhnhat11nam/img_main/thuvien-itemGreen.png'],
+            colors: ['/images/sinhnhat11nam/img_main/thuvien-itemRed.png', '/images/sinhnhat11nam/img_main/thuvien-itemYellow.png', '/images/sinhnhat11nam/img_main/thuvien-itemPuple.png', '/images/sinhnhat11nam/img_main/thuvien-itemPink.png', '/images/sinhnhat11nam/img_main/thuvien-itemGreen.png'],
             // flipList: new Array(33).fill({ active: false, color: '' }), // Tạo mảng 9 phần tử với giá trị ban đầu là false
             flipList: [],
             flag: false,
-            diamond: 0,
-            feathers: 0,
             attrThongbao: 0,
             lineBrealimg: '/images/sinhnhat11nam/img_main/line-break.png',
             thongbaoimgUrl: '/images/sinhnhat11nam/img_main/thongbao.png',
@@ -68,29 +68,9 @@ export default {
     },
     created() {
         this.getFlip();
-        this.getItemUser();
     },
     methods: {
         ...mapActions(["saveInfoUser", "saveGameId"]),
-        getItemUser() {
-            let self = this;
-            axios.get('/api/get-item', {
-            })
-                .then(function (response) {
-                    if (response.data.status === 200 && response.data.success == true) {
-                        self.diamond = response.data.data.diamond;
-                        self.feathers = response.data.data.feathers;
-                        console.log("response.data.data", response.data.data);
-                    }
-                })
-                .catch((error) => {
-                    console.log(error);
-                    if (error.response && error.response.status === 401) {
-                        this.logoutSubmit()
-                    }
-                })
-                .finally();
-        },
         getFlip() {
             this.flipList = [];
             for (let i = 0; i < 32; i++) {
@@ -100,7 +80,7 @@ export default {
         },
         flipCard(index) {
             this.flag = true;
-            if (this.diamond < 5) {
+            if (this.attrKimcuong < 5) {
                 alert("Đá mặt trăng không đủ");
                 this.flag = false;
             } else {
@@ -116,44 +96,64 @@ export default {
 
                             if (response.data.success == true) {
                                 if (response.data.data.user) {
-                                    self.diamond = response.data.data.user.diamond
-                                    self.feathers = response.data.data.user.feathers
+                                    self.$emit("updateAttrKimcuongNtd", response.data.data.user.diamond);
+                                    self.$emit("updateAttrLongvuNtd", response.data.data.user.feathers);
                                 }
                                 if (response.data.data.reward) {
                                     let reward = response.data.data.reward;
                                     let user = response.data.data.user.name;
                                     let message = "";
-                                    for (let i = 0; i < reward.length; i++) {
-                                        console.log("reward[i]", reward[i].record);
-                                        console.log("reward[i].item_id: ", reward[i].item_id);
+                                    console.log("reward", reward);
+                                    console.log("reward", reward.length);
+                                    if (reward.length == 0) {
+                                        message = "Chúc bạn may mắn lần sau";
+                                    } else {
+                                        for (let i = 0; i < reward.length; i++) {
+                                            console.log("reward[i]", reward[i].record);
+                                            console.log("reward[i].item_id: ", reward[i].item_id);
 
-                                        if (reward[i].item_id == "1") {
-                                            console.log("message: ", message);
-                                            console.log("reward[i].record: ", reward[i].record);
-                                            message = message + "Chúc mừng " + user + " đã nhận được " + reward[i].record + " Lông Phượng Hoàng";
-                                            console.log("message: ", message);
+                                            if (reward[i].item_id == "1") {
+                                                console.log("message: ", message);
+                                                console.log("reward[i].record: ", reward[i].record);
+                                                message = message + "Chúc mừng " + user + " đã nhận được " + reward[i].record + " Lông Phượng Hoàng";
+                                                console.log("message: ", message);
+                                            }
+                                            if (reward[i].item_id == "2") {
+                                                message = message + "Chúc mừng " + user + " đã nhận được " + reward[i].record + " Đá mặt trăng";
+                                            }
+
+                                            if (reward[i].item_id == "3") {
+                                                message = message + " Thẻ tiềm long +" + reward[i].record;
+                                            }
                                         }
-                                        if (reward[i].item_id == "2") {
-                                            message = message + "Chúc mừng " + user + " đã nhận được " + reward[i].record + " Đá mặt trăng";
-                                        }
+                                        console.log("message: ", message);
+                                        // alert(message);
+                                        
                                     }
-                                    // alert(message);
                                     self.$swal.fire({
-                                        position: "center",
-                                        icon: "success",
-                                        title: message,
-                                        showConfirmButton: false,
-                                        timer: 5000
-                                    });
-                                    self.getFlip();
-                                    self.flag = false;
+                                            position: "center",
+                                            icon: "success",
+                                            title: message,
+                                            showConfirmButton: false,
+                                            timer: 5000
+                                        });
+                                        self.getFlip();
+                                        self.flag = false;
+                                } else {
+                                    // alert(response.data.message);
+                                    self.$swal.fire({
+                                            position: "center",
+                                            icon: "success",
+                                            title: response.data.message,
+                                            showConfirmButton: false,
+                                            timer: 5000
+                                        });
+                                        self.getFlip();
+                                        self.flag = false;
                                 }
                             } else {
-                                alert(response.data.message);
                                 self.flag = false;
                             }
-                        } else {
-                            self.flag = false;
                         }
                     })
                     .catch((error) => {
@@ -265,9 +265,9 @@ export default {
     transform: rotateY(180deg);
 }
 
-.thuvientoantri .card:hover{
+.thuvientoantri .card:hover {
     filter: brightness(140%);
-} 
+}
 
 /* Thêm các hiệu ứng CSS keyframes animation tại đây */
 

@@ -28,7 +28,7 @@ class QuestRepository
                 'name' => 'Mời 10 phù thủy đi học chung',
                 'type' => '1',
                 'total_attempts' => 10,
-                'current_attempts' => 9,
+                'current_attempts' => 0,
                 'is_reward' => 0,
                 'diamond_reward' => 10
             ],
@@ -151,11 +151,7 @@ class QuestRepository
                 $questData->quests = json_encode($listQuest);
                 
                 if ($listQuest[$questType]['current_attempts'] >= $listQuest[$questType]['total_attempts']) {
-                    // lưu lịch sử hoạt động
-                    $LogRepository = new LogRepository();
-                    $LogRepository->saveLogActivity($user, 2, "Hoàn thành nhiệm vụ " . ($questType + 1) . " tại bảng thử thách.");
-                    $newLog = new LogActivity();
-                    $newLog->user_id = $userId;
+                    
 
 
                     if ($questType < 6 && $listQuest[6]['current_attempts'] < 1) {
@@ -171,11 +167,9 @@ class QuestRepository
                             $listQuest[6]['current_attempts'] = 1;
                             $questData->quests = json_encode($listQuest);
                             
-                            // lưu lịch sử hoạt động
-                            $LogRepository = new LogRepository();
-                            $LogRepository->saveLogActivity($user, 2, "Hoàn thành nhiệm vụ " . (6 + 1) . " tại bảng thử thách.");
-                            $newLog = new LogActivity();
-                            $newLog->user_id = $userId;
+                            // // lưu lịch sử hoạt động
+                            // $LogRepository = new LogRepository();
+                            // $LogRepository->saveLogActivity($user, 2,[], "Hoàn thành nhiệm vụ " . (6 + 1) . " tại bảng thử thách.");
                         }
                     }
                 }

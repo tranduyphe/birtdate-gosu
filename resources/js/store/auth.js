@@ -41,7 +41,7 @@ const actions = {
                     commit('SET_AUTHENTICATED', false);
                     commit('SET_USER', {});
                     localStorage.removeItem("users");
-                    router.push({ name: 'login' }) // redirect to the home page when login is successful
+                    router.push( { name:'login' } ) // redirect to page login when logout is successful
                 }
             } else {
                 commit('SET_AUTHENTICATED', false);
@@ -51,11 +51,11 @@ const actions = {
             }
         }
     },
-
-    users() {
+    users: () => {
         let data = JSON.parse(localStorage.getItem('users') || "{}");
         return data;
     }
+    
 };
 
 const mutations = {

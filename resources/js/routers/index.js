@@ -5,6 +5,7 @@ import login from '@/components/login/';
 import home from '@/components/home/index.vue';
 import Minigame from '@/components/home/Minigame.vue';
 import Quest from '@/components/home/Quest.vue';
+import ManhGhep from '@/components/home/ManhGhep.vue';
 
 import ThuVienToanTri from '../components/home/ThuVienToanTri.vue';
 
@@ -41,6 +42,15 @@ const routes = [
 		path: '/quest',
 		name: 'quest',
 		component: Quest,
+		meta: {
+			middleware: "auth"
+		},
+	},
+	
+	{
+		path: '/manh-ghep',
+		name: 'manh-ghep',
+		component: ManhGhep,
 		meta: {
 			middleware: "auth"
 		},

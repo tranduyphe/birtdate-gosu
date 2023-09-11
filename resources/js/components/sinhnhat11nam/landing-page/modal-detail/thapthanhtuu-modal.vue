@@ -37,7 +37,7 @@
                         </div>
 
                         <div class="task row justify-content-evenly flex-column align-items-center">
-                            <div v-for="(item, index) in quests" :key="index"
+                            <div v-for="(item, index) in nhiemvu" :key="index"
                                 class="item-task col-lg-5 d-flex align-items-center justify-content-between">
                                 <span class="star"
                                     :style="{ color: item.is_reward == 0 ? '#b2ad8a' : '#289e11' }">&#10022;</span>
@@ -131,11 +131,15 @@ import {
     authMethods,
 } from "@/store/store";
 export default {
+    props: {
+        nhiemvu:Array,
+        logActivity: Array,
+        topFeathers: Array,
+        attrKimcuong: Number,
+        attrLongvu: Number,
+    },
     data() {
         return {
-            quests: [],
-            topFeathers: [],
-            logActivity: [],
             lineBreak: '/images/sinhnhat11nam/img_main/linebreak-title.png',
             iconBtn: '/images/sinhnhat11nam/img_main/icon-button-task.png',
             iconLongvu: '/images/sinhnhat11nam/img_main/icon-longvu.png',
@@ -149,16 +153,14 @@ export default {
         };
     },
     created() {
-        this.getQuest();
-        this.getTopFeathers();
-        this.getLogActivity();
+        
     },
     methods: {
         ...authMethods,
         ...authGetters,
 
         async invite() {
-            if (this.quests[1] && this.quests[1]['current_attempts'] < this.quests[1]['total_attempts']) {
+            if (this.nhiemvu[1] && this.nhiemvu[1]['current_attempts'] < this.nhiemvu[1]['total_attempts']) {
                 if (this.inviteFlag == false) {
                     this.inviteFlag = true;
                     let user = await this.users();
@@ -172,7 +174,20 @@ export default {
                         .then(function (response) {
                             self.inviteFlag = false;
                             if (response.data.status === 200 && response.data.success == true) {
-                                self.quests = response.data.data.quests;
+                                // self.nhiemvu = response.data.data.nhiemvu;
+                                self.updateNhiemvuTtt(response.data.data.quests)
+                                // if (response.data.data.user) {
+                                //     // const userResponseJSON = JSON.stringify(response.data.data.user);
+                                //     // self.saveInfoUser(userResponseJSON);
+
+                                //     // self.diamond = response.data.data.user.diamond
+                                    
+                                //     // self.attrKimcuong = response.data.user.diamond;
+                                //     // self.feathers = response.data.data.user.feathers
+                                //     self.$emit("updateAttrKimcuong", response.data.data.user.diamond);
+                                //     self.$emit("updateAttrLongvu", response.data.data.user.feathers);
+                                //     // this.$store.actions.saveInfoUser(response.data.data.user);
+                                // }
                                 if(response.data.message == 'Không tìm thấy Bạn học này'){
                                     self.$swal.fire({
                                         position: "center",
@@ -206,45 +221,11 @@ export default {
 
             }
         },
-        getQuest() {
-            let self = this;
-            axios.get('/api/get-quests', {
-            })
-                .then(function (response) {
-                    if (response.data.status === 200 && response.data.success == true) {
-                        self.quests = response.data.data.quests;
-                        console.log("check quest list:", self.quests);
-                    }
-                })
-                .catch((error) => {
-                    console.log(error);
-                    if (error.response && error.response.status === 401) {
-                        this.logoutSubmit()
-                    }
-                })
-                .finally();
-        },
-        getLogActivity() {
-            let self = this;
-            axios.get('/api/get-log-activity', {
-
-            })
-                .then(function (response) {
-                    if (response.data.status === 200 && response.data.success == true) {
-                        self.logActivity = response.data.data.log_activity;
-                        console.log("checklog activity:", self.logActivity);
-                    }
-                })
-                .catch((error) => {
-                    console.log(error);
-                    if (error.response && error.response.status === 401) {
-                        this.logoutSubmit()
-                    }
-                })
-                .finally();
+        async logoutSubmit() {
+            console.log("signOut");
+            await this.logout();
         },
         async getReWard(questId) {
-            console.log("check get reward");
             if (this.rewardFlag == false) {
                 this.rewardFlag = true;
                 let user = await this.users();
@@ -259,7 +240,14 @@ export default {
                         self.rewardFlag = false;
                         if (response.data.status === 200) {
                             if (response.data.success == true) {
-                                self.quests = response.data.data.quests;
+                                // self.nhiemvu = response.data.data.nhiemvu;
+                                
+                                console.log("response.data.data.quests",response.data.data.quests);
+                                    self.updateNhiemvuTtt(response.data.data.quests);
+                                    if (response.data.data.user) {
+                                    self.$emit("updateAttrKimcuong", response.data.data.user.diamond);
+                                    self.$emit("updateAttrLongvu", response.data.data.user.feathers);
+                                }
                                 // alert(response.data.message);
                                 self.$swal.fire({
                                     position: "center",
@@ -268,10 +256,11 @@ export default {
                                     showConfirmButton: false,
                                     timer: 1500
                                 });
-                                console.log("check quest list:", self.quests);
                             } else {
                                 if (response.data.data.quests) {
-                                    self.quests = response.data.data.quests;
+                                    // self.nhiemvu = response.data.data.nhiemvu;
+                                    console.log("response.data.data.quests",response.data.data.quests);
+                                    self.updateNhiemvuTtt(response.data.data.quests);
                                 }
                                 // alert(response.data.message);
                                 self.$swal.fire({
@@ -295,24 +284,9 @@ export default {
             }
 
         },
-        getTopFeathers() {
-            let self = this;
-            axios.get('/api/get-top-feathers', {
-
-            })
-                .then(function (response) {
-                    if (response.data.status === 200 && response.data.success == true) {
-                        self.topFeathers = response.data.data.top_feathers;
-                        console.log("check quest top_feathers:", self.topFeathers);
-                    }
-                })
-                .catch((error) => {
-                    console.log(error);
-                    if (error.response && error.response.status === 401) {
-                        this.logoutSubmit()
-                    }
-                })
-                .finally();
+        updateNhiemvuTtt(newValue){
+            console.log("updateNhiemvuTtt newValue:",newValue);
+            this.$emit("updateNhiemvu", newValue);
         },
     },
 };
