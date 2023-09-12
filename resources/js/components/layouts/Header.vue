@@ -13,6 +13,10 @@ export default {
         //     console.log("signOut");
         //     await this.logout();
         // }
+
+        handleLinkClick() {
+            this.$router.push('/bach-nhat');
+        }
     },
     created: () => {
     },
@@ -42,7 +46,7 @@ export default {
                     <a target="_blank" href="https://s20.gosu.vn/">S20</a>
                 </li>
                 <li>
-                    <a target="_blank" href="">bách nhật gosu</a>
+                    <router-link to="/bach-nhat" @click="handleLinkClick">bách nhật gosu</router-link>
                 </li>
                 <li>
                     <a target="_blank" href="https://www.facebook.com/groups/gosu.s20">facebook</a>

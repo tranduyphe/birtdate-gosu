@@ -1,6 +1,10 @@
 <template>
     <div class="game-thuvientoantri">
-        <button class="btn-start" @click="reloadFlip()">Làm mới</button>
+        <div class="btn-start">
+            <button @click="reloadFlip()">Làm mới</button>
+            <span>Nhấp "Làm mới" để bắt đầu. Mỗi lượt tốn 2 Đá Mặt Trăng để lật 3 ô ngẫu nhiên. Tìm kiếm bóng lửa cùng loại để mở hết bảng và nhận 2 Lông Kỳ Lân.</span>
+        </div>
+        
         <p class="text-center text-white" v-if="checkGameOver">Bạn đã thua cuộc, vui lòng "Làm mới" để tiếp tục (Trừ 5 đá mặt trăng)</p>
         <div class="row justify-content-center align-items-center">
             <div class="minigame-thuvien">
@@ -553,13 +557,19 @@ export default {
     z-index: 5;
     top: 170px;
     left: 105px;
+    font-weight: bold;
+    transition: all 300ms linear;
+    color: aliceblue;
+}
+
+.btn-start button{
     color: #292929;
     background: linear-gradient(to bottom, #f1c461, #a1813f);
     border-radius: 5px;
     border: none;
     padding: 10px 20px;
     font-weight: bold;
-    transition: all 300ms linear;
+    margin-right: 8px;
 }
 
 

@@ -123,7 +123,7 @@ class QuestController extends Controller
         if (count($friendInvites) >= 10) {
             $response = [
                 "status" => 200,
-                "message" => "Phù thủy này đã đi học rồi!",
+                "message" => "Cú của bạn đã gửi thư cho phù thủy tập sự!",
                 "data" => [
                     'quests' => $getQuest
                 ],
