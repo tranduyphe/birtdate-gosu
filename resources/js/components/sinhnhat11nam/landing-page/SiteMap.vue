@@ -115,7 +115,8 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-body">
-                        <button type="button" ref="closeModal" class="btn close-button" data-bs-dismiss="modal" aria-label="Close"><img :src="closeimgUrl" alt=""></button>                       
+                        <button type="button" ref="closeModal" class="btn close-button" data-bs-dismiss="modal" aria-label="Close"><img :src="closeimgUrl" alt=""></button>
+                        <ModalSanhHopHep></ModalSanhHopHep>                     
                     </div>
                 </div>
             </div>
@@ -152,6 +153,7 @@ import 'aos/dist/aos.css';
 import ModalNhaThiDau from './modal-detail/nhathidau-modal.vue';
 import ModalThapThanhTuu from './modal-detail/thapthanhtuu-modal.vue';
 import ModalThuVienToanTri from './modal-detail/thuvien-modal2.vue';
+import ModalSanhHopHep from './modal-detail/sanhhophep-modal.vue';
 
 import {
     authGetters,
@@ -163,6 +165,7 @@ export default {
         ModalNhaThiDau,
         ModalThuVienToanTri,
         ModalThapThanhTuu,
+        ModalSanhHopHep,
     },
     data() {
         return {
