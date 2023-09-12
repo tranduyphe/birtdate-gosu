@@ -3,8 +3,14 @@
         <img src="https://dl.dir.freefiremobile.com/common/web_event/common/images/scape.png" alt="" width="300">
         <p>Vui lòng xoay thiết bị của bạn sang chế độ nằm ngang để có trải nghiệm tốt hơn.</p>
     </div>
+    <div class="popup-start" v-if="isDivVisible">
+        <button type="button" ref="closePopup" class="btn close-button popup" @click="toggleDivVisibility"><img :src="closeimgUrl" alt=""></button>
+    </div>
     <div class="wrapper-content" :style="{ backgroundImage:backgroundImageUrl() }">
         <div class="div-content">
+            <div class="div-img mui-ten">
+                <img :src="muitenimgUrl" alt="">
+            </div>
             <div class="div-img thap-thanh-tuu" data-aos="fade-down">
                 <div class="group-img">
                     <button class="" data-bs-toggle="modal" data-bs-target="#ThapThanhTuuModal">
@@ -170,6 +176,7 @@ export default {
             thongbaoimgUrl: '/images/sinhnhat11nam/img_main/thongbao.png',
             kimcuongimgUrl: '/images/sinhnhat11nam/img_main/kimcuong.png',
             longvuimgUrl: '/images/sinhnhat11nam/img_main/longvu.png',
+            muitenimgUrl: '/images/sinhnhat11nam/img_main/mui-ten.png',
             user_name: "",
             user_code:"",
             avatar: '/images/sinhnhat11nam/img_main/banner-name.png',
@@ -181,7 +188,8 @@ export default {
             friendCode: "",
             nhiemvu: [],
             logActivity: [],
-            topFeathers: []
+            topFeathers: [],
+            isDivVisible: true,
         };
     },
     created() {
@@ -337,6 +345,9 @@ export default {
             // Cập nhật giá trị của attrKimcuong từ sự kiện
             this.topFeathers = newValue;
         },
+        toggleDivVisibility() {
+            this.isDivVisible = false;
+        },
         
     },
 };
@@ -475,6 +486,13 @@ button.close-button{
     transition: all 200ms linear;
 }
 
+button.close-button.popup{
+    position: absolute;
+    right: 526px;
+    top: 220px;
+    transition: all 200ms linear;
+}
+
 button.close-button:hover{
     filter: brightness(130%);
 }
@@ -504,6 +522,31 @@ button.close-button:focus,button.close-button:active,button.close-button:focus-v
   width: 100%;
   height: 100%;
   z-index: 9999;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  text-align: center;
+  transform-origin: center;
+  /* transform: rotate(90deg) translateY(-50%); */
+  white-space: nowrap;
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  flex-direction: column;
+}
+
+
+.popup-start {
+  display: block;
+  background: url('../../../../assets/images/sinhnhat11nam/img_main/popup.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  color: white;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9;
   justify-content: center;
   align-items: center;
   font-size: 20px;
@@ -594,4 +637,31 @@ button.close-button:focus,button.close-button:active,button.close-button:focus-v
 .bubble-content p{
     margin: 0;
 }
+
+.div-img.mui-ten img{
+    transform: rotateZ(45deg);
+}
+
+.div-img.mui-ten{
+    right: 35%;
+    top: 10%;
+}
+
+.div-img.mui-ten {
+    -webkit-animation: mover 0.5s infinite  alternate;
+    animation: mover 0.5s infinite  alternate;
+}
+.div-img.mui-ten {
+    -webkit-animation: mover 0.5s infinite  alternate;
+    animation: mover 0.5s infinite  alternate;
+}
+@-webkit-keyframes mover {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-15px); }
+}
+@keyframes mover {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-15px); }
+}
+
 </style>
