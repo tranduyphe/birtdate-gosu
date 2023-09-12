@@ -15,7 +15,7 @@ export default {
         // }
 
         handleLinkClick() {
-            this.$router.push('/bach-nhat');
+            this.$router.push('/bachnhatgosu2023');
         }
     },
     created: () => {
@@ -46,7 +46,7 @@ export default {
                     <a target="_blank" href="https://s20.gosu.vn/">S20</a>
                 </li>
                 <li>
-                    <router-link to="/bach-nhat" @click="handleLinkClick">bách nhật gosu</router-link>
+                    <a target="_blank" href="/bachnhatgosu2023">bách nhật gosu</a>
                 </li>
                 <li>
                     <a target="_blank" href="https://www.facebook.com/groups/gosu.s20">facebook</a>

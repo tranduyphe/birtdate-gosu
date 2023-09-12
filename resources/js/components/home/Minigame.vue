@@ -1,8 +1,8 @@
 <template>
     <div class="game-thuvientoantri">
-        <div class="btn-start">
+        <div class="btn-start-div">
             <button @click="reloadFlip()">Làm mới</button>
-            <span>Nhấp "Làm mới" để bắt đầu. Mỗi lượt tốn 2 Đá Mặt Trăng để lật 3 ô ngẫu nhiên. Tìm kiếm bóng lửa cùng loại để mở hết bảng và nhận 2 Lông Kỳ Lân.</span>
+            <span>Nhấp "Làm mới" để bắt đầu. Mỗi lượt tốn 2 Đá Mặt Trăng để lật 3 ô ngẫu nhiên. Tìm kiếm bóng lửa cùng loại để mở hết bảng và nhận 2 Lông Phượng Hoàng.</span>
         </div>
         
         <p class="text-center text-white" v-if="checkGameOver">Bạn đã thua cuộc, vui lòng "Làm mới" để tiếp tục (Trừ 5 đá mặt trăng)</p>
@@ -552,7 +552,7 @@ export default {
     animation: flip 0.5s;
 }
 
-.btn-start {
+.btn-start-div {
     position: absolute;
     z-index: 5;
     top: 170px;
@@ -562,7 +562,7 @@ export default {
     color: aliceblue;
 }
 
-.btn-start button{
+.btn-start-div button{
     color: #292929;
     background: linear-gradient(to bottom, #f1c461, #a1813f);
     border-radius: 5px;
@@ -572,6 +572,9 @@ export default {
     margin-right: 8px;
 }
 
+.btn-start-div:hover {
+    filter: brightness(140%);
+}
 
 .attribute-items .div-img {
     position: relative;

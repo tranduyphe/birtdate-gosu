@@ -3,7 +3,7 @@
         <button class="btn-start" @click="reloadFlip()">Làm mới</button>
         <p class="text-center text-white" v-if="checkGameOver">Bạn đã thua cuộc, vui lòng "Làm mới" để tiếp tục (Trừ 5 đá
             mặt trăng)</p>
-        <div class="row justify-content-center align-items-center">
+        <div class="row justify-content-center">
             <div class="minigame-thuvien">
                 <div class="" v-if="flipList != nul">
                     <div v-for="row in 3" :key="row" class="row justify-content-center align-items-center"
@@ -26,7 +26,23 @@
             <div class="line-break text-center my-3">
                 <img :src="lineBrealimg" alt="">
             </div>
-
+            <div class="col-md-4">
+                <p style="margin-top: 0pt; margin-bottom: 14pt; text-align: justify; font-size: 16pt; line-height: 1;"><b><span style="text-align: left; color: rgb(255, 255, 255); font-size: 18px;">Tỉ lệ trước khi user tr&uacute;ng Thẻ Tiềm Long</span></b></p>
+                <ul>
+                    <li style="margin-top: 0pt; margin-bottom: 14pt; text-align: justify; font-size: 16px; color: rgb(255, 255, 255); line-height: 1;"><span style="text-align: left;">T&iacute;m: 1 Thẻ Tiềm Long (1 người chỉ nhận 1 lần duy nhất) (30%)</span></li>
+                    <li style="margin-top: 0pt; margin-bottom: 14pt; text-align: justify; font-size: 16px; color: rgb(255, 255, 255); line-height: 1;"><span style="text-align: left;">Đỏ: L&ocirc;ng Phượng Ho&agrave;ng*5 (10%)</span></li>
+                    <li style="margin-top: 0pt; margin-bottom: 14pt; text-align: justify; font-size: 16px; color: rgb(255, 255, 255); line-height: 1;"><span style="text-align: left;">Xanh l&aacute;: Đ&aacute; Mặt Trăng*10 (10%)</span></li>
+                    <li style="margin-top: 0pt; margin-bottom: 14pt; text-align: justify; font-size: 16px; color: rgb(255, 255, 255); line-height: 1;"><span style="text-align: left;">V&agrave;ng &amp; Hồng: Fail (25%+25%)</span></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <p style="margin-top: 0pt; margin-bottom: 14pt; text-align: justify; font-size: 16pt; line-height: 1;"><span style="text-align: left; color: rgb(255, 255, 255); font-size: 18px;"><strong>Tỉ lệ sau khi user đ&atilde; tr&uacute;ng Thẻ Tiềm Long</strong></span></p>
+                <ul>
+                    <li style="margin-top: 0pt; margin-bottom: 14pt; text-align: justify; font-size: 16pt; color: rgb(255, 255, 255); line-height: 1;"><span style="text-align: left; font-size: 15px;">Đỏ: L&ocirc;ng Phượng Ho&agrave;ng*5 (20%)</span></li>
+                    <li style="margin-top: 0pt; margin-bottom: 14pt; text-align: justify; font-size: 16pt; color: rgb(255, 255, 255); line-height: 1;"><span style="text-align: left; font-size: 15px;">Xanh l&aacute;: Đ&aacute; Mặt Trăng*10 (20%)</span></li>
+                    <li style="margin-top: 0pt; margin-bottom: 14pt; text-align: justify; font-size: 16pt; color: rgb(255, 255, 255); line-height: 1;"><span style="text-align: left; font-size: 15px;">V&agrave;ng &amp; Hồng: Fail (30%+30%)</span></li>
+                </ul>
+            </div>
             <div class="attribute-items mt-4 d-flex col-md-4 justify-content-around align-items-end">
                 <div class="div-img items thongbao mr-5" data-aos="fade-down">
                     <img :src="thongbaoimgUrl" alt="Thông báo" width="">
