@@ -92,7 +92,7 @@
                                             <img :src="iconBtn" width="40" height="40">
                                         </div>
                                         <div class="col-5">
-                                            <p class="m-0">{{ item.name }}</p>
+                                            <p class="m-0">{{ item.first_name }} {{ item.last_name }}</p>
                                         </div>
                                         <div class="attr-longvu col-2">
                                             <p class="m-0">{{ item.feathers }}</p>
@@ -722,6 +722,23 @@ export default {
 
         doneInstructions(){
             this.clickedtabThanhTuu = true;
+            axios.get('/api/done-instructions', {
+                    })
+                    .then(function (response) {
+                        if (response.data.status === 200) {
+                           
+                        }
+                    })
+                    .catch((error) => {
+                        self.rewardFlag = false;
+                        console.log(error);
+                        if (error.response && error.response.status === 401) {
+                            this.logoutSubmit()
+                        }
+                    })
+                    .finally();
+                    
+
         }
     },
     mounted(){

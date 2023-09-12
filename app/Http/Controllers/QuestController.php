@@ -154,7 +154,6 @@ class QuestController extends Controller
         Cache::forget($cacheKey); // Lưu trong cache trong 5 phút
             return response()->json($response);
         }
-
         $newInvite = new UserInvite;
         $newInvite->user_id = $user->id;
         $newInvite->friend_id = $friend->id;

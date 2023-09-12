@@ -136,7 +136,7 @@ class HomeController extends Controller
     // }
     public function getTopFeathers(Request $request)
     {
-        $usersWithFeathers = User::select('id', 'name', 'email', 'feathers')
+        $usersWithFeathers = User::select('id', 'name', 'first_name', 'last_name', 'email', 'feathers')
             ->orderBy('feathers', 'desc')
             ->orderBy('id', 'asc') // Sắp xếp tiếp theo id nếu feathers bằng nhau
             ->limit(10)
@@ -189,6 +189,20 @@ class HomeController extends Controller
                 'feathers' => $feathers,
                 'read_instructions' => $readInstructions
             ],
+            "success" => true
+        ];
+        return response()->json($response);
+    }
+
+    public function doneInstructions(Request $request)
+    {
+        $user = $request->user();
+        $user->read_instructions = 1;
+        $user->save();
+        $response = [
+            "status" => 200,
+            "message" => "success",
+            "data" => [],
             "success" => true
         ];
         return response()->json($response);

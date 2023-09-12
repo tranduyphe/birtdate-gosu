@@ -34,6 +34,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/get-top-feathers', [App\Http\Controllers\HomeController::class, 'getTopfeathers'])->name('top-feathers');
     Route::get('/get-log-activity', [App\Http\Controllers\HomeController::class, 'getLogActivity'])->name('log-activity');
     Route::get('/get-item', [App\Http\Controllers\HomeController::class, 'getItem'])->name('list-item');
+    Route::get('/done-instructions', [App\Http\Controllers\HomeController::class, 'doneInstructions'])->name('done-instructions');
     
     Route::get('/get-data-sanh-truong-hop-hep', [App\Http\Controllers\HomeController::class, 'getDataSanhTruongHopHep'])->name('list-data-sthh');
     

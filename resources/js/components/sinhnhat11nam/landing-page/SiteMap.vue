@@ -85,7 +85,7 @@
             <div class="infor-user d-flex align-items-center justify-content-between">
                 <div class="group-info d-flex align-items-center">
                     <img :src="avatar" alt="" class="avatar" width="65" height="65">
-                    <p class="mb-0">&nbsp;Xin chào&nbsp;<strong>{{ user_name }} -- {{ readInstructions }}</strong></p>
+                    <p class="mb-0">&nbsp;Xin chào&nbsp;<strong>{{ user_name }} </strong></p>
                 </div>
                 <a href="javascript:void(0)" @click="logoutSubmit" class="logout">Thoát</a>
             </div>
