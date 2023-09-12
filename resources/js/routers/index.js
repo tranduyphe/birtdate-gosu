@@ -41,7 +41,7 @@ const routes = [
 		},
 	},
 	{
-		path: '/bach-nhat',
+		path: '/bachnhatgosu2023',
 		name: 'bachnhat',
 		component: BachNhat,
 		meta: {

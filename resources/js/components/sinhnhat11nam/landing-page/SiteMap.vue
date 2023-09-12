@@ -3,17 +3,17 @@
         <img src="https://dl.dir.freefiremobile.com/common/web_event/common/images/scape.png" alt="" width="300">
         <p>Vui lòng xoay thiết bị của bạn sang chế độ nằm ngang để có trải nghiệm tốt hơn.</p>
     </div>
-    <div class="popup-start" v-if="isDivVisible">
+    <div class="popup-start" v-if="isDivVisible && readInstructions == 0">
         <button type="button" ref="closePopup" class="btn close-button popup" @click="toggleDivVisibility"><img :src="closeimgUrl" alt=""></button>
     </div>
     <div class="wrapper-content" :style="{ backgroundImage:backgroundImageUrl() }">
         <div class="div-content">
-            <div class="div-img mui-ten">
+            <div class="div-img mui-ten" v-if="readInstructions == 0" :class="{'d-none': clickedThanhThanhTuu}">
                 <img :src="muitenimgUrl" alt="">
             </div>
             <div class="div-img thap-thanh-tuu" data-aos="fade-down">
                 <div class="group-img">
-                    <button class="" data-bs-toggle="modal" data-bs-target="#ThapThanhTuuModal">
+                    <button class="" data-bs-toggle="modal" data-bs-target="#ThapThanhTuuModal" @click="clickedThanhThanhTuu = true">
                         <img :src="thapthanhtuuimgUrl" alt="Tháp Thành Tựu" width="485" @click="getDataPhapThanhTuu">
                     </button>
                     <div class="bubble-content">
@@ -38,7 +38,7 @@
                         <img :src="nhathidauimgUrl" alt="Nhà Thi Đấu" width="290">
                     </button>
                     <div class="bubble-content">
-                        <p>Thu thập Lông Kỳ Lân.</p>
+                        <p>Thu thập Lông Phượng Hoàng.</p>
                     </div>
                 </div>
                 
@@ -74,7 +74,7 @@
                 <img :src="longvuimgUrl" alt="Thông báo" width="">
                 <span class="font-size-16 text-white">{{ attrLongvu }}</span>
                 <div class="bubble-content">
-                    <p>Lông kỳ lân</p>
+                    <p>Lông phượng hoàng</p>
                 </div>
             </div>
         </div>
@@ -133,6 +133,8 @@
                         :attrKimcuong="attrKimcuong" @updateAttrKimcuong="updateAttrKimcuong"
                         :attrLongvu="attrLongvu"  @updateAttrLongvu="updateAttrLongvu"
                         :user_code="user_code"
+                        :readInstructions="readInstructions"
+                        :muitenimgUrl="muitenimgUrl"
                         ></ModalThapThanhTuu>
                     </div>
                 </div>
@@ -191,6 +193,7 @@ export default {
             logActivity: [],
             topFeathers: [],
             isDivVisible: true,
+            clickedThanhThanhTuu: false,
         };
     },
     created() {
@@ -366,6 +369,7 @@ export default {
     font-family: 'UVNLacLongQuan';
     position: relative;
     transition: all 500ms linear;
+    cursor: url('../../../../assets/images/sinhnhat11nam/img_main/dua-phep.png') 0 0, auto;
 }
 
 
@@ -621,7 +625,7 @@ button.close-button:focus,button.close-button:active,button.close-button:focus-v
 
 .nha-thi-dau .bubble-content{
     top: 15%;
-    left: -33%;
+    left: -55%;
 }
 
 .wrapper-content .div-img.items .bubble-content{

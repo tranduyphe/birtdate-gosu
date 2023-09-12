@@ -1,11 +1,16 @@
 <template>
     <div id="ThapThanhTuu-Modal">
-
         <!-- Nội dung modal ở đây -->
+        <div class="div-img mui-ten" v-if="readInstructions == 0 && isPopupVisible" :class="{'d-none': clickedtabThanhTuu}">
+            <div class="popup">Các Phù Thủy hãy hoàn thành nhiệm vụ tại đây để nhận nguyên liệu tham gia minigame!</div>
+            <div class="img">
+                <img :src="muitenimgUrl" alt="" width="120">
+            </div>
+        </div>
         <div class="tab-thanhtuu">
             <div class="nav flex-column nav-tabs border-0" id="v-tabs-tab" role="tablist" aria-orientation="vertical">
                 <div class="nav-item mb-3">
-                    <a class="nav-link active" id="v-tabs-thu-thach-tab" data-bs-toggle="tab" href="#v-tabs-thu-thach"
+                    <a class="nav-link" :class="{ active: readInstructions != 0}" @click="doneInstructions" id="v-tabs-thu-thach-tab" data-bs-toggle="tab" href="#v-tabs-thu-thach"
                         role="tab" aria-controls="v-tabs-thu-thach" aria-selected="true">Bảng<br>thử thách</a>
                 </div>
 
@@ -20,7 +25,7 @@
                 </div>
 
                 <div class="nav-item mb-3">
-                    <a class="nav-link" id="v-tabs-the-le-tab" data-bs-toggle="tab" href="#v-tabs-the-le" role="tab"
+                    <a class="nav-link" :class="{ active: readInstructions == 0 }" id="v-tabs-the-le-tab" data-bs-toggle="tab" href="#v-tabs-the-le" role="tab"
                         aria-controls="v-tabs-the-le" aria-selected="false">Thể lệ</a>
                 </div>
 
@@ -29,7 +34,7 @@
         <div class="row">
             <div class="col-12 pr-0">
                 <div class="tab-content" id="v-tabs-tabContent">
-                    <div class="tab-pane fade show active" id="v-tabs-thu-thach" role="tabpanel"
+                    <div class="tab-pane fade" :class="{ active: readInstructions != 0,show: readInstructions != 0}" id="v-tabs-thu-thach" role="tabpanel"
                         aria-labelledby="v-tabs-thu-thach-tab">
                         <div class="title text-center">
                             <h2 class="title-modal">Bảng thử thách</h2>
@@ -45,7 +50,7 @@
                                 class="item-task col-lg-5 d-flex align-items-center justify-content-between">
                                 <span class="star"
                                     :style="{ color: item.is_reward == 0 ? '#b2ad8a' : '#289e11' }">&#10022;</span>
-                                <div class="item-info col-8 d-flex align-items-center">
+                                <div class="item-info col-9 d-flex align-items-center">
                                     <p class="m-0">{{ item.name }}</p>
                                     <div class="friendcode d-flex" v-if="index == 1"><input class="form-control w-75" v-model="friendCode"><button class="btn btn-success" type="button" @click="invite">Mời</button></div>
                                 </div>
@@ -120,7 +125,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="v-tabs-the-le" role="tabpanel" aria-labelledby="v-tabs-the-le-tab">
+                    <div class="tab-pane fade" :class="{ active: readInstructions == 0,show: readInstructions == 0 }" id="v-tabs-the-le" role="tabpanel" aria-labelledby="v-tabs-the-le-tab">
                         <div class="title text-center">
                             <h2 class="title-modal">Thể lệ</h2>
                             <img :src="lineBreak" class="mb-3">
@@ -492,8 +497,6 @@
                                 <em><span style="font-family: Cambria;">Trường hợp người chơi c&oacute; số lượng vật phẩm bằng nhau, phần thưởng sẽ thuộc về người c&oacute; thời gian ho&agrave;n th&agrave;nh sớm hơn.</span></em>
                             </p>
                             <p style="margin-top: 14pt; margin-bottom: 14pt; text-align: justify; line-height: normal; font-size: 14pt;"><span style="font-family: Cambria;">&nbsp;</span></p>
-                            <p style="bottom: 10px; right: 10px; position: absolute;"><a href="https://wordtohtml.net" target="_blank" style="font-size: 11px; color: #d0d0d0;">Converted to HTML with WordToHTML.net</a></p>
-
                         </div>
                     </div>
                 </div>
@@ -516,6 +519,8 @@ export default {
         attrKimcuong: Number,
         attrLongvu: Number,
         user_code: String,
+        readInstructions: Number,
+        muitenimgUrl: String,
     },
     data() {
         return {
@@ -526,10 +531,12 @@ export default {
             img_rank1: '/images/sinhnhat11nam/img_main/rank1.png',
             img_rank2: '/images/sinhnhat11nam/img_main/rank2.png',
             img_rank3: '/images/sinhnhat11nam/img_main/rank3.png',
-
+            clickedThele: false,
             friendCode: "",
             rewardFlag: false,
             inviteFlag: false,
+            clickedtabThanhTuu: false,
+            isPopupVisible: false,
         };
     },
     created() {
@@ -682,6 +689,23 @@ export default {
                 autoClose: 1500,
             });
         },
+
+        // startShowPopup() {
+        //     setTimeout(() => {
+        //         // Sau 5 giây, hiển thị popup bằng cách thay đổi trạng thái
+        //         this.isPopupVisible = true;
+        //     }, 5000); // 5000 milliseconds = 5 giây
+        // },
+
+        doneInstructions(){
+            this.clickedtabThanhTuu = true;
+        }
+    },
+    mounted(){
+        setTimeout(() => {
+            // Sau 5 giây, hiển thị popup bằng cách thay đổi trạng thái
+            this.isPopupVisible = true;
+        }, 5000); // 5000 milliseconds = 5 giây
     },
 };
 </script>
@@ -862,5 +886,53 @@ export default {
     height: 415px;
     overflow-y: auto;
     padding: 0 50px;
+}
+
+#v-tabs-thu-thach .item-task:nth-child(1){ order: 1; }
+#v-tabs-thu-thach .item-task:nth-child(2){ order: 2; }
+#v-tabs-thu-thach .item-task:nth-child(3){ order: 4; }
+#v-tabs-thu-thach .item-task:nth-child(4){ order: 3; }
+#v-tabs-thu-thach .item-task:nth-child(5){ order: 5; }
+#v-tabs-thu-thach .item-task:nth-child(6){ order: 7; }
+#v-tabs-thu-thach .item-task:nth-child(7){ order: 9; }
+#v-tabs-thu-thach .item-task:nth-child(8){ order: 6; }
+#v-tabs-thu-thach .item-task:nth-child(9){ order: 8; }
+#v-tabs-thu-thach .item-task:nth-child(10){ order: 10; }
+
+#ThapThanhTuu-Modal .div-img.mui-ten img{
+    transform: rotateZ(45deg);
+    z-index: 2;
+}
+
+#ThapThanhTuu-Modal .div-img.mui-ten{
+    position: absolute;
+    left: -20%;
+    top: 10%;
+}
+
+#ThapThanhTuu-Modal .div-img.mui-ten {
+    -webkit-animation: mover 0.5s infinite  alternate;
+    animation: mover 0.5s infinite  alternate;
+}
+#ThapThanhTuu-Modal .div-img.mui-ten {
+    -webkit-animation: mover 0.5s infinite  alternate;
+    animation: mover 0.5s infinite  alternate;
+}
+@-webkit-keyframes mover {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-10px); }
+}
+@keyframes mover {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-10px); }
+}
+
+#ThapThanhTuu-Modal .div-img.mui-ten .popup{
+    width: 280px;
+    padding: 5px;
+    border-radius: 5px;
+    color: #ffffff;
+    background: linear-gradient(to bottom, #f1c461, #a1813f);
+    border: 1px solid #ffffff;
 }
 </style>
