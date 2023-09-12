@@ -44,7 +44,7 @@
             <div class="infor-user d-flex align-items-center justify-content-between">
                 <div class="group-info d-flex align-items-center">
                     <img :src="avatar" alt="" class="avatar" width="65" height="65">
-                    <p class="mb-0">&nbsp;Xin chào&nbsp;<strong>{{user_name}}</strong></p>
+                    <p class="mb-0">&nbsp;Xin chào&nbsp;<strong>{{user_name}} -- {{ readInstructions }}</strong></p>
                 </div>
                 <a href="javascript:void(0)" @click="logoutSubmit" class="logout">Thoát</a>
             </div>
@@ -109,7 +109,7 @@ import 'aos/dist/aos.css';
 
 import ModalNhaThiDau from './modal-detail/nhathidau-modal.vue';
 import ModalThapThanhTuu from './modal-detail/thapthanhtuu-modal.vue';
-import ModalThuVienToanTri from './modal-detail/thuvien-modal.vue';
+import ModalThuVienToanTri from './modal-detail/thuvien-modal2.vue';
 
 import {
     authGetters,
@@ -144,6 +144,7 @@ export default {
             attrKimcuong: 67,
             attrLongvu: 15,
             attrThongbao: 0,
+            readInstructions: 0,
             friendCode: "",
             nhiemvu: [],
             logActivity: [],
@@ -262,7 +263,7 @@ export default {
                     if (response.data.status === 200 && response.data.success == true) {
                         self.attrKimcuong = response.data.data.diamond;
                         self.attrLongvu = response.data.data.feathers;
-
+                        self.readInstructions = response.data.data.read_instructions ?? 0;
                     }
                 })
                 .catch((error) => {

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\LogActivity;
 use App\Repositories\QuestRepository;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
@@ -91,9 +92,43 @@ class HomeController extends Controller
             $questType = 0;
             $QuestRepository->updateQuest($user, $questType, 1);
         }
-        
+
         return view('layouts.launch');
     }
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getDataSanhTruongHopHep(Request $request)
+    {
+        $result = User::leftJoin('sanh_hop_hep', 'users.id', '=', 'sanh_hop_hep.user_id')
+            ->select('users.id', DB::raw('COALESCE(sanh_hop_hep.is_open, 0) as is_open'))
+            ->orderBy('users.id')
+            ->get()->toArray();
+        $data = [];
+        for ($i = 0; $i < 198; $i++) {
+            if (!empty($result[$i])) {
+                $data[] = [
+                    "user_id" => $result[$i]['id'],
+                    "is_open" => $result[$i]['is_open']
+                ];
+            } else {
+                $data[] = [
+                    "user_id" => 0,
+                    "is_open" => 0
+                ];
+            }
+        }
+        $response = [
+            "status" => 200,
+            "message" => "success",
+            "data" => $data,
+            "success" => true
+        ];
+        return response()->json($response);
+    }
+
     // public function getAccessToken(Request $request)
     // {
     //     $accessToken = $request->session()->get('access_token_client');
@@ -141,16 +176,18 @@ class HomeController extends Controller
     {
         $user = $request->user();
         $diamond = 0;
-        if($user){
+        if ($user) {
             $diamond =  $user->diamond;
             $feathers = $user->feathers;
+            $readInstructions = $user->read_instructions;
         }
         $response = [
             "status" => 200,
             "message" => "success",
             "data" => [
                 'diamond' => $diamond,
-                'feathers' => $feathers
+                'feathers' => $feathers,
+                'read_instructions' => $readInstructions
             ],
             "success" => true
         ];

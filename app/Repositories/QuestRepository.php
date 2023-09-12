@@ -6,6 +6,7 @@ use App\Models\MinigameQuests;
 use Illuminate\Support\Carbon;
 use App\Models\LogActivity;
 use App\Models\UserInvite;
+use App\Models\SanhHopHep;
 use App\Repositories\LogRepository;
 
 class QuestRepository
@@ -20,7 +21,7 @@ class QuestRepository
                 'name' => 'Điểm danh đến trường hàng ngày 1',
                 'type' => '0',
                 'total_attempts' => 1,
-                'current_attempts' => 0,
+                'current_attempts' => 1,
                 'is_reward' => 0,
                 'diamond_reward' => 5
             ],
@@ -73,7 +74,7 @@ class QuestRepository
                 'diamond_reward' => 5
             ],
             [
-                'name' => 'Thu thập được 5 lông kỳ lân/ngày',
+                'name' => 'Thu thập được 5 Lông Phượng Hoàng/ngày',
                 'type' => '7',
                 'total_attempts' => 5,
                 'current_attempts' => 0,
@@ -81,7 +82,7 @@ class QuestRepository
                 'diamond_reward' => 5
             ],
             [
-                'name' => 'Thu thập được 15 lông kỳ lân/ngày',
+                'name' => 'Thu thập được 15 Lông Phượng Hoàng/ngày',
                 'type' => '8',
                 'total_attempts' => 15,
                 'current_attempts' => 0,
@@ -102,17 +103,60 @@ class QuestRepository
 
     public function getQuests($userId)
     {
-        $questData = MinigameQuests::where('user_id', $userId)
-            ->whereDate('created_at', Carbon::today())
+        //kiểm tra đã tồn tại user trong sảnh họp hẹp chưa
+        $SanhHopHepData = SanhHopHep::where('user_id', $userId)
             ->first();
-            // dump( Carbon::today());
-            // dump($questData);die;
+        $currentAttempts9 = 0;
+        $isReward9 = 0;
+
+        $today = Carbon::today();
+
+        // Lấy ngày hôm qua
+        $yesterday = Carbon::yesterday();
+
+        // Lấy ngày 2 ngày trước
+        $twoDaysAgo = Carbon::yesterday()->subDays(1);
+        if ($SanhHopHepData) {
+            $currentAttempts9 = 1;
+            $isReward9 = $SanhHopHepData->is_reward_quest;
+        } else {
+
+            // Thực hiện truy vấn trong bảng minigame_quest
+            $count = MinigameQuests::where('user_id', $userId)
+                ->where(function ($query) use ($yesterday, $twoDaysAgo) {
+                    $query->whereDate('created_at', $yesterday)
+                        ->orWhereDate('created_at', $twoDaysAgo);
+                })
+                ->count();
+            // dump($yesterday);
+            // dump($twoDaysAgo);
+            // dump($count);die;
+            if ($count >= 2) {
+                $currentAttempts9 = 1;
+                // Lấy ngày hôm nay
+                // dump("check today");
+                // dump($today);die;
+                SanhHopHep::updateOrInsert(
+                    ['user_id' => $userId, 'created_at' => $today],
+                    ['user_id' => $userId]
+                );
+            }
+        }
+
+        $questData = MinigameQuests::where('user_id', $userId)
+            ->whereDate('created_at', $today)
+            ->first();
         if ($questData) {
             // tìm dữ liệu được mời của bản thân
 
             $quests = json_decode($questData->quests, true);
+
+
+            $quests[9]["current_attempts"] = $currentAttempts9;
+            $quests[9]["is_reward"] = $isReward9;
+
             $count = UserInvite::where('friend_id', $userId)
-                ->whereDate('created_at', Carbon::today())
+                ->whereDate('created_at', $today)
                 ->count();
             if ($quests[2]["current_attempts"] < $quests[2]["total_attempts"] && $quests[2]["current_attempts"] < $count) {
                 $quests[2]["current_attempts"] = $count;
@@ -120,12 +164,24 @@ class QuestRepository
                 $questData->save();
             }
         } else {
-            $newQuest = new MinigameQuests();
-            $newQuest->user_id = $userId;  // Thiết lập user_id cho quest mới
-            $newQuest->quests = json_encode($this->listQuest);
-            $newQuest->save();
+
+            //nên sửa lại thành creater or update nếu created_at = ngày hôm nay
             $quests = $this->listQuest;
+            $quests[9]["current_attempts"] = $currentAttempts9;
+            $quests[9]["is_reward"] = $isReward9;
+            // $newQuest = new MinigameQuests();
+            // $newQuest->user_id = $userId;  // Thiết lập user_id cho quest mới
+            // $newQuest->quests = json_encode($quests);
+            // $newQuest->save();
+
+            MinigameQuests::updateOrInsert(
+                ['user_id' => $userId, 'created_at' => $today],
+                ['user_id' => $userId,'quests'=>json_encode($quests)]
+            );
+
+            $quests = $quests;
         }
+
         return  $quests;
     }
 
@@ -149,9 +205,9 @@ class QuestRepository
             if ($listQuest[$questType]['current_attempts'] < $listQuest[$questType]['total_attempts']) {
                 $listQuest[$questType]['current_attempts'] = min($listQuest[$questType]['current_attempts'] + $record, $listQuest[$questType]['total_attempts']);
                 $questData->quests = json_encode($listQuest);
-                
+
                 if ($listQuest[$questType]['current_attempts'] >= $listQuest[$questType]['total_attempts']) {
-                    
+
 
 
                     if ($questType < 6 && $listQuest[6]['current_attempts'] < 1) {
@@ -166,7 +222,7 @@ class QuestRepository
                         if ($checkQuest6) {
                             $listQuest[6]['current_attempts'] = 1;
                             $questData->quests = json_encode($listQuest);
-                            
+
                             // // lưu lịch sử hoạt động
                             // $LogRepository = new LogRepository();
                             // $LogRepository->saveLogActivity($user, 2,[], "Hoàn thành nhiệm vụ " . (6 + 1) . " tại bảng thử thách.");
@@ -193,6 +249,10 @@ class QuestRepository
         }
         $listQuest = json_decode($questData->quests, true);
         // dump($listQuest);die;
+        SanhHopHep::updateOrInsert(
+            ['user_id' => $userId],
+            ['user_id' => $userId, 'is_reward_quest' => 1]
+        );
         if ($listQuest && $listQuest[$questType] && $listQuest[$questType]['current_attempts'] >= $listQuest[$questType]['total_attempts']) {
             $listQuest[$questType]['is_reward'] = 1;
             $questData->quests = json_encode($listQuest);

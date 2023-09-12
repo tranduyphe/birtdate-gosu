@@ -1,20 +1,21 @@
 <template>
     <div class="game-thuvientoantri">
         <button class="btn-start" @click="reloadFlip()">Làm mới</button>
-        <p class="text-center text-white" v-if="checkGameOver">Bạn đã thua cuộc, vui lòng "Làm mới" để tiếp tục (Trừ 5 đá mặt trăng)</p>
+        <p class="text-center text-white" v-if="checkGameOver">Bạn đã thua cuộc, vui lòng "Làm mới" để tiếp tục (Trừ 5 đá
+            mặt trăng)</p>
         <div class="row justify-content-center align-items-center">
             <div class="minigame-thuvien">
                 <div class="" v-if="flipList != nul">
                     <div v-for="row in 3" :key="row" class="row justify-content-center align-items-center"
                         data-aos="fade-up">
-                        <div v-for="col in 15" :key="col" class="cell p-0">
-                            <div v-if="flipList[(row - 1) * 15 + col - 1]" class="card mb-0"
-                                :class="{ flipped: flipList[(row - 1) * 15 + col - 1].active > 0, }"
-                                @click="flipCard((row - 1) * 15 + col - 1)"
-                                :style="{ opacity: flipList[(row - 1) * 15 + col - 1].active == 2 ? '0' : '1' }">
+                        <div v-for="col in 8" :key="col" class="cell p-0">
+                            <div v-if="flipList[(row - 1) * 8 + col - 1]" class="card mb-0"
+                                :class="{ flipped: flipList[(row - 1) * 8 + col - 1].active > 0, }"
+                                @click="flipCard((row - 1) * 8 + col - 1)"
+                                :style="{ opacity: flipList[(row - 1) * 8 + col - 1].active == 2 ? '0' : '1' }">
                                 <div class="image">
                                     <img data-aos="fade-up"
-                                        :src="flipList[(row - 1) * 15 + col - 1].color == null ? imgtransparent : flipList[(row - 1) * 15 + col - 1].color"
+                                        :src="flipList[(row - 1) * 8 + col - 1].color == null ? imgtransparent : flipList[(row - 1) * 8 + col - 1].color"
                                         alt="" width="65" height="65">
                                 </div>
                             </div>
@@ -25,19 +26,7 @@
             <div class="line-break text-center my-3">
                 <img :src="lineBrealimg" alt="">
             </div>
-            <div class="cell-wait col-md-8 mt-2 pl-5">
-                <p class="text-wait font-size-16">&#9830;&nbsp;Số ô chờ đã fill/số ô chờ tổng&nbsp;<span class="px-1">{{
-                    waiting.length }}/4</span></p>
-                <div class="row mt-4">
-                    <div class="item-wait p-0 mr-5" v-for="col in 4">
-                        <div class="card-wait mb-0" :class="{ flipped: waiting[col - 1] && waiting[col - 1] > 0 }">
-                            <div class="image" v-if="waiting[col - 1] && waiting[col - 1] > 0">
-                                <img :src="cardBackgroundColor(col - 1)" alt="" width="65" height="65">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
             <div class="attribute-items mt-4 d-flex col-md-4 justify-content-around align-items-end">
                 <div class="div-img items thongbao mr-5" data-aos="fade-down">
                     <img :src="thongbaoimgUrl" alt="Thông báo" width="">
@@ -51,9 +40,6 @@
                     <img :src="longvuimgUrl" alt="Thông báo" width="">
                     <span class="font-size-14 text-white">{{ attrLongvu }}</span>
                 </div>
-            </div>
-            <div class="modalGameOver" data-aos="zoom-in-up" id="GameOverModal">
-                <img :src="imgloser" width="800">
             </div>
         </div>
     </div>
@@ -77,8 +63,8 @@ import {
 // import io from "socket.io-client";
 export default {
     props: {
-        attrKimcuong:Number,
-        attrLongvu:Number,
+        attrKimcuong: Number,
+        attrLongvu: Number,
     },
     data() {
         return {
@@ -88,7 +74,6 @@ export default {
             colors: ['blue', 'red', 'green', 'pink'],
             // flipList: new Array(33).fill({ active: false, color: '' }), // Tạo mảng 9 phần tử với giá trị ban đầu là false
             flipList: [],
-            waiting: [],
             flag: false,
             diamond: 0,
             feathers: 0,
@@ -104,6 +89,14 @@ export default {
             itemPink: '/images/sinhnhat11nam/img_main/thuvien-itemPink.png',
             imgtransparent: '/images/sinhnhat11nam/img_main/transparent.png',
             imgloser: '/images/sinhnhat11nam/img_main/loser.png',
+            randomMessages: [
+                "Hãy mở tiếp cho đến khi tổ tiên mách bảo!",
+                "Hãy nhận tạm ít bụi tiên để tích lũy thêm may mắn nhé~",
+                "Bạn nhận được 1 lời khen 'Chiến binh đáng yêu nhất GOSU!'",
+                "Câu thần chú có vẻ chưa đúng nên chưa có trúng.",
+                "Bạn không sai, Share To Shine!",
+                "Vừa trượt tay có tí, làm lại lần nữa nào!"
+            ]
         };
     },
     created() {
@@ -154,19 +147,12 @@ export default {
         },
 
         async getFlip() {
-            console.log("check  minigame: this.attrKimcuong =",this.attrKimcuong);
-            let gameId = await this.getGameId();
             let self = this;
-            axios.get('/api/get-flip', {
-                params: {
-                    game_id: gameId
-                },
+            axios.get('/api/get-flip-tvtt', {
             })
                 .then(function (response) {
                     if (response.data.status === 200 && response.data.success == true) {
-                        self.flipList = response.data.data.data_flip.active_flip;
-                        self.waiting = response.data.data.data_flip.waiting ?? [];
-                        console.log("response.data.data", response.data.data);
+                        self.flipList = response.data.data.data_flip;
 
                     }
                 })
@@ -179,33 +165,30 @@ export default {
                 .finally();
         },
         async flipCard(index) {
-            if (!this.checkGameOver && !this.flag) {
 
-                if (this.flipList[index].active == 0 && this.flipList[index].type == 0) {
+            if (this.flipList[index].active == 0 && this.flipList[index].type == 0) {
 
-                    let gameId = await this.getGameId();
-                    const formData = new FormData();
-                    formData.append("id", index);
-                    formData.append("game_id", gameId);
-                    let self = this;
-                    let flipList = this.flipList;
-                    this.flag = true;
+                const formData = new FormData();
+                formData.append("id", index);
+                let self = this;
+                // let flipList = this.flipList;
+                this.flag = true;
 
-                    axios.post('/api/active-flip', formData, {
-                    })
-                        .then(function (response) {
-                            if (response.data.status === 200 && response.data.success == true) {
+                axios.post('/api/active-flip-tvtt-2', formData, {
+                })
+                    .then(function (response) {
+                        if (response.data.status === 200) {
+                            if (response.data.success == true) {
+                                self.flipList[index] = { active: true, color: response.data.data.data_flip[index].color };
 
-                                flipList[index] = { active: true, color: response.data.data.data_flip.active_flip[index].color };
-
-                                self.flipList = flipList;
+                                // self.flipList = flipList;
                                 // self.flipList = response.data.data.data_flip.active_flip;
                                 if (response.data.data.user) {
                                     // const userResponseJSON = JSON.stringify(response.data.data.user);
                                     // self.saveInfoUser(userResponseJSON);
 
                                     // self.diamond = response.data.data.user.diamond
-                                    
+
                                     // self.attrKimcuong = response.data.user.diamond;
                                     // self.feathers = response.data.data.user.feathers
                                     self.$emit("updateAttrKimcuongNtd", response.data.data.user.diamond);
@@ -214,106 +197,90 @@ export default {
                                 }
                                 // if (response.data.data.data_flip.choises && response.data.data.data_flip.choises.length == 0) {
                                 setTimeout(() => {
-                                    self.flipList = response.data.data.data_flip.active_flip;
-                                    self.waiting = response.data.data.data_flip.waiting;
                                     if (response.data.data.reward) {
                                         let reward = response.data.data.reward;
                                         let message = "";
-                                        for (let i = 0; i < reward.length; i++) {
-                                            console.log("reward[i]", reward[i].record);
-                                            console.log("reward[i].item_id: ", reward[i].item_id);
+                                        if (reward.length == 0) {
+                                            message = "Chúc bạn may mắn lần sau.";
+                                            const randomIndex = Math.floor(Math.random() * self.randomMessages.length);
+                                            message = self.randomMessages[randomIndex];
+                                        } else {
+                                            for (let i = 0; i < reward.length; i++) {
+                                                console.log("reward[i]", reward[i].record);
+                                                console.log("reward[i].item_id: ", reward[i].item_id);
 
-                                            if (reward[i].item_id == "1") {
-                                                console.log("message: ", message);
-                                                console.log("reward[i].record: ", reward[i].record);
-                                                message = message + " Lông Phượng Hoàng +" + reward[i].record;
-                                                console.log("message: ", message);
-                                            }
-                                            if (reward[i].item_id == "2") {
-                                                message = message + " Đá mặt trăng +" + reward[i].record;
+                                                if (reward[i].item_id == "1") {
+                                                    console.log("message: ", message);
+                                                    console.log("reward[i].record: ", reward[i].record);
+                                                    message = message + " Lông Phượng Hoàng +" + reward[i].record;
+                                                    console.log("message: ", message);
+                                                }
+                                                if (reward[i].item_id == "2") {
+                                                    message = message + " Đá mặt trăng +" + reward[i].record;
+                                                }
+                                                if (reward[i].item_id == "3") {
+                                                    message = message + "  Chúc mừng bạn đã nhận được+" + reward[i].record + " Thẻ Tiềm Long";
+                                                }
                                             }
                                         }
+
                                         // alert(message);
                                         self.$swal.fire({
                                             position: "center",
                                             icon: "success",
                                             title: message,
                                             showConfirmButton: false,
-                                            timer: 1500
+                                            timer: 2000
                                         });
                                     }
                                     self.flag = false;
                                 }, 500); // 500 milliseconds = 0.5 giây
-
-                                // } else {
-                                //     self.flag = false;
-                                // }
                             } else {
-                                self.flag = false;
+                                console.log("check response.data.message", response.data.message);
+                                if (response.data.data.data_flip) {
+                                    // self.flipList = response.data.data.data_flip;
+                                }
+                                self.$swal.fire({
+                                    position: "center",
+                                    icon: "success",
+                                    title: response.data.message,
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                });
                             }
-                        })
-                        .catch((error) => {
-                            this.flag = true;
-                            console.log(error);
-                            if (error.response && error.response.status === 401) {
-                                this.logoutSubmit()
-                            }
-                        })
-                        .finally();
-                }
+
+
+                            // } else {
+                            //     self.flag = false;
+                            // }
+                        } else {
+                            self.flag = false;
+                        }
+                    })
+                    .catch((error) => {
+                        this.flag = true;
+                        console.log(error);
+                        if (error.response && error.response.status === 401) {
+                            this.logoutSubmit()
+                        }
+                    })
+                    .finally();
             }
         },
-        // reconnect() {
-        //     if (this.socket.connected) {
-        //         // Socket đã kết nối, gửi tín hiệu
-        //         const userId = this.UserInfo.id; // Thay bằng thông tin thực tế
-        //         this.pageConnected = true;
-        //         const pageConnected = this.pageConnected;
-        //         console.log("check userId:", userId);
-        //         console.log("check pageConnected:", pageConnected);
-        //         this.socket.emit('userConnected', { userId, pageConnected });
-        //         this.getFlip();
-        //     } else {
-        //         this.$swal.fire({
-        //             icon: "info",
-        //             title: "Thông báo",
-        //             text: "Kết nối socket thất bại",
-        //             allowOutsideClick: false, // Chặn nhấp vào vùng ngoài popup để tắt
-        //             confirmButtonText: "Kết nối lại", // Tùy chọn tên nút confirm
-        //         }).then((result) => {
-        //             if (result.isConfirmed) {
-        //                 // Xử lý logic khi người dùng nhấn nút "Kết nối lại"
-        //                 this.reconnect();
-        //             }
-        //         });
-        //     }
-        // },
 
 
         reloadFlip() {
             let self = this;
-            axios.get('/api/reload-flip', {
+            axios.get('/api/reload-flip-tvtt', {
             })
                 .then(function (response) {
                     if (response.data.status === 200 && response.data.success == true) {
-                        self.flipList = response.data.data.data_flip.active_flip;
-                        self.waiting = response.data.data.data_flip.waiting;
-                        if (response.data.data.user) {
-                            // const userResponseJSON = JSON.stringify(response.data.data.user);
-                            // self.saveDiamond(response.data.data.user.diamond);
-                            
-                            self.$emit("updateAttrKimcuongNtd", response.data.data.user.diamond);
-                            self.$emit("updateAttrLongvuNtd", response.data.data.user.feathers);
-                            // self.diamond = response.data.data.user.diamond
-                            // self.feathers = response.data.data.user.feathers
-                            // self.saveInfoUser(userResponseJSON);
-                            // this.$store.actions.saveInfoUser(response.data.data.user);
-                        }
-                        if (response.data.data.game_id) {
-                            const gameId = response.data.data.game_id;
-                            self.saveGameId(gameId);
-                            // this.$store.actions.saveInfoUser(response.data.data.user);
-                        }
+                        self.flipList = response.data.data.data_flip;
+                        // if (response.data.data.user) {
+
+                        //     self.$emit("updateAttrKimcuongNtd", response.data.data.user.diamond);
+                        //     self.$emit("updateAttrLongvuNtd", response.data.data.user.feathers);
+                        // }
                     } else {
                         // alert(response.data.message);
                         self.$swal.fire({
@@ -340,15 +307,6 @@ export default {
     },
     // code test keyboard
     watch: {
-        checkGameOver(newValue) {
-            if (newValue) {
-                // Hiển thị modal khi game over
-                $('#GameOverModal').css('display','flex');
-                setTimeout(() => {
-                    $('#GameOverModal').hide();
-                }, 5000);
-            }
-        },
     },
     computed: {
         UserInfo() {
@@ -358,86 +316,9 @@ export default {
                 diamond: user ? user.diamond : 0,
                 feathers: user ? user.feathers : 0,
             }
-        },
-        checkGameOver() {
-            return this.waiting.length >= 4;
-        },
-        cardBackgroundColor() {
-            return (col) => {
-                if (this.waiting[col] === 1) {
-                    return this.itemPuple;
-                } else if (this.waiting[col] === 2) {
-                    return this.itemRed;
-                } else if (this.waiting[col] === 3) {
-                    return this.itemGreen;
-                } else if (this.waiting[col] === 4) {
-                    return this.itemPink;
-
-                } else if (this.waiting[col] === 5) {
-                    return this.itemYellow;
-                } else {
-                    return '';
-                }
-
-            };
         }
     },
     mounted() {
-        // Lắng nghe sự kiện storage để cập nhật tên người dùng từ tab khác
-        // window.addEventListener('storage', (event) => {
-        //     console.log("check event key storage:", event.key);
-        //     alert("bạn đang thao tác ở page khác");
-        // });
-        // this.socket = io('localhost:3000');
-        // console.log('Socket đã được khởi tạo', this.socket);
-
-        // this.socket.on('connect', () => {
-        //     console.log('Kết nối thành công với máy chủ socket');
-
-        //     // Kiểm tra xem người dùng đã kết nối lần nào chưa
-        //     // Gửi thông tin người dùng kèm theo
-        //     const userId = this.UserInfo.id; // Thay bằng thông tin thực tế
-        //     const pageConnected = this.pageConnected;
-        //     console.log("check userId:", userId);
-        //     console.log("check pageConnected:", pageConnected);
-        //     this.socket.emit('userConnected', { userId, pageConnected });
-
-        //     // Xử lý các sự kiện và gửi thông báo đến người dùng
-        //     // ...
-        // });
-        // this.socket.on('disconnect', () => {
-        //     this.pageConnected = false;
-        //     // set 200ms để trường hợp f5 reload không bị hiện popup
-        //     setTimeout(() => {
-        //         this.$swal.fire({
-        //             icon: "info",
-        //             title: "Thông báo",
-        //             text: "Kết nối socket thất bại",
-        //             allowOutsideClick: false,
-        //             confirmButtonText: "Kết nối lại",
-        //         }).then((result) => {
-        //             if (result.isConfirmed) {
-        //                 this.reconnect();
-        //             }
-        //         });
-        //     }, 200); // Chờ 500ms (0.5 giây) trước khi hiển thị popup
-        // });
-
-        // this.socket.on("notification", (data) => {
-        //     this.pageConnected = false;
-        //     console.log("Giá trị được gửi về từ sự kiện notification:", data);
-        //     this.$swal.fire({
-        //         icon: "info",
-        //         title: "Thông báo",
-        //         text: "Bạn đang thao tác ở page khác",
-        //         allowOutsideClick: false, // Chặn nhấp vào vùng ngoài popup để tắt
-        //         confirmButtonText: "Kết nối lại", // Tùy chọn tên nút confirm
-        //     }).then((result) => {
-        //         if (result.isConfirmed) {
-        //             this.reconnect();
-        //         }
-        //     });
-        // });
     },
 };
 </script>
@@ -459,7 +340,7 @@ export default {
         linear-gradient(to bottom, #7b5d1c, #a1813f) border-box;
 }
 
-.game-thuvientoantri .card:hover{
+.game-thuvientoantri .card:hover {
     filter: brightness(140%);
 }
 
@@ -585,26 +466,7 @@ export default {
     filter: brightness(140%);
 }
 
-#GameOverModal{
-    display: none;
-    background-color: rgba(0, 0, 0, 0.8);
-    color: white;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 9999;
-    justify-content: center;
-    align-items: center;
-    font-size: 20px;
-    text-align: center;
-    transform-origin: center;
-    /* transform: rotate(90deg) translateY(-50%); */
-    white-space: nowrap;
-    transition: transform 1s ease-in-out, opacity 1s ease-in-out;
-    flex-direction: column;
-}
+
 
 /* ... CSS sau đó ... */
 </style>

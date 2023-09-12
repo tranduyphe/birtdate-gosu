@@ -13,6 +13,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use Illuminate\Support\Facades\Cache;
 use App\Models\Minigame;
+use App\Models\MinigameTvtt;
 use App\Models\LogItem;
 use App\Models\LogActivity;
 use App\Models\User;
@@ -91,7 +92,7 @@ class FlipController extends Controller
             $activeFlips = $dataActionFlip['active_flip'];
             $gameStatus = 1;
             //check game over
-            if (count($waiting) >= 6) {
+            if (count($waiting) >= 4) {
                 $gameStatus = 0;
             }
 
@@ -151,7 +152,6 @@ class FlipController extends Controller
         $choises = [];
         $saveWaiting = [];
         $waiting = [];
-
         $colors = [];
 
         foreach ($img_colors as $color) {
@@ -208,7 +208,7 @@ class FlipController extends Controller
                     }
 
                     //kiểm tra thắng trò chơi hay chưa
-                    if (count($waiting) >= 6) {
+                    if (count($waiting) >= 4) {
                         $gameData->flag = 0;
                         $gameData->save();
                         $response = [
@@ -236,6 +236,11 @@ class FlipController extends Controller
                     // 2. kiểm tra đã tìm đủ 3 ô cùng mày không
                     $count = 0;
                     $result = [];
+                    foreach ($waiting as $type) {
+                        if ($type == $typeChoise) {
+                            $count++;
+                        }
+                    }
                     foreach ($activeFlips as $key => $item) {
                         if ($item['type'] == $typeChoise && $item['active'] != 2) {
                             $result[] = $key;
@@ -247,36 +252,52 @@ class FlipController extends Controller
                         }
                     }
                     if ($count == 3) {
-                        $activeFlips[$result[0]]['active'] = $activeFlips[$result[1]]['active'] = $activeFlips[$result[2]]['active'] = 2;
+                        if (isset($result[0])) {
+                            $activeFlips[$result[0]]['active'] = 2;
+                        }
+                        if (isset($result[1])) {
+                            $activeFlips[$result[1]]['active'] = 2;
+                        }
+                        if (isset($result[2])) {
+                            $activeFlips[$result[2]]['active'] = 2;
+                        }
+                        // $activeFlips[$result[0]]['active'] = $activeFlips[$result[1]]['active'] = $activeFlips[$result[2]]['active'] = 2;
                         // xoá 1 phần tử của waiting trùng vs type
                         // if ($saveWaiting[2] && $saveWaiting[2] == $typeChoise) {
                         //     unset($saveWaiting[2]);
                         // }
-                        if (isset($saveWaiting[2]) && $saveWaiting[2] == $typeChoise) {
+                        if (isset($saveWaiting[2]) && $saveWaiting[2]['type'] == $typeChoise) {
                             unset($saveWaiting[2]);
                         }
-                        if (isset($saveWaiting[1]) && $saveWaiting[1] == $typeChoise) {
+                        if (isset($saveWaiting[1]) && $saveWaiting[1]['type'] == $typeChoise) {
                             unset($saveWaiting[1]);
                         }
-                        if (isset($saveWaiting[0]) && $saveWaiting[0] == $typeChoise) {
+                        if (isset($saveWaiting[0]) && $saveWaiting[0]['type'] == $typeChoise) {
                             unset($saveWaiting[0]);
                         }
 
                         $saveWaiting = array_values($saveWaiting);
 
-                        $index = array_search($typeChoise, $waiting);
-                        if ($index !== false) {
-                            unset($waiting[$index]); // Xoá phần tử tại vị trí $index
+                        // $index = array_search($typeChoise, $waiting);
+                        // if ($index !== false) {
+                        //     unset($waiting[$index]); // Xoá phần tử tại vị trí $index
+                        // }
+                        $waiting2 = [];
+                        foreach ($waiting as  $type) {
+                            if ($type !== $typeChoise) {
+                                $waiting2[] = $type;
+                            }
                         }
-                        $waiting = array_values($waiting);
+                        $waiting = $waiting2;
                     } else {
-                        $saveWaiting[] = $typeChoise;
+                        $saveWaiting[] = ["id" => $id, "type" => $typeChoise];
                     }
                     if (count($choises) == 3) {
                         if ($saveWaiting !== []) {
                             $lastValue = end($saveWaiting);
-                            $waiting[] = $lastValue;
+                            $waiting[] = $lastValue["type"];
                             $saveWaiting = [];
+                            $activeFlips[$lastValue['id']]['active'] = 2;
                         }
                         $choises = [];
                     }
@@ -310,12 +331,12 @@ class FlipController extends Controller
                                 'data_flip' => $dataActionFlip,
                                 'game_status' => 2,
                                 'user' => $user,
-                                'reward' => [['item_id'=>1,'record'=>10]]
+                                'reward' => [['item_id' => 1, 'record' => 10]]
                             ],
                             "success" => true
                         ];
                         return response()->json($response);
-                    } elseif (count($waiting) >= 6) {
+                    } elseif (count($waiting) >= 4) {
                         $response = [
                             "status" => 200,
                             "message" => "game over",
@@ -418,11 +439,11 @@ class FlipController extends Controller
         $LogRepository = new LogRepository();
         $LogRepository->saveLogItemWithValue($user, $itemType, $record, $oldValue, $newValue, $reason);
     }
-    public function saveLogActivity($user, $activityType,$listITemReward, $reason)
+    public function saveLogActivity($user, $activityType, $listITemReward, $reason)
     {
         // save history 
         $LogRepository = new LogRepository();
-        $LogRepository->saveLogActivity($user, $activityType,[], $reason);
+        $LogRepository->saveLogActivity($user, $activityType, [], $reason);
         // $newLog = new LogActivity();
         // $newLog->user_id = $user->id;  // Thiết lập user_id cho quest mới
 
@@ -436,7 +457,7 @@ class FlipController extends Controller
     {
         $user = $request->user();
 
-        if (!$user || $user->diamond < 5) {
+        if (!$user || $user->diamond < 2) {
             $response = [
                 "status" => 200,
                 "message" => "Đá mặt trăng không đủ!",
@@ -448,7 +469,7 @@ class FlipController extends Controller
         $response = null;
         DB::transaction(function () use ($user, &$response) {
             try {
-                $amount = 5;
+                $amount = 2;
                 $affectedRows = User::where('id', $user->id)
                     ->whereRaw('diamond >= ?', [$amount])
                     ->decrement('diamond', $amount);
@@ -459,9 +480,9 @@ class FlipController extends Controller
 
                 $user->refresh();
                 $newValue = $user->diamond;
-                // $this->saveLogItem($user,2,-5,"Tham gia thử thách Tích Kỳ tại Thư Viện Toàn Tri.");
+                // $this->saveLogItem($user,2,-2,"Tham gia thử thách Tích Kỳ tại Thư Viện Toàn Tri.");
                 $this->saveLogItemWithValue($user, 2, $amount * (-1), $newValue + $amount, $newValue, "Tham gia thử thách Bài Trùng tại Nhà Thi Đấu Xoẹt Xoẹt.");
-                $this->saveLogActivity($user, 2,[], "Tham gia thử thách Bài Trùng tại Nhà Thi Đấu Xoẹt Xoẹt.");
+                $this->saveLogActivity($user, 2, [], "Tham gia thử thách Bài Trùng tại Nhà Thi Đấu Xoẹt Xoẹt.");
                 // dump($user);die;
                 $listFlips = [];
                 $activeFlips = [];
@@ -533,6 +554,324 @@ class FlipController extends Controller
         return response()->json($response);
     }
 
+    public function getFlipTvtt(Request $request)
+    {
+
+        $user = $request->user();
+        // $gameData = Cache::get('data_game_' . $user->id . 'gid' . $gameId);
+        // if (!$gameData) {
+        $gameData = MinigameTvtt::where("user_id", $user->id)->first();
+        if (!$gameData) {
+            $activeFlips = [];
+            for ($i = 0; $i < 32; $i++) {
+                $activeFlips[] = [
+                    'active' => 0,
+                    'type' => 0
+                ];
+            }
+
+            $gameData = new MinigameTvtt();
+            MinigameTvtt::updateOrInsert(
+                ['user_id' => $user->id],
+                ['user_id' => $user->id, 'active_flip_tvtt' => json_encode($activeFlips)]
+            );
+            $response = [
+                "status" => 200,
+                "message" => "success",
+                "data" => [
+                    'data_flip' => $activeFlips,
+                ],
+                "success" => true
+            ];
+            return response()->json($response);
+        }
+
+        $dataActionFlip = json_decode($gameData->active_flip_tvtt, true);
+
+        //check win
+        // dump($activeFlips);die;
+
+
+        $response = [
+            "status" => 200,
+            "message" => "success",
+            "data" => [
+                'data_flip' => $dataActionFlip,
+            ],
+            "success" => true
+        ];
+        return response()->json($response);
+    }
+
+    public function activeFlipTvtt2(Request $request)
+    {
+        $user = $request->user();
+
+        $id = $request->input('id');
+
+        $img_colors = [
+            'transparent',
+            'thuvien-itemPuple',
+            'thuvien-itemRed',
+            'thuvien-itemGreen',
+            'thuvien-itemPink',
+            'thuvien-itemYellow'
+        ];
+        $activeFlips = [];
+        $colors = [];
+
+        foreach ($img_colors as $color) {
+            $imagePath = 'images/sinhnhat11nam/' . $color . '.png'; // Đường dẫn tương đối đến ảnh
+            $colors[] = asset($imagePath); // Sử dụng hàm asset để tạo đường dẫn tới ảnh
+        }
+
+        // lấy thông tin flip
+
+        // $gameData = Cache::get('data_game_' . $user->id . 'gid' . $gameId);
+        // if (!$gameData) {
+        $gameData = MinigameTvtt::where("user_id", $user->id)->first();
+
+        if ($gameData) {
+            $activeFlips =  json_decode($gameData['active_flip_tvtt'], true);
+            if ($gameData->flag) {
+                $response = [
+                    "status" => 200,
+                    "message" => "Thẻ bài cũ chưa lật xong",
+                    "data" => [
+                        'data_flip' => $activeFlips,
+                    ],
+                    "success" => false
+                ];
+                return response()->json($response);
+            }
+            if($activeFlips[$id]['active'] !== 0){
+                $response = [
+                    "status" => 200,
+                    "message" => "Thẻ bài đã được lật trước đó, hãy load lại page để cập nhật thẻ bài!",
+                    "data" => [
+                        'data_flip' => $activeFlips,
+                    ],
+                    "success" => false
+                ];
+                return response()->json($response);
+            }
+            
+            if (!$user || $user->diamond < 5) {
+                $response = [
+                    "status" => 200,
+                    "message" => "Đá mặt trăng không đủ!",
+                    "data" => ['data_flip' => $activeFlips],
+                    "success" => false
+                ];
+                return response()->json($response);
+            }
+            $response = null;
+
+
+            //start transaction
+            DB::transaction(function () use ($user, $id, $gameData, $activeFlips, $colors, &$response) {
+                try {
+
+                    // $oldValue = $user->diamond;
+                    $amount = 5;
+                    $affectedRows = User::where('id', $user->id)
+                        ->whereRaw('diamond >= ?', [$amount])
+                        ->decrement('diamond', $amount);
+                    if (!($affectedRows > 0)) {
+                        throw new \Exception("Đá mặt trăng không đủ!");
+                    };
+                    $user->refresh();
+                    $newValue = $user->diamond;
+                    // $this->saveLogItem($user,2,-5,"Tham gia thử thách Tích Kỳ tại Thư Viện Toàn Tri.");
+                    $this->saveLogItemWithValue($user, 2, $amount * (-1), $newValue + $amount, $newValue, "Tham gia thử thách Tích Kỳ tại Thư Viện Toàn Tri.");
+                    $this->saveLogActivity($user, 2, [], "Tham gia thử thách Tích Kỳ tại Thư Viện Toàn Tri.");
+                    if ($user->the_tiem_long > 0) {
+                        $itemRandom = [
+                            [
+                                'item' => [['item_id' => 3, 'record' => 1]], // 3 là thẻ tiềm long
+                                'weight' => 0
+                            ],
+                            [
+                                'item' => [['item_id' => 1, 'record' => 5]],
+                                'weight' => 200
+                            ],
+                            [
+                                'item' => [['item_id' => 2, 'record' => 10]],
+                                'weight' => 200
+                            ],
+                            [
+                                'item' => [],
+                                'weight' => 300
+                            ],
+                            [
+                                'item' => [],
+                                'weight' => 300
+                            ],
+
+                        ];
+                    } else {
+                        $itemRandom = [
+                            [
+                                'item' => [['item_id' => 3, 'record' => 1]], // 3 là thẻ tiềm long
+                                'weight' => 300
+                            ],
+                            [
+                                'item' => [['item_id' => 1, 'record' => 5]], // 2 là đá mặt trăng
+                                'weight' => 100
+                            ],
+                            [
+                                'item' => [['item_id' => 2, 'record' => 10]], // 1 là lông Phượng hoàng
+                                'weight' => 100
+                            ],
+                            [
+                                'item' => [],
+                                'weight' => 250
+                            ], [
+                                'item' => [],
+                                'weight' => 250
+                            ],
+                        ];
+                    }
+
+                    $totalWeight = 0;
+                    $randomWeight = rand(1, 1000);
+                    $listItems = [];
+                    $colorId = 0;
+                    foreach ($itemRandom as $element) {
+                        $colorId++;
+                        $totalWeight = $totalWeight + $element['weight'];
+                        if ($totalWeight >= $randomWeight) {
+                            $listItems = $element['item'];
+                            break;
+                        }
+                    }
+                    foreach ($listItems as $element) {
+                        if ($element['record'] > 0) {
+
+                            $this->saveLogItem($user, $element['item_id'], $element['record'], "Tham gia thử thách Tích Kỳ tại Thư Viện Toàn Tri.");
+                            if ($element['item_id'] == 1) {
+                                $user->increment('feathers', $element['record']);
+                            }
+                            if ($element['item_id'] == 2) {
+                                $user->increment('diamond', $element['record']);
+                                // $user->diamond = $user->diamond + $element['record'];
+                            }
+                            if ($element['item_id'] == 3) {
+                                $user->increment('the_tiem_long', $element['record']);
+                                // $user->diamond = $user->diamond + $element['record'];
+                            }
+                        }
+                        $user->save();
+                    }
+                    $choises[] = $id;
+                    $activeFlips[$id]['active'] = 1;
+                    $activeFlips[$id]['type'] = $colorId;
+                    $activeFlips[$id]['color'] = $colors[$colorId];
+
+                    $gameData->active_flip_tvtt = json_encode($activeFlips);
+                    $gameData->save();
+                    // Nếu không có lỗi, commit giao dịch
+                    DB::commit();
+                    $response = [
+                        "status" => 200,
+                        "message" => "success",
+                        "data" => [
+                            'user' => $user,
+                            'reward' => $listItems,
+                            'data_flip' => $activeFlips
+
+                        ],
+                        "success" => true
+                    ];
+                } catch (\Exception $e) {
+                    // Nếu có lỗi, quay lại trạng thái ban đầu và xử lý lỗi
+                    DB::rollback();
+                    $user->refresh();
+                    // Khôi phục giá trị "diamond" ban đầu
+                    // Trả về thông báo lỗi hoặc thực hiện xử lý lỗi khác ở đây
+                    $errorMessage = $e->getMessage() ?? "Có lỗi trong lúc xử lý!";
+                    $response = [
+                        "status" => 200,
+                        "message" => $errorMessage,
+                        "data" => ['data_flip' => []],
+                        "success" => false
+                    ];
+                }
+            });
+
+            $gameData->flag = 0;
+            $gameData->save();
+            return response()->json($response);
+        } else {
+            $response = [
+                "status" => 200,
+                "message" => "Trò chơi không tồn tại, hãy ấn bắt đầu để tạo trò chơi mới",
+                "data" => [
+                    'data_flip' => [],
+                ],
+                "success" => true
+            ];
+            return response()->json($response);
+        }
+
+        //check win
+
+    }
+
+    public function reloadFlipTvtt(Request $request)
+    {
+        $user = $request->user();
+
+        $response = null;
+        DB::transaction(function () use ($user, &$response) {
+            try {
+
+                for ($i = 0; $i < 32; $i++) {
+                    $activeFlips[] = [
+                        'active' => 0,
+                        'type' => 0
+                    ];
+                }
+
+                MinigameTvtt::updateOrInsert(
+                    ['user_id' => $user->id],
+                    ['user_id' => $user->id, 'active_flip_tvtt' => json_encode($activeFlips)]
+                );
+                // Cache::put('data_game_' . $user->id . 'gid' . $minigameData->id, json_encode(['list_flips' => $listFlips, 'active_flips' => $dataActionFlip]), now()->addMinutes(20));
+
+                // hoàn thành nhiệm vụ: 3
+                $QuestRepository = new QuestRepository();
+                $questType = 3;
+                $QuestRepository->updateQuest($user, $questType, 1);
+
+                DB::commit();
+                $response = [
+                    "status" => 200,
+                    "message" => "success",
+                    "data" => [
+                        'data_flip' => $activeFlips,
+                    ],
+                    "success" => true
+                ];
+            } catch (\Exception $e) {
+                // Nếu có lỗi, quay lại trạng thái ban đầu và xử lý lỗi
+                DB::rollback();
+                $user->refresh();
+                // Khôi phục giá trị "diamond" ban đầu
+                // Trả về thông báo lỗi hoặc thực hiện xử lý lỗi khác ở đây
+
+                $response = [
+                    "status" => 200,
+                    "message" => "Có lỗi trong lúc xử lý!",
+                    "data" => ['data_flip' => []],
+                    "success" => false
+                ];
+            }
+        });
+
+        return response()->json($response);
+    }
+
     //mở quà thư viện toàn tri
     public function activeFlipTvtt(Request $request)
     {
@@ -564,7 +903,7 @@ class FlipController extends Controller
                 // $this->saveLogItem($user,2,-5,"Tham gia thử thách Tích Kỳ tại Thư Viện Toàn Tri.");
                 $this->saveLogItemWithValue($user, 2, $amount * (-1), $newValue + $amount, $newValue, "Tham gia thử thách Tích Kỳ tại Thư Viện Toàn Tri.");
                 $this->saveLogActivity($user, 2, [], "Tham gia thử thách Tích Kỳ tại Thư Viện Toàn Tri.");
-                if($user->the_tiem_long >0){
+                if ($user->the_tiem_long > 0) {
                     $itemRandom = [
                         [
                             'item' => [['item_id' => 2, 'record' => 10]],
@@ -578,9 +917,9 @@ class FlipController extends Controller
                             'item' => [],
                             'weight' => 700
                         ],
-                        
+
                     ];
-                }else{
+                } else {
                     $itemRandom = [
                         [
                             'item' => [['item_id' => 3, 'record' => 1]], // 3 là thẻ tiềm long
@@ -591,7 +930,7 @@ class FlipController extends Controller
                             'weight' => 200
                         ],
                         [
-                            'item' => [['item_id' => 1, 'record' => 5]],// 1 là lông kỳ lân
+                            'item' => [['item_id' => 1, 'record' => 5]], // 1 là lông Phượng hoàng
                             'weight' => 100
                         ],
                         [
@@ -600,7 +939,7 @@ class FlipController extends Controller
                         ],
                     ];
                 }
-                
+
                 $totalWeight = 0;
                 $randomWeight = rand(1, 1000);
                 $listItems = [];
@@ -649,7 +988,7 @@ class FlipController extends Controller
                 $errorMessage = $e->getMessage() ?? "Có lỗi trong lúc xử lý!";
                 $response = [
                     "status" => 200,
-                    "message" => $errorMessage ,
+                    "message" => $errorMessage,
                     "data" => ['data_flip' => []],
                     "success" => false
                 ];
