@@ -228,7 +228,7 @@ export default {
                                         self.$swal.fire({
                                             position: "center",
                                             icon: "success",
-                                            title: message,
+                                            title: message, 
                                             showConfirmButton: false,
                                             timer: 2000
                                         });

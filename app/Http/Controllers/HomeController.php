@@ -154,7 +154,7 @@ class HomeController extends Controller
     public function getLogActivity(Request $request)
     {
         $user = $request->user();
-        $logActivities = LogActivity::selectRaw('log_activity.user_id, log_activity.reason, users.name, DATE_FORMAT(log_activity.created_at, "%Y-%m-%d %H:%i:%s") as formatted_created_at')
+        $logActivities = LogActivity::selectRaw('log_activity.user_id, log_activity.reason, log_activity.log_item, users.name, DATE_FORMAT(log_activity.created_at, "%Y-%m-%d %H:%i:%s") as formatted_created_at')
             ->join('users', 'users.id', '=', 'log_activity.user_id')
             ->where('log_activity.user_id', $user->id)
             ->orderBy('log_activity.id', 'desc')

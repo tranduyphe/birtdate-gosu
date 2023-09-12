@@ -222,10 +222,6 @@ class QuestRepository
                         if ($checkQuest6) {
                             $listQuest[6]['current_attempts'] = 1;
                             $questData->quests = json_encode($listQuest);
-
-                            // // lưu lịch sử hoạt động
-                            // $LogRepository = new LogRepository();
-                            // $LogRepository->saveLogActivity($user, 2,[], "Hoàn thành nhiệm vụ " . (6 + 1) . " tại bảng thử thách.");
                         }
                     }
                 }

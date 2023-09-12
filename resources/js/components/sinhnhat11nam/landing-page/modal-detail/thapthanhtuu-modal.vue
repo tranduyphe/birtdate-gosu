@@ -115,7 +115,11 @@
                                     <p class="m-0">{{ item.reason }}</p>
                                 </div>
                                 <div class="item-reason col-1">
-                                    <p class="m-0">123</p>
+                                    <img v-if="item.log_item && item.log_item[0].item_id == 1" :src="iconLongvu" alt="" width="40">
+                                    <img v-if="item.log_item && item.log_item[0].item_id == 2" :src="iconKimcuong" alt="" width="40">
+
+                                    <img :src="icon" alt="" width="40">
+                                    <p v-if="item.log_item" class="m-0">{{ item.log_item[0].record ?? 0}}</p>
                                 </div>
                             </div>
                         </div>
@@ -522,6 +526,7 @@ export default {
             lineBreak: '/images/sinhnhat11nam/img_main/linebreak-title.png',
             iconBtn: '/images/sinhnhat11nam/img_main/icon-button-task.png',
             iconLongvu: '/images/sinhnhat11nam/img_main/icon-longvu.png',
+            iconKimcuong: '/images/sinhnhat11nam/img_main/icon-da-mat-trang.png',
             img_chauthanhtich: '/images/sinhnhat11nam/img_main/321.png',
             img_rank1: '/images/sinhnhat11nam/img_main/rank1.png',
             img_rank2: '/images/sinhnhat11nam/img_main/rank2.png',
@@ -628,6 +633,20 @@ export default {
                                     self.$emit("updateAttrKimcuong", response.data.data.user.diamond);
                                     self.$emit("updateAttrLongvu", response.data.data.user.feathers);
                                 }
+                                if(response.data.data.log_activity){
+                                    let dataLog = response.data.data.log_activity ?? [];
+                                    let logActivity = []
+                                    dataLog.forEach(element => {
+                                        logActivity.push({
+                                            "reason": element.reason,
+                                            "log_item": JSON.parse(element.log_item ?? "[]"),
+                                            "name": element.name,
+                                            "formatted_created_at": element.formatted_created_at
+                                        });
+                                    });
+                                    
+                                    self.updateLogActivityTtt(logActivity);
+                                }
                                 // alert(response.data.message);
                                 self.$swal.fire({
                                     position: "center",
@@ -667,6 +686,10 @@ export default {
         updateNhiemvuTtt(newValue){
             console.log("updateNhiemvuTtt newValue:",newValue);
             this.$emit("updateNhiemvu", newValue);
+        },
+        updateLogActivityTtt(newValue){
+            console.log("updateLogActivityTtt newValue:",newValue);
+            this.$emit("updateLogActivity", newValue);
         },
 
         copyContent() {

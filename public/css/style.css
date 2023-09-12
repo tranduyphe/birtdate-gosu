@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Homemade+Apple&family=Inter:wght@100;200;300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Barlow');
 :root {
     --fontBlackHanSan: 'Black Han Sans', sans-serif;
     --fontHomemadeApple: 'Homemade Apple', cursive;
@@ -7,7 +8,7 @@
     --colorForm:#0B2525;
 }
 .main-login {
-    background-image: url('../images/bg_login.jpg');
+    background-image: url('../images/sinhnhat11nam/img_main/bg-login.png');
     background-size: cover;
     font-size: 1.25rem;
     color: var(--bs-white);
@@ -15,6 +16,19 @@
     background-repeat: no-repeat;
     background-position: center;
 }
+
+.main-bachnhat {
+    background-image: url('../images/sinhnhat11nam/img_main/bg-bachnhat.png');
+    background-size: cover;
+    font-size: 1.25rem;
+    color: var(--bs-white);
+    position: relative;
+    background-repeat: no-repeat;
+    background-position: center;
+    padding-top: 70px;
+    text-align: center;
+}
+
 .main-login nav {
     position: absolute;
     width: 100%;
@@ -45,6 +59,11 @@
 .h-100vh {
     height: 100vh;
 }
+
+.w-100vw {
+    width: 100vw;
+}
+
 .btn.btn-custom {
     color: var(--bs-white);
     font-family: var(--fontInter);
@@ -87,11 +106,13 @@
 }
 .frmLogin h4 {
     color: var(--colorForm);
+    font-family: 'UVNLacLongQuan';
     font-size: 2rem;
     font-weight: 400;
 }
 .frmLogin label {
     color: var(--colorForm);
+    font-family: 'UVNLacLongQuan';
     font-size: 2rem;
     font-weight: 400;
 }
@@ -99,10 +120,26 @@
     border: 0;
     border-radius: 0;
     outline: none;
+    font-family: 'UVNLacLongQuan';
 }
 .error {
     color: var(--bs-form-invalid-color);
     display: block;
     font-weight: 700;
     font-size: 1rem;
+    font-family: 'UVNLacLongQuan';
+}
+
+.frmLogin button{
+    font-family: 'UVNLacLongQuan' !important;
+}
+
+.main-bachnhat .countdown-part{
+    font-family: 'Barlow';
+    background-image: url('../images/sinhnhat11nam/img_main/bg-countdown.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 135px;
+    width: 135px;
+    height: 135px;
 }
