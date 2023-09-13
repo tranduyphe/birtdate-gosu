@@ -4,7 +4,7 @@
         <div class="main-list-ctvd">
             <div class="it-image-ctvd it-puzzle" :class="`itpuzzle`+(idx+1)" v-for="(it, idx) in 192" :key="idx">
                 <!-- <span style="display: none;">{{checkInclude(listImageTram4, it)}}</span> -->
-                <img :src="list_back[idx]['image']" :class="{'brightness-manhghep': data}">
+                <img :src="list_back[idx]['image']" :class="{'brightness-manhghep': dataPuzzle[idx] && dataPuzzle[idx].is_open == 1}">
             </div>
         </div>
     </div>
@@ -21,13 +21,14 @@ export default {
     },
     methods: {
         getDataSanhTruongHopHep() {
+            
             let self = this;
             axios.get('/api/get-data-sanh-truong-hop-hep', {
             })
                 .then(function (response) {
                     if (response.data.status === 200 && response.data.success == true) {
                         self.dataPuzzle = response.data.data ?? [];
-                        console.log("self.data", self.data[0].is_open);
+                        console.log(self.dataPuzzle);
                     }
                 })
                 .catch((error) => {
@@ -159,7 +160,7 @@ export default {
 
 
 .brightness-manhghep{
-    opacity: 1;
-    filter: brightness(140%);
+    opacity: 1 !important;
+    filter: brightness(140%) !important;
 }
 </style>
