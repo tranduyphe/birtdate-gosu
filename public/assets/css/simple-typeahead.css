@@ -1,0 +1,15 @@
+#typeahead_id_wrapper {
+  height: 100%;
+  position: relative;
+}
+#typeahead_id_wrapper #typeahead_id {
+  height: 40px;
+  border-radius: 5px;
+}
+#typeahead_id_wrapper .simple-typeahead-list {
+  margin-top: 2px;
+  border: 1px solid grey;
+  border-radius: 5px;
+  height: auto;
+  z-index: 1;
+}

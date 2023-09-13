@@ -8,22 +8,29 @@ export default {
     components: {
     }, 
     data: () => {
-        return {}
+        return {
+            
+        }
     },
     computed: {
-        ...authGetters
     },
     methods: {
         ...authMethods,
+        ...authGetters,
         async signOut(){
-            console.log("signOut");
             await this.logout();
+        },
+        async infoUser(){
+            let user = await this.users();
         }
     },
-    created: () => {
+    created () {
+        this.infoUser();
+        // this.user = this.users();
+        
     },
     mounted: () =>{    
-        console.log(this);    
+        // console.log(this);    
     },
 };
     
