@@ -1,5 +1,5 @@
 <template>
-    <div class="game-thuvientoantri">
+    <div class="game-nhathidauxoetxoet">
         <div class="btn-start-div">
             <button @click="reloadFlip()">Làm mới</button>
             <span>Nhấp "Làm mới" để bắt đầu. Mỗi lượt tốn 2 Đá Mặt Trăng để lật 3 ô ngẫu nhiên. Tìm kiếm bóng lửa cùng loại để mở hết bảng và nhận 2 Lông Phượng Hoàng.</span>
@@ -350,7 +350,7 @@ export default {
                 $('#GameOverModal').css('display','flex');
                 setTimeout(() => {
                     $('#GameOverModal').hide();
-                }, 5000);
+                }, 3000);
             }
         },
     },
@@ -447,50 +447,59 @@ export default {
 </script>
 
 <style>
-.card {
+.minigame-thuvien .card {
     perspective: 1000px;
     position: relative;
     transform-style: preserve-3d;
     transition: transform 0.5s linear;
     display: inline-block;
-    border: 1px solid transparent;
-    border-radius: 5px;
+    /* border: 1px solid transparent; */
+    /* border-radius: 5px; */
     min-width: 65px;
     width: 100%;
     height: 65px !important;
-    background:
+    /* background:
         linear-gradient(to bottom, #292929, #453d69) padding-box,
-        linear-gradient(to bottom, #7b5d1c, #a1813f) border-box;
+        linear-gradient(to bottom, #7b5d1c, #a1813f) border-box; */
+    background: url('../../../assets/images/sinhnhat11nam/img_main/front.png');
 }
 
-.game-thuvientoantri .card:hover{
+.minigame-thuvien .card.flipped{
+    border: 1px solid transparent;
+    border-radius: 5px;
+    background:
+            linear-gradient(to bottom, #292929, #453d69) padding-box,
+            linear-gradient(to bottom, #7b5d1c, #a1813f) border-box !important;
+}
+
+.game-nhathidauxoetxoet .card:hover{
     filter: brightness(140%);
 }
 
-.game-thuvientoantri .cell,
-.game-thuvientoantri .item-wait {
+.game-nhathidauxoetxoet .cell,
+.game-nhathidauxoetxoet .item-wait {
     margin-right: 20px;
     margin-bottom: 30px;
     max-width: 65px;
     max-height: 65px;
 }
 
-.game-thuvientoantri .cell:nth-child(15n + 0) {
+.game-nhathidauxoetxoet .cell:nth-child(15n + 0) {
     margin-right: 0px;
 }
 
-.game-thuvientoantri .minigame-thuvien {
+.game-nhathidauxoetxoet .minigame-thuvien {
     min-height: 285px;
     transition: all 500ms linear
 }
 
-.game-thuvientoantri .card {
+.game-nhathidauxoetxoet .card {
     background-repeat: no-repeat !important;
     background-position: center center !important;
     background-size: cover !important;
 }
 
-/* .game-thuvientoantri .row>*{
+/* .game-nhathidauxoetxoet .row>*{
     width: auto;
 } */
 
