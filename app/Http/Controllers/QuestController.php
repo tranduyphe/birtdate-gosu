@@ -233,7 +233,7 @@ class QuestController extends Controller
                 $user->refresh();
                 $response = [
                     "status" => 200,
-                    "message" => $record . "Đá mặt trăng",
+                    "message" => $record . " Đá mặt trăng",
                     "data" => [
                         'quests' => $getQuest,
                         'user' => $user

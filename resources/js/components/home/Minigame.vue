@@ -5,7 +5,7 @@
             <span>Nhấp "Làm mới" để bắt đầu. Mỗi lượt tốn 2 Đá Mặt Trăng để lật 3 ô ngẫu nhiên. Tìm kiếm bóng lửa cùng loại để mở hết bảng và nhận 2 Lông Phượng Hoàng.</span>
         </div>
         
-        <p class="text-center text-white" v-if="checkGameOver">Bạn đã thua cuộc, vui lòng "Làm mới" để tiếp tục (Trừ 5 đá mặt trăng)</p>
+        <p class="text-center text-white" v-if="checkGameOver">Bạn đã thua cuộc, vui lòng "Làm mới" để tiếp tục (Trừ 2 đá mặt trăng)</p>
         <div class="row justify-content-center align-items-center">
             <div class="minigame-thuvien">
                 <div class="" v-if="flipList != nul">
