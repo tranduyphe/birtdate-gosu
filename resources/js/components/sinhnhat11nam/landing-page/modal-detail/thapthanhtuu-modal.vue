@@ -614,7 +614,6 @@ export default {
             }
         },
         async logoutSubmit() {
-            console.log("signOut");
             await this.logout();
         },
         async getReWard(questId) {
@@ -634,7 +633,6 @@ export default {
                             if (response.data.success == true) {
                                 // self.nhiemvu = response.data.data.nhiemvu;
                                 
-                                console.log("response.data.data.quests",response.data.data.quests);
                                     self.updateNhiemvuTtt(response.data.data.quests);
                                     if (response.data.data.user) {
                                     self.$emit("updateAttrKimcuong", response.data.data.user.diamond);
@@ -665,7 +663,6 @@ export default {
                             } else {
                                 if (response.data.data.quests) {
                                     // self.nhiemvu = response.data.data.nhiemvu;
-                                    console.log("response.data.data.quests",response.data.data.quests);
                                     self.updateNhiemvuTtt(response.data.data.quests);
                                 }
                                 // alert(response.data.message);
@@ -691,11 +688,9 @@ export default {
 
         },
         updateNhiemvuTtt(newValue){
-            console.log("updateNhiemvuTtt newValue:",newValue);
             this.$emit("updateNhiemvu", newValue);
         },
         updateLogActivityTtt(newValue){
-            console.log("updateLogActivityTtt newValue:",newValue);
             this.$emit("updateLogActivity", newValue);
         },
 

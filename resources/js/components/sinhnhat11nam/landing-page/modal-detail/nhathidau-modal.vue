@@ -29,12 +29,10 @@ export default {
     },
     methods: {
         updateAttrKimcuongNtd(newValue) {
-            console.log("updateAttrKimcuongNtd newValue", newValue);
             // Cập nhật giá trị của attrKimcuong từ sự kiện
             this.$emit("updateAttrKimcuong", newValue);
         },
         updateAttrLongvuNtd(newValue) {
-            console.log("updateAttrLongvuNtd newValue", newValue);
             // Cập nhật giá trị của attrKimcuong từ sự kiện
             this.$emit("updateAttrLongvu", newValue);
         },

@@ -222,14 +222,9 @@ export default {
                                             message = self.randomMessages[randomIndex];
                                         } else {
                                             for (let i = 0; i < reward.length; i++) {
-                                                console.log("reward[i]", reward[i].record);
-                                                console.log("reward[i].item_id: ", reward[i].item_id);
 
                                                 if (reward[i].item_id == "1") {
-                                                    console.log("message: ", message);
-                                                    console.log("reward[i].record: ", reward[i].record);
                                                     message = message + " Lông Phượng Hoàng +" + reward[i].record;
-                                                    console.log("message: ", message);
                                                 }
                                                 if (reward[i].item_id == "2") {
                                                     message = message + " Đá mặt trăng +" + reward[i].record;
@@ -252,7 +247,6 @@ export default {
                                     self.flag = false;
                                 }, 500); // 500 milliseconds = 0.5 giây
                             } else {
-                                console.log("check response.data.message", response.data.message);
                                 if (response.data.data.data_flip) {
                                     // self.flipList = response.data.data.data_flip;
                                 }
@@ -317,7 +311,6 @@ export default {
                 .finally();
         },
         async logoutSubmit() {
-            console.log("signOut");
             await this.logout();
         },
     },

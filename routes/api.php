@@ -42,7 +42,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/get-quests', [App\Http\Controllers\QuestController::class, 'getQuests'])->name('quests');
     Route::post('/active-quest', [App\Http\Controllers\QuestController::class, 'activeQuest'])->name('active-quest');
     Route::get('/get-reward', [App\Http\Controllers\QuestController::class, 'getReward'])->name('get-reward-quest');
-    Route::get('/invite', [App\Http\Controllers\QuestController::class, 'invite'])->name('invite');
+    Route::get('/invite', [App\Http\Controllers\QuestController::class, 'invite'])->name('invite');    
+    // Route::get('/check-notification', [App\Http\Controllers\QuestController::class, 'checkNotification'])->name('check-notification');
 
     // Route::get('/send-notification', [App\Http\Controllers\SocketController::class, 'index'])->name('send-notification');
 });

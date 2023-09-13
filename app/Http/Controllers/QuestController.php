@@ -62,6 +62,8 @@ class QuestController extends Controller
         ];
         return response()->json($response);
     }
+    
+    
     public function invite(Request $request)
     {
         

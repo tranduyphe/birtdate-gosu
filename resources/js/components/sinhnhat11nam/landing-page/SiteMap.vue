@@ -9,12 +9,13 @@
     </div>
     <div class="wrapper-content" :style="{ backgroundImage: backgroundImageUrl() }">
         <div class="div-content">
-            <div class="div-img mui-ten" v-if="readInstructions == 0" :class="{'d-none': clickedThanhThanhTuu}">
+            <div class="div-img mui-ten" v-if="readInstructions == 0" :class="{ 'd-none': clickedThanhThanhTuu }">
                 <img :src="muitenimgUrl" alt="">
             </div>
             <div class="div-img thap-thanh-tuu" data-aos="fade-down">
                 <div class="group-img">
-                    <button class="" data-bs-toggle="modal" data-bs-target="#ThapThanhTuuModal" @click="clickedThanhThanhTuu = true">
+                    <button class="" data-bs-toggle="modal" data-bs-target="#ThapThanhTuuModal"
+                        @click="clickedThanhThanhTuu = true">
                         <img :src="thapthanhtuuimgUrl" alt="Tháp Thành Tựu" width="485" @click="getDataPhapThanhTuu">
                     </button>
                     <div class="bubble-content">
@@ -26,7 +27,7 @@
             <div class="div-img thu-vien-toan-tri" data-aos="fade-right">
                 <div class="group-img">
                     <!-- <button class="" data-bs-toggle="modal" data-bs-target="#ThuVienModal" @click="activeQuest"> -->
-                    <button class="" data-bs-toggle="modal" data-bs-target="#ThuVienModal" >
+                    <button class="" data-bs-toggle="modal" data-bs-target="#ThuVienModal">
                         <img :src="thuvienimgUrl" alt="Thư Viện Toàn Tri" width="295">
                     </button>
                     <div class="bubble-content">
@@ -56,9 +57,13 @@
                 </div>
             </div>
             <div class="div-img items thongbao" data-aos="fade-left">
-                <button class="" data-bs-toggle="modal" data-bs-target="#ThapThanhTuuModal">
+                <button class="" data-bs-toggle="modal" data-bs-target="#ThapThanhTuuModal" v-if="completedQuestCount > 0">
                     <img :src="thongbaoimgUrl" alt="Thông báo" width="" @click="getDataPhapThanhTuu">
-                    <span class="font-size-16 text-white">{{ attrThongbao }}</span>
+                    <span class="font-size-16 text-white">{{ completedQuestCount }}</span>
+                </button>
+                <button class="" data-bs-toggle="modal" data-bs-target="" v-else>
+                    <img :src="thongbaoimgUrl" alt="Thông báo" width="" @click="getDataPhapThanhTuu">
+                    <span class="font-size-16 text-white">{{ completedQuestCount }}</span>
                 </button>
                 <div class="bubble-content">
                     <p>Thông báo</p>
@@ -133,17 +138,14 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-body">
-                        <button type="button" ref="closeModal" class="btn close-button" data-bs-dismiss="modal" aria-label="Close"><img :src="closeimgUrl" alt=""></button>
-                        <ModalThapThanhTuu 
-                        :nhiemvu="nhiemvu" @updateNhiemvu="updateNhiemvu" 
-                        :logActivity="logActivity" @updateLogActivity="updateLogActivity" 
-                        :topFeathers="topFeathers" @updateTopFeathers="updateTopFeathers" 
-                        :attrKimcuong="attrKimcuong" @updateAttrKimcuong="updateAttrKimcuong"
-                        :attrLongvu="attrLongvu"  @updateAttrLongvu="updateAttrLongvu"
-                        :user_code="user_code"
-                        :readInstructions="readInstructions"
-                        :muitenimgUrl="muitenimgUrl"
-                        ></ModalThapThanhTuu>
+                        <button type="button" ref="closeModal" class="btn close-button" data-bs-dismiss="modal"
+                            aria-label="Close"><img :src="closeimgUrl" alt=""></button>
+                        <ModalThapThanhTuu :nhiemvu="nhiemvu" @updateNhiemvu="updateNhiemvu" :logActivity="logActivity"
+                            @updateLogActivity="updateLogActivity" :topFeathers="topFeathers"
+                            @updateTopFeathers="updateTopFeathers" :attrKimcuong="attrKimcuong"
+                            @updateAttrKimcuong="updateAttrKimcuong" :attrLongvu="attrLongvu"
+                            @updateAttrLongvu="updateAttrLongvu" :user_code="user_code" :readInstructions="readInstructions"
+                            :muitenimgUrl="muitenimgUrl"></ModalThapThanhTuu>
                     </div>
                 </div>
             </div>
@@ -201,11 +203,33 @@ export default {
             topFeathers: [],
             isDivVisible: true,
             clickedThanhThanhTuu: false,
+
         };
     },
     created() {
         this.getItemUser();
         this.user();
+        this.getQuest();
+
+
+        // Khai báo một biến để theo dõi trạng thái tab
+        let tabActive = true;
+
+        // Sử dụng sự kiện visibilitychange để kiểm tra trạng thái của tab
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible') {
+                tabActive = true; // Tab đã trở lại trạng thái hiển thị
+            } else {
+                tabActive = false; // Tab không hoạt động
+            }
+        });
+        setInterval(() => {
+            console.log('tabActive',tabActive);
+            if (tabActive) {
+
+                this.getQuest();
+            }
+        }, 10000); // 10000 mili giây = 10 giây
     },
     mounted() {
         // Khởi tạo AOS và cấu hình tùy chọn theo ý muốn
@@ -216,7 +240,26 @@ export default {
 
     },
     computed: {
-
+        questOpened() {
+            let tabVisible = false;
+            if (document.visibilityState === 'visible') {
+                tabVisible = true; // Tab đang hiển thị
+            } else {
+                tabVisible = false; // Tab đã đóng hoặc không hiển thị
+            }
+            return tabVisible;
+        },
+        completedQuestCount() {
+            // Tính toán số lượng nhiệm vụ đã hoàn thành dựa trên dữ liệu của bạn
+            // Ví dụ:
+            let completedQuest = 0;
+            for (let i = 0; i < this.nhiemvu.length; i++) {
+                if (this.nhiemvu[i].current_attempts >= this.nhiemvu[i].total_attempts && this.nhiemvu[i].is_reward == 0) {
+                    completedQuest++;
+                }
+            }
+            return completedQuest;
+        }
     },
     methods: {
         ...authMethods,
@@ -258,7 +301,7 @@ export default {
                 .then(function (response) {
                     if (response.data.status === 200 && response.data.success == true) {
                         let dataLog = response.data.data.log_activity ?? [];
-                        
+
                         self.logActivity = [];
                         dataLog.forEach(element => {
                             self.logActivity.push({
@@ -317,7 +360,7 @@ export default {
                     }
                 })
                 .finally();
-                
+
 
         },
         getItemUser() {
@@ -340,7 +383,6 @@ export default {
         },
 
         async logoutSubmit() {
-            console.log("signOut");
             await this.logout();
         },
 
@@ -350,7 +392,6 @@ export default {
 
         updateAttrKimcuong(newValue) {
             // Cập nhật giá trị của attrKimcuong từ sự kiện
-            console.log("check updateAttrKimcuong: ", newValue);
             this.attrKimcuong = newValue;
         },
         updateAttrLongvu(newValue) {
@@ -710,4 +751,5 @@ button.close-button:focus-visible {
     100% {
         transform: translateX(-15px);
     }
-}</style>
+}
+</style>
