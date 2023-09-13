@@ -37,6 +37,8 @@ export default {
 #SanhHopHep-Modal .main-list-ctvd{
     display: grid;
     grid-template-columns: repeat(16, 1fr);
+    width: 100%;
+    height: 500px;
 }
 
 #SanhHopHep-Modal .main-list-ctvd .it-image-ctvd{
