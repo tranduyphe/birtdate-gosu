@@ -57,7 +57,8 @@
                 </div>
             </div>
             <div class="modalGameOver" data-aos="zoom-in-up" id="GameOverModal">
-                <img :src="imgloser" width="800">
+                <h1>Thua rồi!</h1>
+                <img :src="imgloser" width="500">
             </div>
         </div>
     </div>
