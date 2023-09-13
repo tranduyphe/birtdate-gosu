@@ -7,12 +7,7 @@
                 <img :src="muitenimgUrl" alt="" width="120">
             </div>
         </div>
-        <div class="div-img mui-ten nhan-da" v-if="readInstructions == 0 && isPopupVisible" :class="{'d-none': clickedtabThanhTuu}">
-            <div class="popup">Các Phù Thủy hãy hoàn thành nhiệm vụ tại đây để nhận nguyên liệu tham gia minigame!</div>
-            <div class="img">
-                <img :src="muitenimgUrl" alt="" width="120">
-            </div>
-        </div>
+        
         <div class="tab-thanhtuu">
             <div class="nav flex-column nav-tabs border-0" id="v-tabs-tab" role="tablist" aria-orientation="vertical">
                 <div class="nav-item mb-3">
@@ -54,6 +49,12 @@
                         <div class="task row justify-content-evenly align-items-center">
                             <div v-for="(item, index) in nhiemvu" :key="index"
                                 class="item-task col-lg-5 d-flex align-items-center justify-content-between">
+                                <div class="div-img mui-ten nhan-da" v-if="readInstructions == 0 && index == 0 && isDivVisible">
+                                    <div class="popup">Bấm vào đây để nhận ĐÁ MẶT TRĂNG.</div>
+                                    <div class="img">
+                                        <img :src="muitenimgUrl" alt="" width="120">
+                                    </div>
+                                </div>
                                 <span class="star"
                                     :style="{ color: item.is_reward == 0 ? '#b2ad8a' : '#289e11' }">&#10022;</span>
                                 <div class="item-info col-9 d-flex align-items-center">
@@ -543,6 +544,7 @@ export default {
             inviteFlag: false,
             clickedtabThanhTuu: false,
             isPopupVisible: false,
+            isDivVisible: false,
         };
     },
     created() {
@@ -717,6 +719,13 @@ export default {
 
         doneInstructions(){
             this.clickedtabThanhTuu = true;
+
+            setTimeout(() => {
+                this.isDivVisible = true;
+                setTimeout(() => {
+                    this.isDivVisible = false;
+                }, 5000);
+            }, 5000);
         }
     },
     mounted(){
@@ -929,6 +938,12 @@ export default {
     top: 10%;
 }
 
+#ThapThanhTuu-Modal .div-img.mui-ten.nhan-da{
+    position: absolute;
+    left: 34%;
+    top: 34%;
+}
+
 #ThapThanhTuu-Modal .div-img.mui-ten {
     -webkit-animation: mover 0.5s infinite  alternate;
     animation: mover 0.5s infinite  alternate;
@@ -953,5 +968,10 @@ export default {
     color: #ffffff;
     background: linear-gradient(to bottom, #f1c461, #a1813f);
     border: 1px solid #ffffff;
+}
+
+#ThapThanhTuu-Modal .div-img.mui-ten.nhan-da .popup{
+    width: 170px;
+    margin-bottom: -20px
 }
 </style>

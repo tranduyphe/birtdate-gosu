@@ -455,6 +455,15 @@ export default {
     transform: translate(50%, 0%);
 }
 
+.wrapper-content .div-img.items.longvu span{
+    position: absolute;
+    bottom: 28px;
+    right: 47%;
+    text-align: center;
+    transform: translate(50%, 0%);
+}
+
+
 .banner-name{
     position: absolute;
     top: 630px;
