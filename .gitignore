@@ -18,12 +18,3 @@ yarn-error.log
 composer.lock
 package-lock.json
 mix-manifest.json
-/server/package-lock.json
-/server/node_modules
-/server/controllers
-/server/exceptions
-/server/global
-/server/models
-/server/routers
-/public/uploads/
-/public/mix-manifest

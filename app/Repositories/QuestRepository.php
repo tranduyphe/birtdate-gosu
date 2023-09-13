@@ -147,7 +147,11 @@ class QuestRepository
             ->whereDate('created_at', $today)
             ->first();
         if ($questData) {
+            // tìm dữ liệu được mời của bản thân
+
             $quests = json_decode($questData->quests, true);
+
+
             $quests[9]["current_attempts"] = $currentAttempts9;
             $quests[9]["is_reward"] = $isReward9;
 
@@ -165,10 +169,15 @@ class QuestRepository
             $quests = $this->listQuest;
             $quests[9]["current_attempts"] = $currentAttempts9;
             $quests[9]["is_reward"] = $isReward9;
-            $newQuest = new MinigameQuests();
-            $newQuest->user_id = $userId;  // Thiết lập user_id cho quest mới
-            $newQuest->quests = json_encode($quests);
-            $newQuest->save();
+            // $newQuest = new MinigameQuests();
+            // $newQuest->user_id = $userId;  // Thiết lập user_id cho quest mới
+            // $newQuest->quests = json_encode($quests);
+            // $newQuest->save();
+
+            MinigameQuests::updateOrInsert(
+                ['user_id' => $userId, 'created_at' => $today],
+                ['user_id' => $userId,'quests'=>json_encode($quests)]
+            );
 
             $quests = $quests;
         }
@@ -213,6 +222,10 @@ class QuestRepository
                         if ($checkQuest6) {
                             $listQuest[6]['current_attempts'] = 1;
                             $questData->quests = json_encode($listQuest);
+
+                            // // lưu lịch sử hoạt động
+                            // $LogRepository = new LogRepository();
+                            // $LogRepository->saveLogActivity($user, 2,[], "Hoàn thành nhiệm vụ " . (6 + 1) . " tại bảng thử thách.");
                         }
                     }
                 }

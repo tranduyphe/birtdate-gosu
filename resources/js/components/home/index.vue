@@ -18,10 +18,12 @@ export default {
         ...authMethods,
         ...authGetters,
         async signOut(){
+            console.log("signOut");
             await this.logout();
         },
         async infoUser(){
             let user = await this.users();
+            console.log("check user",user.name);
         }
     },
     created () {

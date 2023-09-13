@@ -98,7 +98,7 @@
                                             <img :src="iconBtn" width="40" height="40">
                                         </div>
                                         <div class="col-5">
-                                            <p class="m-0">{{ item.first_name }} {{ item.last_name }}</p>
+                                            <p class="m-0">{{ item.name }}</p>
                                         </div>
                                         <div class="attr-longvu col-2">
                                             <p class="m-0">{{ item.feathers }}</p>
@@ -126,11 +126,7 @@
                                     <p class="m-0">{{ item.reason }}</p>
                                 </div>
                                 <div class="item-reason col-1">
-                                    <img v-if="item.log_item && item.log_item[0].item_id == 1" :src="iconLongvu" alt="" width="40">
-                                    <img v-if="item.log_item && item.log_item[0].item_id == 2" :src="iconKimcuong" alt="" width="40">
-
-                                    <img :src="icon" alt="" width="40">
-                                    <p v-if="item.log_item" class="m-0">{{ item.log_item[0].record ?? 0}}</p>
+                                    <p class="m-0">123</p>
                                 </div>
                             </div>
                         </div>
@@ -537,7 +533,6 @@ export default {
             lineBreak: '/images/sinhnhat11nam/img_main/linebreak-title.png',
             iconBtn: '/images/sinhnhat11nam/img_main/icon-button-task.png',
             iconLongvu: '/images/sinhnhat11nam/img_main/icon-longvu.png',
-            iconKimcuong: '/images/sinhnhat11nam/img_main/icon-da-mat-trang.png',
             img_chauthanhtich: '/images/sinhnhat11nam/img_main/321.png',
             img_rank1: '/images/sinhnhat11nam/img_main/rank1.png',
             img_rank2: '/images/sinhnhat11nam/img_main/rank2.png',
@@ -620,6 +615,7 @@ export default {
             }
         },
         async logoutSubmit() {
+            console.log("signOut");
             await this.logout();
         },
         async getReWard(questId) {
@@ -639,24 +635,11 @@ export default {
                             if (response.data.success == true) {
                                 // self.nhiemvu = response.data.data.nhiemvu;
                                 
+                                console.log("response.data.data.quests",response.data.data.quests);
                                     self.updateNhiemvuTtt(response.data.data.quests);
                                     if (response.data.data.user) {
                                     self.$emit("updateAttrKimcuong", response.data.data.user.diamond);
                                     self.$emit("updateAttrLongvu", response.data.data.user.feathers);
-                                }
-                                if(response.data.data.log_activity){
-                                    let dataLog = response.data.data.log_activity ?? [];
-                                    let logActivity = []
-                                    dataLog.forEach(element => {
-                                        logActivity.push({
-                                            "reason": element.reason,
-                                            "log_item": JSON.parse(element.log_item ?? "[]"),
-                                            "name": element.name,
-                                            "formatted_created_at": element.formatted_created_at
-                                        });
-                                    });
-                                    
-                                    self.updateLogActivityTtt(logActivity);
                                 }
                                 // alert(response.data.message);
                                 // self.$swal.fire({
@@ -681,6 +664,7 @@ export default {
                             } else {
                                 if (response.data.data.quests) {
                                     // self.nhiemvu = response.data.data.nhiemvu;
+                                    console.log("response.data.data.quests",response.data.data.quests);
                                     self.updateNhiemvuTtt(response.data.data.quests);
                                 }
                                 // alert(response.data.message);
@@ -706,10 +690,8 @@ export default {
 
         },
         updateNhiemvuTtt(newValue){
+            console.log("updateNhiemvuTtt newValue:",newValue);
             this.$emit("updateNhiemvu", newValue);
-        },
-        updateLogActivityTtt(newValue){
-            this.$emit("updateLogActivity", newValue);
         },
 
         copyContent() {
@@ -735,23 +717,6 @@ export default {
 
         doneInstructions(){
             this.clickedtabThanhTuu = true;
-            axios.get('/api/done-instructions', {
-                    })
-                    .then(function (response) {
-                        if (response.data.status === 200) {
-                           
-                        }
-                    })
-                    .catch((error) => {
-                        self.rewardFlag = false;
-                        console.log(error);
-                        if (error.response && error.response.status === 401) {
-                            this.logoutSubmit()
-                        }
-                    })
-                    .finally();
-                    
-
         }
     },
     mounted(){

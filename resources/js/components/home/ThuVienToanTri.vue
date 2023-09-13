@@ -117,14 +117,21 @@ export default {
                                     let reward = response.data.data.reward;
                                     let user = response.data.data.user.name;
                                     let message = "";
+                                    console.log("reward", reward);
+                                    console.log("reward", reward.length);
                                     if (reward.length == 0) {
                                         message = "Chúc bạn may mắn lần sau";
                                     } else {
                                         for (let i = 0; i < reward.length; i++) {
+                                            console.log("reward[i]", reward[i].record);
+                                            console.log("reward[i].item_id: ", reward[i].item_id);
 
                                             if (reward[i].item_id == "1") {
+                                                console.log("message: ", message);
+                                                console.log("reward[i].record: ", reward[i].record);
                                                 message = message + "Chúc mừng " + user + " đã nhận được " + reward[i].record + " LÔNG PHƯỢNG HOÀNG";
-                                                }
+                                                console.log("message: ", message);
+                                            }
                                             if (reward[i].item_id == "2") {
                                                 message = message + "Chúc mừng " + user + " đã nhận được " + reward[i].record + " ĐÁ MẶT TRĂNG";
                                             }
@@ -133,6 +140,7 @@ export default {
                                                 message = message + " Thẻ tiềm long +" + reward[i].record;
                                             }
                                         }
+                                        console.log("message: ", message);
                                         // alert(message);
                                         
                                     }

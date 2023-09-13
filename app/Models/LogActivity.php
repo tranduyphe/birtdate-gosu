@@ -15,7 +15,6 @@ class LogActivity extends Model
     protected $fillable = [
         'user_id',
         'reason',
-        'type',
-        'log_item'
+        'type'
     ];
 }

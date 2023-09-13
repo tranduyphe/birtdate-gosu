@@ -443,7 +443,7 @@ class FlipController extends Controller
     {
         // save history 
         $LogRepository = new LogRepository();
-        $LogRepository->saveLogActivity($user, $activityType, $listITemReward, $reason);
+        $LogRepository->saveLogActivity($user, $activityType, [], $reason);
         // $newLog = new LogActivity();
         // $newLog->user_id = $user->id;  // Thiết lập user_id cho quest mới
 
@@ -482,7 +482,7 @@ class FlipController extends Controller
                 $newValue = $user->diamond;
                 // $this->saveLogItem($user,2,-2,"Tham gia thử thách Tích Kỳ tại Thư Viện Toàn Tri.");
                 $this->saveLogItemWithValue($user, 2, $amount * (-1), $newValue + $amount, $newValue, "Tham gia thử thách Bài Trùng tại Nhà Thi Đấu Xoẹt Xoẹt.");
-                $this->saveLogActivity($user, 2, [['item_id'=>2,'record'=>$amount]], "Tham gia thử thách Bài Trùng tại Nhà Thi Đấu Xoẹt Xoẹt.");
+                $this->saveLogActivity($user, 2, [], "Tham gia thử thách Bài Trùng tại Nhà Thi Đấu Xoẹt Xoẹt.");
                 // dump($user);die;
                 $listFlips = [];
                 $activeFlips = [];
@@ -684,10 +684,7 @@ class FlipController extends Controller
                     $newValue = $user->diamond;
                     // $this->saveLogItem($user,2,-5,"Tham gia thử thách Tích Kỳ tại Thư Viện Toàn Tri.");
                     $this->saveLogItemWithValue($user, 2, $amount * (-1), $newValue + $amount, $newValue, "Tham gia thử thách Tích Kỳ tại Thư Viện Toàn Tri.");
-                    $this->saveLogActivity($user, 2, [['item_id'=>2,'record'=>$amount*(-1)]], "Tham gia thử thách Tích Kỳ tại Thư Viện Toàn Tri.");
-                    $QuestRepository = new QuestRepository();
-                    $questType = 5;
-                    $QuestRepository->updateQuest($user, $questType, 1);
+                    $this->saveLogActivity($user, 2, [], "Tham gia thử thách Tích Kỳ tại Thư Viện Toàn Tri.");
                     if ($user->the_tiem_long > 0) {
                         $itemRandom = [
                             [
@@ -905,7 +902,7 @@ class FlipController extends Controller
                 $newValue = $user->diamond;
                 // $this->saveLogItem($user,2,-5,"Tham gia thử thách Tích Kỳ tại Thư Viện Toàn Tri.");
                 $this->saveLogItemWithValue($user, 2, $amount * (-1), $newValue + $amount, $newValue, "Tham gia thử thách Tích Kỳ tại Thư Viện Toàn Tri.");
-                $this->saveLogActivity($user, 2, [['item_id'=>2,'record'=>$amount*(-1)]], "Tham gia thử thách Tích Kỳ tại Thư Viện Toàn Tri.");
+                $this->saveLogActivity($user, 2, [], "Tham gia thử thách Tích Kỳ tại Thư Viện Toàn Tri.");
                 if ($user->the_tiem_long > 0) {
                     $itemRandom = [
                         [
@@ -1005,7 +1002,7 @@ class FlipController extends Controller
         // $user->save();
         // $newValue = $user->diamond;
         // $this->saveLogItemWithValue($user, 2, -5, $oldValue, $newValue, "Tham gia thử thách Tích Kỳ tại Thư Viện Toàn Tri.");
-        // $this->saveLogActivity($user, 2,[['item_id'=>2,'record'=>5*(-1)]], "Tham gia thử thách Tích Kỳ tại Thư Viện Toàn Tri.");
+        // $this->saveLogActivity($user, 2,[], "Tham gia thử thách Tích Kỳ tại Thư Viện Toàn Tri.");
 
         // $user->diamond = $user->diamond - 5;
         // $user->save();

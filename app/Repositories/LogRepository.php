@@ -73,7 +73,6 @@ class LogRepository
         $newLog->user_id = $user->id;  // Thiết lập user_id cho quest mới
 
         $newLog->type = $activityType;
-        $newLog->log_item = json_encode($listItem);
         $newLog->reason = $reason;
         $newLog->save();
     }
