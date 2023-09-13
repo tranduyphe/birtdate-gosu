@@ -241,7 +241,7 @@ export default {
                                             icon: "success",
                                             title: message, 
                                             showConfirmButton: false,
-                                            timer: 2000
+                                            timer: 3000
                                         });
                                     }
                                     self.flag = false;
@@ -252,7 +252,7 @@ export default {
                                 }
                                 self.$swal.fire({
                                     position: "center",
-                                    icon: "success",
+                                    icon: "error",
                                     title: response.data.message,
                                     showConfirmButton: false,
                                     timer: 1500
@@ -333,20 +333,29 @@ export default {
 </script>
 
 <style>
-.card {
+.game-thuvientoantri .card {
     perspective: 1000px;
     position: relative;
     transform-style: preserve-3d;
     transition: transform 0.5s linear;
     display: inline-block;
-    border: 1px solid transparent;
-    border-radius: 5px;
+    /* border: 1px solid transparent; */
+    /* border-radius: 5px; */
     min-width: 65px;
     width: 100%;
     height: 65px !important;
-    background:
+    /* background:
         linear-gradient(to bottom, #292929, #453d69) padding-box,
-        linear-gradient(to bottom, #7b5d1c, #a1813f) border-box;
+        linear-gradient(to bottom, #7b5d1c, #a1813f) border-box; */
+    background: url('../../../assets/images/sinhnhat11nam/img_main/front.png');
+}
+
+.game-thuvientoantri .card.flipped{
+    border: 1px solid transparent;
+    border-radius: 5px;
+    background:
+            linear-gradient(to bottom, #292929, #453d69) padding-box,
+            linear-gradient(to bottom, #7b5d1c, #a1813f) border-box !important;
 }
 
 .game-thuvientoantri .card:hover {
