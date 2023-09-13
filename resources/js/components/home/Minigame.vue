@@ -1,8 +1,11 @@
 <template>
-    <div class="game-thuvientoantri">
-        <h1 class="text-center mt-5" v-if="checkGameOver">Game Over</h1>
-        <button class="btn-start" @click="reloadFlip()">Làm mới</button>
-
+    <div class="game-nhathidauxoetxoet">
+        <div class="btn-start-div">
+            <button @click="reloadFlip()">Làm mới</button>
+            <span>Nhấp "Làm mới" để bắt đầu. Mỗi lượt tốn 2 Đá Mặt Trăng để lật 3 ô ngẫu nhiên. Tìm kiếm bóng lửa cùng loại để mở hết bảng và nhận 2 Lông Phượng Hoàng.</span>
+        </div>
+        
+        <p class="text-center text-white" v-if="checkGameOver">Bạn đã thua cuộc, vui lòng "Làm mới" để tiếp tục (Trừ 5 đá mặt trăng)</p>
         <div class="row justify-content-center align-items-center">
             <div class="minigame-thuvien">
                 <div class="" v-if="flipList != nul">
@@ -28,9 +31,9 @@
             </div>
             <div class="cell-wait col-md-8 mt-2 pl-5">
                 <p class="text-wait font-size-16">&#9830;&nbsp;Số ô chờ đã fill/số ô chờ tổng&nbsp;<span class="px-1">{{
-                    waiting.length }}/6</span></p>
+                    waiting.length }}/4</span></p>
                 <div class="row mt-4">
-                    <div class="item-wait p-0 mr-5" v-for="col in 6">
+                    <div class="item-wait p-0 mr-5" v-for="col in 4">
                         <div class="card-wait mb-0" :class="{ flipped: waiting[col - 1] && waiting[col - 1] > 0 }">
                             <div class="image" v-if="waiting[col - 1] && waiting[col - 1] > 0">
                                 <img :src="cardBackgroundColor(col - 1)" alt="" width="65" height="65">
@@ -46,12 +49,16 @@
                 </div>
                 <div class="div-img items kimcuong mr-5" data-aos="fade-down">
                     <img :src="kimcuongimgUrl" alt="Thông báo" width="">
-                    <span class="font-size-14 text-white">{{ diamond }}</span>
+                    <span class="font-size-14 text-white">{{ attrKimcuong }}</span>
                 </div>
                 <div class="div-img items longvu" data-aos="fade-down">
                     <img :src="longvuimgUrl" alt="Thông báo" width="">
-                    <span class="font-size-14 text-white">{{ feathers }}</span>
+                    <span class="font-size-14 text-white">{{ attrLongvu }}</span>
                 </div>
+            </div>
+            <div class="modalGameOver" data-aos="zoom-in-up" id="GameOverModal">
+                <h1>Thua rồi!</h1>
+                <img :src="imgloser" width="500">
             </div>
         </div>
     </div>
@@ -74,7 +81,10 @@ import {
 // Tạo kết nối Socket.io
 // import io from "socket.io-client";
 export default {
-    props: {},
+    props: {
+        attrKimcuong:Number,
+        attrLongvu:Number,
+    },
     data() {
         return {
             socket: null,
@@ -98,35 +108,37 @@ export default {
             itemGreen: '/images/sinhnhat11nam/img_main/thuvien-itemGreen.png',
             itemPink: '/images/sinhnhat11nam/img_main/thuvien-itemPink.png',
             imgtransparent: '/images/sinhnhat11nam/img_main/transparent.png',
+            imgloser: '/images/sinhnhat11nam/img_main/loser.png',
         };
     },
     created() {
         this.getFlip();
-        this.getItemUser();
+        // this.getItemUser();
     },
     methods: {
         ...authMethods,
         ...authGetters,
-        getItemUser() {
-            let self = this;
-            axios.get('/api/get-item', {
-            })
-                .then(function (response) {
-                    if (response.data.status === 200 && response.data.success == true) {
-                        self.diamond = response.data.data.diamond;
-                        self.feathers = response.data.data.feathers;
-                        console.log("response.data.data", response.data.data);
+        // getItemUser() {
+        //     let self = this;
+        //     axios.get('/api/get-item', {
+        //     })
+        //         .then(function (response) {
+        //             if (response.data.status === 200 && response.data.success == true) {
+        //                 // self.diamond = response.data.data.diamond;
+        //                 // self.attrKimcuong = response.data.data.diamond;
+        //                 self.feathers = response.data.data.feathers;
+        //                 console.log("response.data.data", response.data.data);
 
-                    }
-                })
-                .catch((error) => {
-                    console.log(error);
-                    if (error.response && error.response.status === 401) {
-                        this.logoutSubmit()
-                    }
-                })
-                .finally();
-        },
+        //             }
+        //         })
+        //         .catch((error) => {
+        //             console.log(error);
+        //             if (error.response && error.response.status === 401) {
+        //                 this.logoutSubmit()
+        //             }
+        //         })
+        //         .finally();
+        // },
 
         backgroundImageUrl(type) {
             if (type == 1) {
@@ -147,7 +159,6 @@ export default {
         },
 
         async getFlip() {
-
             let gameId = await this.getGameId();
             let self = this;
             axios.get('/api/get-flip', {
@@ -159,7 +170,6 @@ export default {
                     if (response.data.status === 200 && response.data.success == true) {
                         self.flipList = response.data.data.data_flip.active_flip;
                         self.waiting = response.data.data.data_flip.waiting ?? [];
-                        console.log("response.data.data", response.data.data);
 
                     }
                 })
@@ -197,8 +207,12 @@ export default {
                                     // const userResponseJSON = JSON.stringify(response.data.data.user);
                                     // self.saveInfoUser(userResponseJSON);
 
-                                    self.diamond = response.data.data.user.diamond
-                                    self.feathers = response.data.data.user.feathers
+                                    // self.diamond = response.data.data.user.diamond
+                                    
+                                    // self.attrKimcuong = response.data.user.diamond;
+                                    // self.feathers = response.data.data.user.feathers
+                                    self.$emit("updateAttrKimcuongNtd", response.data.data.user.diamond);
+                                    self.$emit("updateAttrLongvuNtd", response.data.data.user.feathers);
                                     // this.$store.actions.saveInfoUser(response.data.data.user);
                                 }
                                 // if (response.data.data.data_flip.choises && response.data.data.data_flip.choises.length == 0) {
@@ -209,20 +223,22 @@ export default {
                                         let reward = response.data.data.reward;
                                         let message = "";
                                         for (let i = 0; i < reward.length; i++) {
-                                            console.log("reward[i]", reward[i].record);
-                                            console.log("reward[i].item_id: ", reward[i].item_id);
 
                                             if (reward[i].item_id == "1") {
-                                                console.log("message: ", message);
-                                                console.log("reward[i].record: ", reward[i].record);
-                                                message = message + " Lông phượng hoàng +" + reward[i].record;
-                                                console.log("message: ", message);
+                                                message = message + " Lông Phượng Hoàng +" + reward[i].record;
                                             }
                                             if (reward[i].item_id == "2") {
                                                 message = message + " Đá mặt trăng +" + reward[i].record;
                                             }
                                         }
-                                        alert(message);
+                                        // alert(message);
+                                        self.$swal.fire({
+                                            position: "center",
+                                            icon: "success",
+                                            title: message,
+                                            showConfirmButton: false,
+                                            timer: 1500
+                                        });
                                     }
                                     self.flag = false;
                                 }, 500); // 500 milliseconds = 0.5 giây
@@ -282,8 +298,12 @@ export default {
                         self.waiting = response.data.data.data_flip.waiting;
                         if (response.data.data.user) {
                             // const userResponseJSON = JSON.stringify(response.data.data.user);
-                            self.diamond = response.data.data.user.diamond
-                            self.feathers = response.data.data.user.feathers
+                            // self.saveDiamond(response.data.data.user.diamond);
+                            
+                            self.$emit("updateAttrKimcuongNtd", response.data.data.user.diamond);
+                            self.$emit("updateAttrLongvuNtd", response.data.data.user.feathers);
+                            // self.diamond = response.data.data.user.diamond
+                            // self.feathers = response.data.data.user.feathers
                             // self.saveInfoUser(userResponseJSON);
                             // this.$store.actions.saveInfoUser(response.data.data.user);
                         }
@@ -293,7 +313,14 @@ export default {
                             // this.$store.actions.saveInfoUser(response.data.data.user);
                         }
                     } else {
-                        alert(response.data.message);
+                        // alert(response.data.message);
+                        self.$swal.fire({
+                            position: "center",
+                            icon: "error",
+                            title: response.data.message,
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
                     }
                 })
                 .catch((error) => {
@@ -304,10 +331,21 @@ export default {
                 })
                 .finally();
         },
+        async logoutSubmit() {
+            await this.logout();
+        },
     },
     // code test keyboard
     watch: {
-
+        checkGameOver(newValue) {
+            if (newValue) {
+                // Hiển thị modal khi game over
+                $('#GameOverModal').css('display','flex');
+                setTimeout(() => {
+                    $('#GameOverModal').hide();
+                }, 3000);
+            }
+        },
     },
     computed: {
         UserInfo() {
@@ -319,7 +357,7 @@ export default {
             }
         },
         checkGameOver() {
-            return this.waiting.length >= 6;
+            return this.waiting.length >= 4;
         },
         cardBackgroundColor() {
             return (col) => {
@@ -402,47 +440,59 @@ export default {
 </script>
 
 <style>
-.card {
+.minigame-thuvien .card {
     perspective: 1000px;
     position: relative;
     transform-style: preserve-3d;
-    transition: transform 0.5s;
+    transition: transform 0.5s linear;
     display: inline-block;
-    border: 1px solid transparent;
-    border-radius: 5px;
+    /* border: 1px solid transparent; */
+    /* border-radius: 5px; */
     min-width: 65px;
     width: 100%;
     height: 65px !important;
-    background:
+    /* background:
         linear-gradient(to bottom, #292929, #453d69) padding-box,
-        linear-gradient(to bottom, #7b5d1c, #a1813f) border-box;
-    transition: all 300ms linear !important;
+        linear-gradient(to bottom, #7b5d1c, #a1813f) border-box; */
+    background: url('../../../assets/images/sinhnhat11nam/img_main/front.png');
 }
 
-.game-thuvientoantri .cell,
-.game-thuvientoantri .item-wait {
+.minigame-thuvien .card.flipped{
+    border: 1px solid transparent;
+    border-radius: 5px;
+    background:
+            linear-gradient(to bottom, #292929, #453d69) padding-box,
+            linear-gradient(to bottom, #7b5d1c, #a1813f) border-box !important;
+}
+
+.game-nhathidauxoetxoet .card:hover{
+    filter: brightness(140%);
+}
+
+.game-nhathidauxoetxoet .cell,
+.game-nhathidauxoetxoet .item-wait {
     margin-right: 20px;
     margin-bottom: 30px;
     max-width: 65px;
     max-height: 65px;
 }
 
-.game-thuvientoantri .cell:nth-child(15n + 0) {
+.game-nhathidauxoetxoet .cell:nth-child(15n + 0) {
     margin-right: 0px;
 }
 
-.game-thuvientoantri .minigame-thuvien {
+.game-nhathidauxoetxoet .minigame-thuvien {
     min-height: 285px;
     transition: all 500ms linear
 }
 
-.game-thuvientoantri .card {
+.game-nhathidauxoetxoet .card {
     background-repeat: no-repeat !important;
     background-position: center center !important;
     background-size: cover !important;
 }
 
-/* .game-thuvientoantri .row>*{
+/* .game-nhathidauxoetxoet .row>*{
     width: auto;
 } */
 
@@ -504,20 +554,29 @@ export default {
     animation: flip 0.5s;
 }
 
-.btn-start {
+.btn-start-div {
     position: absolute;
     z-index: 5;
     top: 170px;
     left: 105px;
+    font-weight: bold;
+    transition: all 300ms linear;
+    color: aliceblue;
+}
+
+.btn-start-div button{
     color: #292929;
     background: linear-gradient(to bottom, #f1c461, #a1813f);
     border-radius: 5px;
     border: none;
     padding: 10px 20px;
     font-weight: bold;
-    transition: all 300ms linear;
+    margin-right: 8px;
 }
 
+.btn-start-div:hover {
+    filter: brightness(140%);
+}
 
 .attribute-items .div-img {
     position: relative;
@@ -539,6 +598,27 @@ export default {
 .attribute-items .div-img img:hover,
 .btn-start:hover {
     filter: brightness(140%);
+}
+
+#GameOverModal{
+    display: none;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    text-align: center;
+    transform-origin: center;
+    /* transform: rotate(90deg) translateY(-50%); */
+    white-space: nowrap;
+    transition: transform 1s ease-in-out, opacity 1s ease-in-out;
+    flex-direction: column;
 }
 
 /* ... CSS sau đó ... */

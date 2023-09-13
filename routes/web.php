@@ -22,6 +22,11 @@ Route::get('/login', function () {
     return view('layouts.launch');
 });
 
+Route::get('/bach-nhat', function () {
+    return view('layouts.launch');
+});
+
+
 Route::get('/logout', function () {
     return view('layouts.launch');
 });

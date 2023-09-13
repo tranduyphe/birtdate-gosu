@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\LogActivity;
 use App\Repositories\QuestRepository;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
@@ -91,9 +92,43 @@ class HomeController extends Controller
             $questType = 0;
             $QuestRepository->updateQuest($user, $questType, 1);
         }
-        
+
         return view('layouts.launch');
     }
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getDataSanhTruongHopHep(Request $request)
+    {
+        $result = User::leftJoin('sanh_hop_hep', 'users.id', '=', 'sanh_hop_hep.user_id')
+            ->select('users.id', DB::raw('COALESCE(sanh_hop_hep.is_open, 0) as is_open'))
+            ->orderBy('users.id')
+            ->get()->toArray();
+        $data = [];
+        for ($i = 0; $i < 198; $i++) {
+            if (!empty($result[$i])) {
+                $data[] = [
+                    "user_id" => $result[$i]['id'],
+                    "is_open" => $result[$i]['is_open']
+                ];
+            } else {
+                $data[] = [
+                    "user_id" => 0,
+                    "is_open" => 0
+                ];
+            }
+        }
+        $response = [
+            "status" => 200,
+            "message" => "success",
+            "data" => $data,
+            "success" => true
+        ];
+        return response()->json($response);
+    }
+
     // public function getAccessToken(Request $request)
     // {
     //     $accessToken = $request->session()->get('access_token_client');
@@ -101,9 +136,10 @@ class HomeController extends Controller
     // }
     public function getTopFeathers(Request $request)
     {
-        $usersWithFeathers = User::select('id', 'name', 'email', 'feathers')
+        $usersWithFeathers = User::select('id', 'name', 'first_name', 'last_name', 'email', 'feathers')
             ->orderBy('feathers', 'desc')
             ->orderBy('id', 'asc') // Sắp xếp tiếp theo id nếu feathers bằng nhau
+            ->limit(10)
             ->get();
         $response = [
             "status" => 200,
@@ -118,10 +154,11 @@ class HomeController extends Controller
     public function getLogActivity(Request $request)
     {
         $user = $request->user();
-        $logActivities = LogActivity::selectRaw('log_activity.user_id, log_activity.reason, users.name, DATE_FORMAT(log_activity.created_at, "%Y-%m-%d %H:%i:%s") as formatted_created_at')
+        $logActivities = LogActivity::selectRaw('log_activity.user_id, log_activity.reason, log_activity.log_item, users.name, DATE_FORMAT(log_activity.created_at, "%Y-%m-%d %H:%i:%s") as formatted_created_at')
             ->join('users', 'users.id', '=', 'log_activity.user_id')
             ->where('log_activity.user_id', $user->id)
             ->orderBy('log_activity.id', 'desc')
+            // ->limit(30) // Thêm dòng này để giới hạn kết quả thành 30 hàng
             ->get();
         // dump($logActivity);die;
         $response = [
@@ -139,17 +176,33 @@ class HomeController extends Controller
     {
         $user = $request->user();
         $diamond = 0;
-        if($user){
+        if ($user) {
             $diamond =  $user->diamond;
             $feathers = $user->feathers;
+            $readInstructions = $user->read_instructions;
         }
         $response = [
             "status" => 200,
             "message" => "success",
             "data" => [
                 'diamond' => $diamond,
-                'feathers' => $feathers
+                'feathers' => $feathers,
+                'read_instructions' => $readInstructions
             ],
+            "success" => true
+        ];
+        return response()->json($response);
+    }
+
+    public function doneInstructions(Request $request)
+    {
+        $user = $request->user();
+        $user->read_instructions = 1;
+        $user->save();
+        $response = [
+            "status" => 200,
+            "message" => "success",
+            "data" => [],
             "success" => true
         ];
         return response()->json($response);

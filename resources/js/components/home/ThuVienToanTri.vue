@@ -1,35 +1,48 @@
 <template>
-    <h3 class="text-center mt-5">Game mini</h3>
-    <div>Lông phượng hoàng:{{ feathers }}</div>
-    <div>Đá mặt trăng: {{ diamond }}</div>
-    <h1 class="text-center mt-5" v-if="checkGameOver">Game Over</h1>
-    <!-- <button @click="reloadFlip()">
-        Start
-    </button> -->
-    <div class="container" v-if="flipList != nul">
+    <div class="thuvientoantri container" v-if="flipList != nul">
         <div class="row">
-            <div class="col-md-12">
-                <table class="table table-bordered" style="background-color: gray;">
-                    <thead>
-                    </thead>
-                    <tbody>
-                        <tr v-for="row in 4" :key="row">
-                            <td v-for="col in 8" :key="col">
-                                <div class="card" @click="flipCard((row - 1) * 8 + col - 1)"
-                                    :style="{ backgroundColor: flipList[(row - 1) * 8 + col - 1].color }">
-                                    <div class="front">
-                                    </div>
-                                    <div v-if="flipList[(row - 1) * 8 + col - 1].active == 1"
-                                        :style="{ backgroundColor: flipList[(row - 1) * 8 + col - 1].color }">
-                                    </div>
-                                    <div v-else-if="flipList[(row - 1) * 8 + col - 1].active == 2" class="back"
-                                        :style="{ backgroundColor: 'black' }">
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="col-md-12 d-flex justify-content-evenly">
+                <div class="row-card" v-for="col in 8" :key="col" data-aos="zoom-in-up">
+                    <div class="cell-card mb-3" v-for="row in 4" :key="row">
+                        <div class="card" @click="flipCard((row - 1) * 8 + col - 1)"
+                            :style="{ backgroundColor: flipList[(row - 1) * 8 + col - 1].color }">
+                            <img :src="flipList[(row - 1) * 8 + col - 1].color" alt="" width="65" height="65">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="line-break text-center my-3">
+                <img :src="lineBrealimg" alt="">
+            </div>
+            <div class="col-md-8">
+                <p style="margin-top: 0pt; margin-bottom: 14pt; text-align: justify; font-size: 16pt; line-height: 1;"><b><span style="text-align: left; color: rgb(0, 0, 0); font-size: 18px;">Tỉ lệ trước khi user tr&uacute;ng Thẻ Tiềm Long</span></b></p>
+                <ul>
+                    <li style="margin-top: 0pt; margin-bottom: 14pt; text-align: justify; font-size: 16px; color: rgb(0, 0, 0); line-height: 1;"><span style="text-align: left;">T&iacute;m: 1 Thẻ Tiềm Long (1 người chỉ nhận 1 lần duy nhất) (30%)</span></li>
+                    <li style="margin-top: 0pt; margin-bottom: 14pt; text-align: justify; font-size: 16px; color: rgb(0, 0, 0); line-height: 1;"><span style="text-align: left;">Đỏ: L&ocirc;ng Phượng Ho&agrave;ng*5 (10%)</span></li>
+                    <li style="margin-top: 0pt; margin-bottom: 14pt; text-align: justify; font-size: 16px; color: rgb(0, 0, 0); line-height: 1;"><span style="text-align: left;">Xanh l&aacute;: Đ&aacute; Mặt Trăng*10 (10%)</span></li>
+                    <li style="margin-top: 0pt; margin-bottom: 14pt; text-align: justify; font-size: 16px; color: rgb(0, 0, 0); line-height: 1;"><span style="text-align: left;">V&agrave;ng &amp; Hồng: Fail (25%+25%)</span></li>
+                </ul>
+                <p style="margin-top: 0pt; margin-bottom: 14pt; text-align: justify; font-size: 16pt; line-height: 1;"><span style="text-align: left; color: rgb(0, 0, 0); font-size: 18px;"><strong>Tỉ lệ sau khi user đ&atilde; tr&uacute;ng Thẻ Tiềm Long</strong></span></p>
+                <ul>
+                    <li style="margin-top: 0pt; margin-bottom: 14pt; text-align: justify; font-size: 16pt; color: rgb(0, 0, 0); line-height: 1;"><span style="text-align: left; font-size: 15px;">Đỏ: L&ocirc;ng Phượng Ho&agrave;ng*5 (20%)</span></li>
+                    <li style="margin-top: 0pt; margin-bottom: 14pt; text-align: justify; font-size: 16pt; color: rgb(0, 0, 0); line-height: 1;"><span style="text-align: left; font-size: 15px;">Xanh l&aacute;: Đ&aacute; Mặt Trăng*10 (20%)</span></li>
+                    <li style="margin-top: 0pt; margin-bottom: 14pt; text-align: justify; font-size: 16pt; color: rgb(0, 0, 0); line-height: 1;"><span style="text-align: left; font-size: 15px;">V&agrave;ng &amp; Hồng: Fail (30%+30%)</span></li>
+                </ul>
+            </div>
+            <div class="attribute-items d-flex col-md-4 justify-content-around align-items-end">
+                <div class="div-img items thongbao mr-5" data-aos="fade-down">
+                    <img :src="thongbaoimgUrl" alt="Thông báo" width="">
+                    <span class="font-size-14 text-white">{{ attrThongbao }}</span>
+                </div>
+                <div class="div-img items kimcuong mr-5" data-aos="fade-down">
+                    <img :src="kimcuongimgUrl" alt="Thông báo" width="">
+                    <span class="font-size-14 text-white">{{ attrKimcuong }}</span>
+                </div>
+                <div class="div-img items longvu" data-aos="fade-down">
+                    <img :src="longvuimgUrl" alt="Thông báo" width="">
+                    <span class="font-size-14 text-white">{{ attrLongvu }}</span>
+                </div>
             </div>
         </div>
     </div>
@@ -42,45 +55,36 @@ import { store } from '../../store/store';
 // Tạo kết nối Socket.io
 // import io from "socket.io-client";
 export default {
-    props: {},
+    props: {
+        attrKimcuong:Number,
+        attrLongvu:Number,
+    },
     data() {
         return {
             socket: null,
             pageConnected: true,
             accessToken: "", // Khởi tạo access token rỗng
-            colors: ['blue', 'red', 'green', 'pink'],
+            colors: ['/images/sinhnhat11nam/img_main/thuvien-itemRed.png', '/images/sinhnhat11nam/img_main/thuvien-itemYellow.png', '/images/sinhnhat11nam/img_main/thuvien-itemPuple.png', '/images/sinhnhat11nam/img_main/thuvien-itemPink.png', '/images/sinhnhat11nam/img_main/thuvien-itemGreen.png'],
             // flipList: new Array(33).fill({ active: false, color: '' }), // Tạo mảng 9 phần tử với giá trị ban đầu là false
             flipList: [],
             flag: false,
-            diamond: 0,
-            feathers: 0,
+            attrThongbao: 0,
+            lineBrealimg: '/images/sinhnhat11nam/img_main/line-break.png',
+            thongbaoimgUrl: '/images/sinhnhat11nam/img_main/thongbao.png',
+            kimcuongimgUrl: '/images/sinhnhat11nam/img_main/kimcuong.png',
+            longvuimgUrl: '/images/sinhnhat11nam/img_main/longvu.png',
+            itemRed: '/images/sinhnhat11nam/img_main/thuvien-itemRed.png',
+            itemYellow: '/images/sinhnhat11nam/img_main/thuvien-itemYellow.png',
+            itemPuple: '/images/sinhnhat11nam/img_main/thuvien-itemPuple.png',
+            itemGreen: '/images/sinhnhat11nam/img_main/thuvien-itemGreen.png',
+            itemPink: '/images/sinhnhat11nam/img_main/thuvien-itemPink.png',
         };
     },
     created() {
         this.getFlip();
-        this.getItemUser();
     },
     methods: {
         ...mapActions(["saveInfoUser", "saveGameId"]),
-        getItemUser() {
-            let self = this;
-            axios.get('/api/get-item', {
-            })
-                .then(function (response) {
-                    if (response.data.status === 200 && response.data.success == true) {
-                        self.diamond = response.data.data.diamond;
-                        self.feathers = response.data.data.feathers;
-                        console.log("response.data.data", response.data.data);
-                    }
-                })
-                .catch((error) => {
-                    console.log(error);
-                    if (error.response && error.response.status === 401) {
-                        this.logoutSubmit()
-                    }
-                })
-                .finally();
-        },
         getFlip() {
             this.flipList = [];
             for (let i = 0; i < 32; i++) {
@@ -90,7 +94,7 @@ export default {
         },
         flipCard(index) {
             this.flag = true;
-            if (this.diamond < 5) {
+            if (this.attrKimcuong < 5) {
                 alert("Đá mặt trăng không đủ");
                 this.flag = false;
             } else {
@@ -106,36 +110,57 @@ export default {
 
                             if (response.data.success == true) {
                                 if (response.data.data.user) {
-                                    self.diamond = response.data.data.user.diamond
-                                    self.feathers = response.data.data.user.feathers
+                                    self.$emit("updateAttrKimcuongNtd", response.data.data.user.diamond);
+                                    self.$emit("updateAttrLongvuNtd", response.data.data.user.feathers);
                                 }
                                 if (response.data.data.reward) {
                                     let reward = response.data.data.reward;
+                                    let user = response.data.data.user.name;
                                     let message = "";
-                                    for (let i = 0; i < reward.length; i++) {
-                                        console.log("reward[i]", reward[i].record);
-                                        console.log("reward[i].item_id: ", reward[i].item_id);
+                                    if (reward.length == 0) {
+                                        message = "Chúc bạn may mắn lần sau";
+                                    } else {
+                                        for (let i = 0; i < reward.length; i++) {
 
-                                        if (reward[i].item_id == "1") {
-                                            console.log("message: ", message);
-                                            console.log("reward[i].record: ", reward[i].record);
-                                            message = message + " Lông phượng hoàng +" + reward[i].record;
-                                            console.log("message: ", message);
+                                            if (reward[i].item_id == "1") {
+                                                message = message + "Chúc mừng " + user + " đã nhận được " + reward[i].record + " LÔNG PHƯỢNG HOÀNG";
+                                                }
+                                            if (reward[i].item_id == "2") {
+                                                message = message + "Chúc mừng " + user + " đã nhận được " + reward[i].record + " ĐÁ MẶT TRĂNG";
+                                            }
+
+                                            if (reward[i].item_id == "3") {
+                                                message = message + " Thẻ tiềm long +" + reward[i].record;
+                                            }
                                         }
-                                        if (reward[i].item_id == "2") {
-                                            message = message + " Đá mặt trăng +" + reward[i].record;
-                                        }
+                                        // alert(message);
+                                        
                                     }
-                                    alert(message);
-                                    self.getFlip();
-                                    self.flag = false;
+                                    self.$swal.fire({
+                                            position: "center",
+                                            icon: "success",
+                                            title: message,
+                                            showConfirmButton: false,
+                                            timer: 3000,
+                                            customClass: 'swal-wide',
+                                        });
+                                        self.getFlip();
+                                        self.flag = false;
+                                } else {
+                                    // alert(response.data.message);
+                                    self.$swal.fire({
+                                            position: "center",
+                                            icon: "success",
+                                            title: response.data.message,
+                                            showConfirmButton: false,
+                                            timer: 5000
+                                        });
+                                        self.getFlip();
+                                        self.flag = false;
                                 }
                             } else {
-                                alert(response.data.message);
                                 self.flag = false;
                             }
-                        } else {
-                            self.flag = false;
                         }
                     })
                     .catch((error) => {
@@ -153,25 +178,25 @@ export default {
 
     },
     computed: {
-        cardBackgroundColor() {
-            return (col) => {
-                if (this.waiting[col] === 1) {
-                    return 'blue';
-                } else if (this.waiting[col] === 2) {
-                    return 'red';
-                } else if (this.waiting[col] === 3) {
-                    return 'green';
-                } else if (this.waiting[col] === 4) {
-                    return 'pink';
+        // cardBackgroundColor() {
+        //     return (col) => {
+        //         if (this.waiting[col] === 1) {
+        //             return 'blue';
+        //         } else if (this.waiting[col] === 2) {
+        //             return 'red';
+        //         } else if (this.waiting[col] === 3) {
+        //             return 'green';
+        //         } else if (this.waiting[col] === 4) {
+        //             return 'pink';
 
-                } else if (this.waiting[col] === 5) {
-                    return 'orange';
+        //         } else if (this.waiting[col] === 5) {
+        //             return 'orange';
 
-                } else {
-                    return '';
-                }
-            };
-        }
+        //         } else {
+        //             return '';
+        //         }
+        //     };
+        // }
     },
     mounted() {
         // Lắng nghe sự kiện storage để cập nhật tên người dùng từ tab khác
@@ -240,37 +265,15 @@ export default {
     perspective: 1000px;
     position: relative;
     transform-style: preserve-3d;
-    transition: transform 0.5s;
+    transition: transform 0.3s linear;
 }
 
 .flipped {
     transform: rotateY(180deg);
 }
 
-.front,
-.back {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-}
-
-.front {
-    transform: rotateY(0deg);
-    /* background-color: #f5f5f5; */
-
-
-}
-
-.back {
-    transform: rotateY(180deg);
-    background-color: #3498db;
-    color: white;
-    border: solid #000;
+.thuvientoantri .card:hover {
+    filter: brightness(140%);
 }
 
 /* Thêm các hiệu ứng CSS keyframes animation tại đây */

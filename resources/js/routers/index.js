@@ -6,9 +6,10 @@ import home from '@/components/home/index.vue';
 import Minigame from '@/components/home/Minigame.vue';
 import Quest from '@/components/home/Quest.vue';
 import wall from '@/components/wall/';
-
+import ManhGhep from '@/components/home/ManhGhep.vue';
 import ThuVienToanTri from '../components/home/ThuVienToanTri.vue';
 import Launch from '../components/sinhnhat11nam/landing-page/Launch.vue';
+import BachNhat from '../components/sinhnhat11nam/landing-page/BachNhat.vue';
 import SiteMap from '../components/sinhnhat11nam/landing-page/SiteMap.vue';
 
 const routes = [
@@ -38,9 +39,27 @@ const routes = [
 		},
 	},
 	{
+		path: '/bachnhatgosu2023',
+		name: 'bachnhat',
+		component: BachNhat,
+		meta: {
+			middleware: "launch",
+			title: `Bách Nhật`
+		},
+	},
+	{
 		path: '/quest',
 		name: 'quest',
 		component: Quest,
+		meta: {
+			middleware: "auth"
+		},
+	},
+	
+	{
+		path: '/manh-ghep',
+		name: 'manh-ghep',
+		component: ManhGhep,
 		meta: {
 			middleware: "auth"
 		},
@@ -67,8 +86,10 @@ const routes = [
 		path: '/site-map',
 		component: SiteMap,
 		meta: {
-			middleware: "auth"
+			middleware: "auth",
+			title: `Sinh Nhật GOSU 11 Năm`
 		},
+		
 	},
 	{
 		name: 'wall',

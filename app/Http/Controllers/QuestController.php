@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Cache;
 use App\Models\MinigameQuests;
 use App\Models\User;
 use App\Models\UserInvite;
+use App\Models\LogActivity;
+
 use Exception;
 use Illuminate\Support\Facades\Log;
 
@@ -60,6 +62,8 @@ class QuestController extends Controller
         ];
         return response()->json($response);
     }
+    
+    
     public function invite(Request $request)
     {
         
@@ -79,18 +83,18 @@ class QuestController extends Controller
         $friendCode = $request->input('user_code');
         $QuestRepository = new QuestRepository();
         $getQuest = $QuestRepository->getQuests($user->id);
-        // if ($user->user_code == $friendCode) {
-        //     $response = [
-        //         "status" => 200,
-        //         "message" => "Bạn không thể mời chính mình đi học!",
-        //         "data" => [
-        //             'quests' => $getQuest
-        //         ],
-        //         "success" => true
-        //     ];
-        //     Cache::forget($cacheKey); // Lưu trong cache trong 5 phút
-        //     return response()->json($response);
-        // }
+        if ($user->user_code == $friendCode) {
+            $response = [
+                "status" => 200,
+                "message" => "Bạn không thể mời chính mình đi học!",
+                "data" => [
+                    'quests' => $getQuest
+                ],
+                "success" => true
+            ];
+            Cache::forget($cacheKey); // Lưu trong cache trong 5 phút
+            return response()->json($response);
+        }
         if ($getQuest[1]['current_attempts'] >= $getQuest[1]['total_attempts']) {
             $response = [
                 "status" => 200,
@@ -123,7 +127,7 @@ class QuestController extends Controller
         if (count($friendInvites) >= 10) {
             $response = [
                 "status" => 200,
-                "message" => "Phù thủy này đã đi học rồi!",
+                "message" => "Cú của bạn đã gửi thư cho phù thủy tập sự!",
                 "data" => [
                     'quests' => $getQuest
                 ],
@@ -133,26 +137,25 @@ class QuestController extends Controller
             return response()->json($response);
         }
         // //check người chơi đã mời hay bạn này trước đó hay chưa:
-        // $userHasInvitation = false;
-        // foreach ($friendInvites as $invite) {
-        //     if ($invite['user_id'] === $user->id) {
-        //         $userHasInvitation = true;
-        //         break; // Bạn có thể thoát vòng lặp khi tìm thấy một lời mời từ người dùng.
-        //     }
-        // }
-        // if($userHasInvitation){
-        //     $response = [
-        //         "status" => 200,
-        //         "message" => "Bạn đã mời bạn học này trước đó!",
-        //         "data" => [
-        //             'quests' => $getQuest
-        //         ],
-        //         "success" => true
-        //     ];
-        // Cache::forget($cacheKey); // Lưu trong cache trong 5 phút
-        //     return response()->json($response);
-        // }
-
+        $userHasInvitation = false;
+        foreach ($friendInvites as $invite) {
+            if ($invite['user_id'] === $user->id) {
+                $userHasInvitation = true;
+                break; // Bạn có thể thoát vòng lặp khi tìm thấy một lời mời từ người dùng.
+            }
+        }
+        if($userHasInvitation){
+            $response = [
+                "status" => 200,
+                "message" => "Bạn đã mời bạn học này trước đó!",
+                "data" => [
+                    'quests' => $getQuest
+                ],
+                "success" => true
+            ];
+        Cache::forget($cacheKey); // Lưu trong cache trong 5 phút
+            return response()->json($response);
+        }
         $newInvite = new UserInvite;
         $newInvite->user_id = $user->id;
         $newInvite->friend_id = $friend->id;
@@ -161,11 +164,12 @@ class QuestController extends Controller
         $questType = 1;
         $QuestRepository->updateQuest($user, $questType, 1);
         $newQuest = $QuestRepository->getQuests($user->id);
+        
         $response = [
             "status" => 200,
             "message" => "Mời bạn đi học thành công!",
             "data" => [
-                'quests' => $newQuest
+                'quests' => $newQuest,
             ],
             "success" => true
         ];
@@ -197,17 +201,9 @@ class QuestController extends Controller
         $user = $request->user();
         
         $QuestRepository = new QuestRepository();
-        // dump($questId);
-
-        
-        // dump($cacheFlagReward);
         Cache::put($cacheKey, 1, now()->addMinutes(5)); // Lưu trong cache trong 5 phút
-        // dump($cacheFlagReward);
-        // die;
         if ($questId !== null) {
-            // dump("check quest id1");
             $getQuest = $QuestRepository->getQuests($user->id);
-            // dump($getQuest);
             if($getQuest[$questId] && $getQuest[$questId]['is_reward'] ==1 ){
                 Cache::forget($cacheKey); // Lưu trong cache trong 5 phút
                 $response = [
@@ -220,7 +216,6 @@ class QuestController extends Controller
                 return response()->json($response);
             }
             if ($getQuest[$questId] && $getQuest[$questId]['current_attempts'] >= $getQuest[$questId]['total_attempts']) {
-                // dump($getQuest[$questId]);die;
                 // ghi nhận đã nhận thưởng.
                 $getQuest = $QuestRepository->rewardQuest($user, $questId, 1);
 
@@ -231,14 +226,27 @@ class QuestController extends Controller
 
                     $user->diamond = $user->diamond + $record;
                     $user->save();
+                    // lưu lịch sử hoạt động
+                    $LogRepository = new LogRepository();
+                    $LogRepository->saveLogActivity($user, 2,[['item_id'=>2,'record'=>$record]], "Nhận thưởng nhiệm vụ " . ($questId + 1) . " tại bảng thử thách.");
                 }
                 Cache::forget($cacheKey); // Lưu trong cache trong 5 phút
                 // Cache::forget($cacheKey);
+                
+                $user->refresh();
+                $logActivities = LogActivity::selectRaw('log_activity.user_id, log_activity.reason, log_activity.log_item, users.name, DATE_FORMAT(log_activity.created_at, "%Y-%m-%d %H:%i:%s") as formatted_created_at')
+                    ->join('users', 'users.id', '=', 'log_activity.user_id')
+                    ->where('log_activity.user_id', $user->id)
+                    ->orderBy('log_activity.id', 'desc')
+                    // ->limit(30) // Thêm dòng này để giới hạn kết quả thành 30 hàng
+                    ->get();
                 $response = [
                     "status" => 200,
                     "message" => "Đá mặt trăng +" . $record,
                     "data" => [
-                        'quests' => $getQuest
+                        'quests' => $getQuest,
+                        'user' => $user,
+                        'log_activity'=>$logActivities
                     ],
                     "success" => true
                 ];
@@ -277,7 +285,7 @@ class QuestController extends Controller
     {
         $user = $request->user();
         $QuestRepository = new QuestRepository();
-        $questType = 5;
+        $questType = $request->input('quest_id');
         $QuestRepository->updateQuest($user, $questType, 1);
     }
     //     $user = $request->user();

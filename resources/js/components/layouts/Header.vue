@@ -13,6 +13,10 @@ export default {
         //     console.log("signOut");
         //     await this.logout();
         // }
+
+        handleLinkClick() {
+            this.$router.push('/bachnhatgosu2023');
+        }
     },
     created: () => {
     },

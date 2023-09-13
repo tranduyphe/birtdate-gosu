@@ -142,7 +142,6 @@ export default {
                 .then(function (response) {
                     if (response.data.status === 200 && response.data.success == true) {
                         self.quests = response.data.data.quests;
-                        console.log("check quest list:", self.quests);
                     }
                 })
                 .catch((error) => {
@@ -161,7 +160,6 @@ export default {
                 .then(function (response) {
                     if (response.data.status === 200 && response.data.success == true) {
                         self.logActivity = response.data.data.log_activity;
-                        console.log("checklog activity:", self.logActivity);
                     }
                 })
                 .catch((error) => {
@@ -184,11 +182,9 @@ export default {
                         if (response.data.success == true) {
                             self.quests = response.data.data.quests;
                             alert(response.data.message);
-                            console.log("check quest list:", self.quests);
                         } else {
                             self.quests = response.data.data.quests;
                             alert(response.data.message);
-                            console.log("check quest list:", self.quests);
                         }
                     }
                 })
@@ -208,7 +204,6 @@ export default {
                 .then(function (response) {
                     if (response.data.status === 200 && response.data.success == true) {
                         self.topFeathers = response.data.data.top_feathers;
-                        console.log("check quest top_feathers:", self.topFeathers);
                     }
                 })
                 .catch((error) => {
