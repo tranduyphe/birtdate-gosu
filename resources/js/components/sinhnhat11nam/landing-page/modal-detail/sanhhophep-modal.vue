@@ -37,8 +37,9 @@ export default {
 #SanhHopHep-Modal .main-list-ctvd{
     display: grid;
     grid-template-columns: repeat(16, 1fr);
-    width: 100%;
-    height: 500px;
+    width: 1200px;
+    height: 675px;
+    margin: 0 auto;
 }
 
 #SanhHopHep-Modal .main-list-ctvd .it-image-ctvd{
@@ -47,7 +48,7 @@ export default {
 
 
 #SanhHopHep-Modal .main-list-ctvd .it-image-ctvd:nth-child(-n+15) img {
-    transform: translate(-10%, 0);
+    transform: translate(-50%, 0);
     top: 0;
 }
 
@@ -65,7 +66,7 @@ export default {
     image-rendering: -o-pixelated;
     image-rendering: pixelated;
     position: absolute;
-    left: 121.7%;
+    left: 46.7%;
     top: 49.7%;
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);

@@ -246,7 +246,7 @@ export default {
                                             icon: "success",
                                             title: message,
                                             showConfirmButton: false,
-                                            timer: 2000
+                                            timer: 3000
                                         });
                                     }
                                     self.flag = false;
@@ -258,7 +258,7 @@ export default {
                                 }
                                 self.$swal.fire({
                                     position: "center",
-                                    icon: "success",
+                                    icon: "error",
                                     title: response.data.message,
                                     showConfirmButton: false,
                                     timer: 1500
