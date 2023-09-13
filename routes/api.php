@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\WallController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -20,7 +21,14 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::group(['middleware' => ['auth:sanctum']], function () {
     // logout 
     Route::post('/logout', [AuthController::class, 'logout']);
-
+    Route::group(
+        array( 'prefix' => 'wall' ),
+        function () {
+            Route::post( '/', array( WallController::class, 'index' ) );
+            Route::post( '/create', array( WallController::class, 'create' ) );
+            Route::post( '/update/{id}', array( WallController::class, 'update' ) );
+        }
+    );
     Route::get('/get-flip', [App\Http\Controllers\FlipController::class, 'getFlip'])->name('flip');
     Route::post('/active-flip', [App\Http\Controllers\FlipController::class, 'activeFlip'])->name('active-flip');
     Route::get('/reload-flip', [App\Http\Controllers\FlipController::class, 'reloadFlip'])->name('reload-flip');
@@ -35,4 +43,13 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/invite', [App\Http\Controllers\QuestController::class, 'invite'])->name('invite');
 
     // Route::get('/send-notification', [App\Http\Controllers\SocketController::class, 'index'])->name('send-notification');
+
+    // padlet
+    
+    // Route::group(
+    //     array( 'prefix' => 'wall' ),
+    //     function () {
+    //         Route::post( '/create', array( WallController::class, 'create' ) );
+    //     }
+    // );
 });

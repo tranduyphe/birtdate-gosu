@@ -35,18 +35,21 @@ export default {
             </div>
             <div class="d-flex pe-0 pe-lg-3">
                 <ul class="nav-items-link pr-4">
-                <li>
-                    <a target="_blank" href="https://gosucorp.vn/">gosucorp</a>
-                </li>
-                <li>
-                    <a target="_blank" href="https://s20.gosu.vn/">S20</a>
-                </li>
-                <li>
-                    <a target="_blank" href="">bách nhật gosu</a>
-                </li>
-                <li>
-                    <a target="_blank" href="https://www.facebook.com/groups/gosu.s20">facebook</a>
-                </li>
+                    <li>
+                        <router-link to="wall">Padlet</router-link>
+                    </li>
+                    <li>
+                        <a target="_blank" href="https://gosucorp.vn/">gosucorp</a>
+                    </li>
+                    <li>
+                        <a target="_blank" href="https://s20.gosu.vn/">S20</a>
+                    </li>
+                    <li>
+                        <a target="_blank" href="">bách nhật gosu</a>
+                    </li>
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/groups/gosu.s20">facebook</a>
+                    </li>
                 </ul>
             </div>
         </nav>
