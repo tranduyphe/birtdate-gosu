@@ -34,7 +34,7 @@ const actions = {
         if (Object.keys(users).length > 0) {
             let token = users.token;
             let results = await logout(token);
-            console.log('results', results)
+            // console.log('results', results)
             if (results.status == 200) {
                 const data = results.data.data;
                 if (data.logout) {
@@ -51,7 +51,7 @@ const actions = {
             }
         }
     },
-    users: () => {
+    users: ({ commit }) => {
         let data = JSON.parse(localStorage.getItem('users') || "{}");
         return data;
     }
