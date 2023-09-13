@@ -159,7 +159,6 @@ export default {
         },
 
         async getFlip() {
-            console.log("check  minigame: this.attrKimcuong =",this.attrKimcuong);
             let gameId = await this.getGameId();
             let self = this;
             axios.get('/api/get-flip', {
@@ -171,7 +170,6 @@ export default {
                     if (response.data.status === 200 && response.data.success == true) {
                         self.flipList = response.data.data.data_flip.active_flip;
                         self.waiting = response.data.data.data_flip.waiting ?? [];
-                        console.log("response.data.data", response.data.data);
 
                     }
                 })
@@ -225,8 +223,6 @@ export default {
                                         let reward = response.data.data.reward;
                                         let message = "";
                                         for (let i = 0; i < reward.length; i++) {
-                                            console.log("reward[i]", reward[i].record);
-                                            console.log("reward[i].item_id: ", reward[i].item_id);
 
                                             if (reward[i].item_id == "1") {
                                                 console.log("message: ", message);
@@ -350,7 +346,6 @@ export default {
                 .finally();
         },
         async logoutSubmit() {
-            console.log("signOut");
             await this.logout();
         },
     },

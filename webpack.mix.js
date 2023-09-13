@@ -1,5 +1,6 @@
 const mix = require('laravel-mix');
 var path = require('path');
+const webpack = require('webpack');
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
@@ -16,14 +17,21 @@ mix.js('resources/js/app.js', 'public/assets/js')
         //
     ])
     .styles(['resources/css/style.css'], 'public/css/style.css')
-    .webpackConfig({
-        
+    .webpackConfig({        
         resolve: {
             alias: {
                 '@': path.resolve(__dirname, 'resources/js/'),
             },
             extensions: [".*",".wasm",".mjs",".js",".jsx",".json",".vue"]
-        }
+        },
+        plugins: [
+            new webpack.DefinePlugin({
+                'process.env': {
+                    PUBLIC_URL: JSON.stringify(process.env.PUBLIC_URL),
+                    RESOURCE_URL: JSON.stringify(process.env.RESOURCE_URL),
+                }
+            })
+        ]
     })
     .sass('resources/assets/scss/style.scss', 'public/assets/css')
     .sass('resources/assets/scss/datatable.scss', 'public/assets/css')

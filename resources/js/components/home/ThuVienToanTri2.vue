@@ -213,8 +213,6 @@ export default {
                                             imageUrl = '/images/sinhnhat11nam/img_main/may-man-lan-sau.png'
                                         } else {
                                             for (let i = 0; i < reward.length; i++) {
-                                                console.log("reward[i]", reward[i].record);
-                                                console.log("reward[i].item_id: ", reward[i].item_id);
 
                                                 if (reward[i].item_id == "1") {
                                                     console.log("message: ", message);
@@ -250,7 +248,6 @@ export default {
                                     self.flag = false;
                                 }, 500); // 500 milliseconds = 0.5 giây
                             } else {
-                                console.log("check response.data.message", response.data.message);
                                 if (response.data.data.data_flip) {
                                     // self.flipList = response.data.data.data_flip;
                                 }
@@ -315,7 +312,6 @@ export default {
                 .finally();
         },
         async logoutSubmit() {
-            console.log("signOut");
             await this.logout();
         },
     },
