@@ -275,255 +275,253 @@ export default {
 };
 </script>
 <template>
-    <perfect-scrollbar>
-        <div class="wrap-padlet">
-            <div class="main-padlet">
-                <div class="header-padlet container-fluid py-4 px-5">
-                    <Header></Header>
-                </div>
-                <div class="masonry" ref="masonryContainer">
-                    <div class="gutter-sizer"></div>
-                    <div class="masonry-sizer"></div>
-                    <div
-                        v-for="item in items"
-                        :key="item.id"
-                        :class="['masonry-item wow fadeInUp pb-2 px-2 pt-2']"
-                        v-bind:style="`background-color:rgb(${item.color && item.color != 'null' ? item.color : '255,255,255'})`"
-                    >
-                        <div class="wrap-content">
+    <div class="wrap-padlet">
+        <div class="main-padlet">
+            <div class="header-padlet container-fluid py-4 px-5">
+                <Header></Header>
+            </div>
+            <div class="masonry" ref="masonryContainer">
+                <div class="gutter-sizer"></div>
+                <div class="masonry-sizer"></div>
+                <div
+                    v-for="item in items"
+                    :key="item.id"
+                    :class="['masonry-item wow fadeInUp pb-2 px-2 pt-2']"
+                    v-bind:style="`background-color:rgb(${item.color && item.color != 'null' ? item.color : '255,255,255'})`"
+                >
+                    <div class="wrap-content">
+                        <div
+                            class="content-wall pb-2"
+                            @click="handleShowModal(item.id)"
+                        >
+                            <h5 v-if="item.title && item.title != 'null'">{{ item.title }}</h5>
+                            <div class="images pt-2" v-if="item.file_name">
+                                <img
+                                    :src="`${publicPath + item.file_name}`"
+                                    alt=""
+                                />
+                            </div>
                             <div
-                                class="content-wall pb-2"
-                                @click="handleShowModal(item.id)"
-                            >
-                                <h5 v-if="item.title && item.title != 'null'">{{ item.title }}</h5>
-                                <div class="images pt-2" v-if="item.file_name">
-                                    <img
-                                        :src="`${publicPath + item.file_name}`"
-                                        alt=""
-                                    />
-                                </div>
-                                <div
-                                    v-if="item.content && item.content != 'null'"
-                                    v-bind:innerHTML="`${item.content}`"
-                                    :class="['content-messenger pt-2']"
-                                ></div>
-                            </div>
-                            <span class="border-dark"></span>
-                            <div class="d-flex justify-content-between pt-2">
-                                <span class="heart">
-                                    <i
-                                        v-if="!item.liked || item.liked == 0"
-                                        :class="`${'ri-heart-line'}`"
-                                        @click="handleUpadtedWall"
-                                        :data-id="item.id"
-                                    ></i>
-                                    <i
-                                        v-else
-                                        :class="`${
-                                            checkLiked(item.data_like)
-                                                ? 'ri-heart-fill'
-                                                : 'ri-heart-line'
-                                        }`"
-                                        @click="handleUpadtedWall"
-                                        :data-id="item.id"
-                                    ></i>
-                                    <small>{{
-                                        item.liked && item.liked != 0 ? item.liked : ""
-                                    }}</small>
-                                </span>
-                            </div>
+                                v-if="item.content && item.content != 'null'"
+                                v-bind:innerHTML="`${item.content}`"
+                                :class="['content-messenger pt-2']"
+                            ></div>
+                        </div>
+                        <span class="border-dark"></span>
+                        <div class="d-flex justify-content-between pt-2">
+                            <span class="heart">
+                                <i
+                                    v-if="!item.liked || item.liked == 0"
+                                    :class="`${'ri-heart-line'}`"
+                                    @click="handleUpadtedWall"
+                                    :data-id="item.id"
+                                ></i>
+                                <i
+                                    v-else
+                                    :class="`${
+                                        checkLiked(item.data_like)
+                                            ? 'ri-heart-fill'
+                                            : 'ri-heart-line'
+                                    }`"
+                                    @click="handleUpadtedWall"
+                                    :data-id="item.id"
+                                ></i>
+                                <small>{{
+                                    item.liked && item.liked != 0 ? item.liked : ""
+                                }}</small>
+                            </span>
                         </div>
                     </div>
                 </div>
-                <div
-                    :class="['wrap-model w-100', `${expand ? 'show' : ''}`]"
-                    v-if="hidden"
-                >
-                    <span class="close" @click="handleShowForm"></span>
-                    <form class="wrapper-form" action="" @submit.prevent="handleCreate">
-                        <div
-                            class="d-flex flex-row justify-content-between pt-3 pb-2 px-3"
-                        >
-                            <ul class="navbar-nav d-flex flex-row">
-                                <li class="nav-item me-2" @click="handleShowForm">
-                                    <span class="btn btn-light">
-                                        <i class="ri-close-line"></i>
-                                    </span>
-                                </li>
-                                <li class="nav-item">
-                                    <span
-                                        class="btn btn-light"
-                                        @click="handleExpandForm"
-                                    >
-                                        <i
-                                            :class="`${
-                                                expand
-                                                    ? 'ri-arrow-right-down-line'
-                                                    : 'ri-arrow-left-up-line'
-                                            }`"
-                                        ></i>
-                                    </span>
-                                </li>
-                                <!-- <li class="nav-item">
-                                    <span class="btn btn-light">
-                                        <i class="ri-subtract-line"></i>
-                                    </span>
-                                </li> -->
-                            </ul>
-                            <div class="d-flex fjustify-content-end ps-3">
-                                <button
-                                    ref="buttonSubmit"
-                                    type="submit"
-                                    class="btn btn-outline-primary"
-                                    :disabled="disabled ? true : null"
+            </div>
+            <div
+                :class="['wrap-model w-100', `${expand ? 'show' : ''}`]"
+                v-if="hidden"
+            >
+                <span class="close" @click="handleShowForm"></span>
+                <form class="wrapper-form" action="" @submit.prevent="handleCreate">
+                    <div
+                        class="d-flex flex-row justify-content-between pt-3 pb-2 px-3"
+                    >
+                        <ul class="navbar-nav d-flex flex-row">
+                            <li class="nav-item me-2" @click="handleShowForm">
+                                <span class="btn btn-light">
+                                    <i class="ri-close-line"></i>
+                                </span>
+                            </li>
+                            <li class="nav-item">
+                                <span
+                                    class="btn btn-light"
+                                    @click="handleExpandForm"
                                 >
-                                    Xuất bảng
-                                </button>
-                            </div>
-                        </div>
-                        <div class="wrap-form-group pt-1 pb-2 px-3">
-                            <div class="form-group">
-                                <input
-                                    type="text"
-                                    class="form-control"
-                                    placeholder="Chủ đề"
-                                    v-model="data.title"
-                                />
-                            </div>
-                            <div class="form-group bg-images-file d-flex">
-                                <div class="images" v-if="images">
-                                    <img :src="images" alt="" />
-                                    <span
-                                        class="btn remove-file"
-                                        @click="handleRemoveFile"
-                                        >Gỡ bỏ</span
-                                    >
-                                </div>
-                                <div
-                                    class="d-flex justify-content-center w-100 align-items-center"
-                                    v-else
-                                >
-                                    <!-- <div class="button-upload button-choice">
-                                        <div class="icon green">
-                                            <svg
-                                                width="32"
-                                                height="37"
-                                                viewBox="0 0 32 37"
-                                                xmlns="http://www.w3.org/2000/svg"
-                                            >
-                                                <path
-                                                    d="M11.894 1.183a7.716 7.716 0 0 1 8.212 0l7.788 4.835C30.435 7.595 32 10.51 32 13.665v9.67c0 3.155-1.565 6.07-4.106 7.647l-7.788 4.835a7.716 7.716 0 0 1-8.212 0l-7.788-4.835C1.566 29.404 0 26.49 0 23.335v-9.67c0-3.155 1.565-6.07 4.106-7.647l7.788-4.835z"
-                                                />
-                                            </svg>
-                                            <span class="upload"
-                                                ><i class="ri-camera-fill"></i
-                                            ></span>
-                                        </div>
-                                        <input
-                                            class="form-control"
-                                            type="file"
-                                            id="formFile"
-                                            @change="handleFileUpload"
-                                        />
-                                    </div> -->
-                                    <div class="button-upload button-choice">
-                                        <div class="icon green">
-                                            <svg
-                                                width="32"
-                                                height="37"
-                                                viewBox="0 0 32 37"
-                                                xmlns="http://www.w3.org/2000/svg"
-                                            >
-                                                <path
-                                                    d="M11.894 1.183a7.716 7.716 0 0 1 8.212 0l7.788 4.835C30.435 7.595 32 10.51 32 13.665v9.67c0 3.155-1.565 6.07-4.106 7.647l-7.788 4.835a7.716 7.716 0 0 1-8.212 0l-7.788-4.835C1.566 29.404 0 26.49 0 23.335v-9.67c0-3.155 1.565-6.07 4.106-7.647l7.788-4.835z"
-                                                />
-                                            </svg>
-                                            <span class="upload"
-                                                ><i class="ri-camera-fill"></i
-                                            ></span>
-                                        </div>
-                                        <input
-                                            class="form-control"
-                                            type="file"
-                                            id="formFile"
-                                            @change="handleFileUpload"
-                                            accept="image/*"
-                                        />
-                                    </div>
-                                    <!-- <div class="button-upload button-choice">
-                                        <div class="icon green">
-                                            <svg
-                                                width="32"
-                                                height="37"
-                                                viewBox="0 0 32 37"
-                                                xmlns="http://www.w3.org/2000/svg"
-                                            >
-                                                <path
-                                                    d="M11.894 1.183a7.716 7.716 0 0 1 8.212 0l7.788 4.835C30.435 7.595 32 10.51 32 13.665v9.67c0 3.155-1.565 6.07-4.106 7.647l-7.788 4.835a7.716 7.716 0 0 1-8.212 0l-7.788-4.835C1.566 29.404 0 26.49 0 23.335v-9.67c0-3.155 1.565-6.07 4.106-7.647l7.788-4.835z"
-                                                />
-                                            </svg>
-                                            <span class="upload"
-                                                ><i class="ri-camera-fill"></i
-                                            ></span>
-                                        </div>
-                                        <input
-                                            class="form-control"
-                                            type="file"
-                                            id="formFile"
-                                            @change="handleFileUpload"
-                                        />
-                                    </div> -->
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <textarea
-                                    class="form-control"
-                                    rows="3"
-                                    placeholder="Viết một điều gì đó..."
-                                    v-model="data.content"
-                                ></textarea>
-                            </div>
-                            <span class="error-message" v-if="checkMessenger">Vui lòng không sử dụng từ ngữ tục tĩu</span>
-                        </div>
-
-                        <div class="btn-group dropup">
+                                    <i
+                                        :class="`${
+                                            expand
+                                                ? 'ri-arrow-right-down-line'
+                                                : 'ri-arrow-left-up-line'
+                                        }`"
+                                    ></i>
+                                </span>
+                            </li>
+                            <!-- <li class="nav-item">
+                                <span class="btn btn-light">
+                                    <i class="ri-subtract-line"></i>
+                                </span>
+                            </li> -->
+                        </ul>
+                        <div class="d-flex fjustify-content-end ps-3">
                             <button
-                                type="button"
-                                class="btn btn-secondary dropdown-toggle"
-                                data-bs-toggle="dropdown"
-                                aria-expanded="false"
-                                id="dropContent"
+                                ref="buttonSubmit"
+                                type="submit"
+                                class="btn btn-outline-primary"
+                                :disabled="disabled ? true : null"
+                            >
+                                Xuất bảng
+                            </button>
+                        </div>
+                    </div>
+                    <div class="wrap-form-group pt-1 pb-2 px-3">
+                        <div class="form-group">
+                            <input
+                                type="text"
+                                class="form-control"
+                                placeholder="Chủ đề"
+                                v-model="data.title"
+                            />
+                        </div>
+                        <div class="form-group bg-images-file d-flex">
+                            <div class="images" v-if="images">
+                                <img :src="images" alt="" />
+                                <span
+                                    class="btn remove-file"
+                                    @click="handleRemoveFile"
+                                    >Gỡ bỏ</span
+                                >
+                            </div>
+                            <div
+                                class="d-flex justify-content-center w-100 align-items-center"
+                                v-else
+                            >
+                                <!-- <div class="button-upload button-choice">
+                                    <div class="icon green">
+                                        <svg
+                                            width="32"
+                                            height="37"
+                                            viewBox="0 0 32 37"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <path
+                                                d="M11.894 1.183a7.716 7.716 0 0 1 8.212 0l7.788 4.835C30.435 7.595 32 10.51 32 13.665v9.67c0 3.155-1.565 6.07-4.106 7.647l-7.788 4.835a7.716 7.716 0 0 1-8.212 0l-7.788-4.835C1.566 29.404 0 26.49 0 23.335v-9.67c0-3.155 1.565-6.07 4.106-7.647l7.788-4.835z"
+                                            />
+                                        </svg>
+                                        <span class="upload"
+                                            ><i class="ri-camera-fill"></i
+                                        ></span>
+                                    </div>
+                                    <input
+                                        class="form-control"
+                                        type="file"
+                                        id="formFile"
+                                        @change="handleFileUpload"
+                                    />
+                                </div> -->
+                                <div class="button-upload button-choice">
+                                    <div class="icon green">
+                                        <svg
+                                            width="32"
+                                            height="37"
+                                            viewBox="0 0 32 37"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <path
+                                                d="M11.894 1.183a7.716 7.716 0 0 1 8.212 0l7.788 4.835C30.435 7.595 32 10.51 32 13.665v9.67c0 3.155-1.565 6.07-4.106 7.647l-7.788 4.835a7.716 7.716 0 0 1-8.212 0l-7.788-4.835C1.566 29.404 0 26.49 0 23.335v-9.67c0-3.155 1.565-6.07 4.106-7.647l7.788-4.835z"
+                                            />
+                                        </svg>
+                                        <span class="upload"
+                                            ><i class="ri-camera-fill"></i
+                                        ></span>
+                                    </div>
+                                    <input
+                                        class="form-control"
+                                        type="file"
+                                        id="formFile"
+                                        @change="handleFileUpload"
+                                        accept="image/*"
+                                    />
+                                </div>
+                                <!-- <div class="button-upload button-choice">
+                                    <div class="icon green">
+                                        <svg
+                                            width="32"
+                                            height="37"
+                                            viewBox="0 0 32 37"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <path
+                                                d="M11.894 1.183a7.716 7.716 0 0 1 8.212 0l7.788 4.835C30.435 7.595 32 10.51 32 13.665v9.67c0 3.155-1.565 6.07-4.106 7.647l-7.788 4.835a7.716 7.716 0 0 1-8.212 0l-7.788-4.835C1.566 29.404 0 26.49 0 23.335v-9.67c0-3.155 1.565-6.07 4.106-7.647l7.788-4.835z"
+                                            />
+                                        </svg>
+                                        <span class="upload"
+                                            ><i class="ri-camera-fill"></i
+                                        ></span>
+                                    </div>
+                                    <input
+                                        class="form-control"
+                                        type="file"
+                                        id="formFile"
+                                        @change="handleFileUpload"
+                                    />
+                                </div> -->
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <textarea
+                                class="form-control"
+                                rows="3"
+                                placeholder="Viết một điều gì đó..."
+                                v-model="data.content"
+                            ></textarea>
+                        </div>
+                        <span class="error-message" v-if="checkMessenger">Vui lòng không sử dụng từ ngữ tục tĩu</span>
+                    </div>
+
+                    <div class="btn-group dropup">
+                        <button
+                            type="button"
+                            class="btn btn-secondary dropdown-toggle"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                            id="dropContent"
+                        >
+                            <span
+                                class="color"
+                                v-bind:style="`background-color:rgb(255,255,255)`"
+                            ></span>
+                            <span class="name">Màu trắng</span>
+                        </button>
+                        <ul class="dropdown-menu" id="dropColor">
+                            <li
+                                v-for="(item, index) in listColor"
+                                :key="index"
+                                class="dropdown-item"
                             >
                                 <span
                                     class="color"
-                                    v-bind:style="`background-color:rgb(255,255,255)`"
+                                    v-bind:style="`background-color:rgb(${item.color})`"
+                                    :data-color="`${item.color}`"
+                                    :data-name="`${item.name}`"
                                 ></span>
-                                <span class="name">Màu trắng</span>
-                            </button>
-                            <ul class="dropdown-menu" id="dropColor">
-                                <li
-                                    v-for="(item, index) in listColor"
-                                    :key="index"
-                                    class="dropdown-item"
-                                >
-                                    <span
-                                        class="color"
-                                        v-bind:style="`background-color:rgb(${item.color})`"
-                                        :data-color="`${item.color}`"
-                                        :data-name="`${item.name}`"
-                                    ></span>
-                                    <p>{{ item.name }}</p>
-                                </li>
-                            </ul>
-                        </div>
-                    </form>
-                </div>
-                <div class="addPadlet" @click="handleShowForm">
-                    <span class=""><i class="ri-add-line"></i></span>
-                </div>
+                                <p>{{ item.name }}</p>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+            <div class="addPadlet" @click="handleShowForm">
+                <span class=""><i class="ri-add-line"></i></span>
             </div>
         </div>
-    </perfect-scrollbar>
+    </div>
     <button
         type="button"
         class="btn btn-primary showModal"
