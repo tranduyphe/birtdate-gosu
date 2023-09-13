@@ -47,6 +47,7 @@ export default {
         AOS.init({
             duration: 1000, // Thời gian hoàn thành hiệu ứng (milliseconds)
             easing: 'ease', // Thuật toán điều chỉnh (có thể sử dụng các giá trị khác nhau)
+            
         });
     },
 };
