@@ -231,7 +231,7 @@ export default {
                                             if (reward[i].item_id == "1") {
                                                 console.log("message: ", message);
                                                 console.log("reward[i].record: ", reward[i].record);
-                                                message = message + " Lông Phượng Hoàng +" + reward[i].record;
+                                                message = message + reward[i].record + " Lông Phượng Hoàng";
                                                 console.log("message: ", message);
                                             }
                                             if (reward[i].item_id == "2") {
@@ -239,12 +239,23 @@ export default {
                                             }
                                         }
                                         // alert(message);
+                                        // self.$swal.fire({
+                                        //     position: "center",
+                                        //     icon: "success",
+                                        //     title: message,
+                                        //     showConfirmButton: false,
+                                        //     timer: 1500
+                                        // });
                                         self.$swal.fire({
                                             position: "center",
-                                            icon: "success",
-                                            title: message,
+                                            // icon: "success",
+                                            text: message,
+                                            title:"Bạn đã nhận được",
                                             showConfirmButton: false,
-                                            timer: 1500
+                                            timer: 2500,
+                                            customClass: 'swal-wide',
+                                            imageUrl: '/images/sinhnhat11nam/img_main/icon-longvu.png',
+                                            imageHeight: 80,
                                         });
                                     }
                                     self.flag = false;
