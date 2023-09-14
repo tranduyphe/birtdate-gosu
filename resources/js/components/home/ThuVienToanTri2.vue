@@ -1,6 +1,6 @@
 <template>
     <div class="custom-cusor" >
-      <img :src="imgDuaPhep" class="img-dua" id="img-dua" style="opacity: 0;">
+      <img :src="imgDuaPhep" class="img-dua" id="img-dua" width="100" style="opacity: 0;">
     </div>
     <div class="game-thuvientoantri">
         <button class="btn-start" @click="reloadFlip()">Làm mới</button>
@@ -325,6 +325,53 @@ export default {
             console.log("signOut");
             await this.logout();
         },
+
+        cursorDua() {
+            const cursorDua = document.getElementById('img-dua'),
+                mainLDFirst = document.getElementsByClassName("game-thuvientoantri"),
+
+                withClassHover = document.getElementsByClassName("cursor-hover"),
+                cPointer = document.getElementsByClassName("c-pointer"),
+
+                withInMainKimCuong = [
+                ...mainLDFirst,
+                // ...mainKimCuong, 
+                // ...bgKimCuong, 
+                // ...imgBgKimCuong, 
+                // ...listKimCuong, 
+                // ...itKimCuong,
+                // ...imgAni,
+            ];
+            
+            document.addEventListener("mousemove", onMouseMove);
+            document.addEventListener("mousedown", PressBua);
+            document.addEventListener("mouseup", exitPressBua);
+
+            withInMainKimCuong.forEach((element) => {
+            element.addEventListener("mouseover", showBua);
+            element.addEventListener("mouseout", hideBua);
+
+            
+            })
+
+            function showBua() {
+                cursorDua.style.opacity = 1;
+            }
+            function hideBua() {
+                cursorDua.style.opacity = 0;
+            }
+            function PressBua() {
+                cursorDua.style.transform  = "rotate(-30deg)";
+            }
+            function exitPressBua() {
+                cursorDua.style.transform  = "rotate(0deg)";
+            }
+
+            function onMouseMove(e) {
+                cursorDua.style.left = e.clientX-(40)+'px'
+                cursorDua.style.top = e.clientY-(20)+'px'
+            }
+        },
     },
     // code test keyboard
     watch: {
@@ -340,11 +387,16 @@ export default {
         }
     },
     mounted() {
+        this.cursorDua();
     },
 };
 </script>
 
 <style>
+
+.game-thuvientoantri{
+    cursor: none;
+}
 
 .game-thuvientoantri .card {
     perspective: 1000px;

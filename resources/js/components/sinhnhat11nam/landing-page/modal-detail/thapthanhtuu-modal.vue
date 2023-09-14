@@ -741,7 +741,7 @@ export default {
                 }
             })
             .finally();
-        }
+        },
     },
     mounted(){
         setTimeout(() => {
