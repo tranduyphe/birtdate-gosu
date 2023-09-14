@@ -13,7 +13,7 @@
             </div>
             <div class="div-img thap-thanh-tuu" data-aos="fade-down">
                 <div class="group-img">
-                    <button class="" data-bs-toggle="modal" data-bs-target="#ThapThanhTuuModal" @click="clickedThanhThanhTuu = true">
+                    <button class="" data-bs-toggle="modal" data-bs-target="#ThapThanhTuuModal" @click="clickThanhThanhTuu">
                         <img :src="thapthanhtuuimgUrl" alt="Tháp Thành Tựu" width="485" @click="getDataPhapThanhTuu">
                     </button>
                     <div class="bubble-content">
@@ -55,7 +55,7 @@
                 </div>
             </div>
             <div class="div-img items thongbao" data-aos="fade-left">
-                <button class="" data-bs-toggle="modal" data-bs-target="#ThapThanhTuuModal" v-if="completedQuestCount > 0">
+                <button class="" data-bs-toggle="modal" data-bs-target="#ThapThanhTuuModal" v-if="completedQuestCount > 0" @click="openThuThach = 1">
                     <img :src="thongbaoimgUrl" alt="Thông báo" width="" @click="getDataPhapThanhTuu">
                     <span class="font-size-16 text-white">{{ completedQuestCount }}</span>
                 </button>
@@ -136,7 +136,7 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-body">
-                        <button type="button" ref="closeModal" class="btn close-button" data-bs-dismiss="modal" aria-label="Close"><img :src="closeimgUrl" alt=""></button>
+                        <button @click="openThuThach = 0" type="button" ref="closeModal" class="btn close-button" data-bs-dismiss="modal" aria-label="Close"><img :src="closeimgUrl" alt=""></button>
                         <ModalThapThanhTuu 
                         :nhiemvu="nhiemvu" @updateNhiemvu="updateNhiemvu" 
                         :logActivity="logActivity" @updateLogActivity="updateLogActivity" 
@@ -146,6 +146,7 @@
                         :user_code="user_code"
                         :readInstructions="readInstructions"
                         :muitenimgUrl="muitenimgUrl"
+                        :openThuThach="openThuThach"
                         ></ModalThapThanhTuu>
                     </div>
                 </div>
@@ -207,6 +208,7 @@ export default {
             topFeathers: [],
             isDivVisible: true,
             clickedThanhThanhTuu: false,
+            openThuThach: 0,
         };
     },
     created() {
@@ -275,8 +277,8 @@ export default {
         },
         getDataPhapThanhTuu(){
             this.getQuest();
-        this.getLogActivity();
-        this.getTopFeathers();
+            this.getLogActivity();
+            this.getTopFeathers();
         },
         getQuest() {
             let self = this;
@@ -418,6 +420,11 @@ export default {
         toggleDivVisibility() {
             this.isDivVisible = false;
         },
+
+        clickThanhThanhTuu(){
+            this.clickedThanhThanhTuu = true;
+            this.openThuThach = 1;
+        }
         
     },
 };

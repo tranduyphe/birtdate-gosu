@@ -11,22 +11,22 @@
         <div class="tab-thanhtuu">
             <div class="nav flex-column nav-tabs border-0" id="v-tabs-tab" role="tablist" aria-orientation="vertical">
                 <div class="nav-item mb-3">
-                    <a class="nav-link" :class="{ active: readInstructions != 0}" @click="doneInstructions" id="v-tabs-thu-thach-tab" data-bs-toggle="tab" href="#v-tabs-thu-thach"
+                    <a class="nav-link" :class="{ active: readInstructions != 0 && openThuThach == 1}" @click="doneInstructions" id="v-tabs-thu-thach-tab" data-bs-toggle="tab" href="#v-tabs-thu-thach"
                         role="tab" aria-controls="v-tabs-thu-thach" aria-selected="true">Bảng<br>thử thách</a>
                 </div>
 
                 <div class="nav-item mb-3">
-                    <a class="nav-link" id="v-tabs-ky-tich-tab" data-bs-toggle="tab" href="#v-tabs-ky-tich" role="tab"
+                    <a class="nav-link" :class="{ active: openThuThach == 0}" id="v-tabs-ky-tich-tab" data-bs-toggle="tab" href="#v-tabs-ky-tich" role="tab"
                         aria-controls="v-tabs-ky-tich" aria-selected="false">Chậu<br>kỳ tích</a>
                 </div>
 
                 <div class="nav-item mb-3">
-                    <a class="nav-link" id="v-tabs-lich-tab" data-bs-toggle="tab" href="#v-tabs-lich" role="tab"
+                    <a class="nav-link" :class="{ active: openThuThach == 0}" id="v-tabs-lich-tab" data-bs-toggle="tab" href="#v-tabs-lich" role="tab"
                         aria-controls="v-tabs-lich" aria-selected="false">Lịch<br>tưởng ký</a>
                 </div>
 
                 <div class="nav-item mb-3">
-                    <a class="nav-link" :class="{ active: readInstructions == 0 }" id="v-tabs-the-le-tab" data-bs-toggle="tab" href="#v-tabs-the-le" role="tab"
+                    <a class="nav-link" :class="{ active: readInstructions == 0 || openThuThach == 0}" id="v-tabs-the-le-tab" data-bs-toggle="tab" href="#v-tabs-the-le" role="tab"
                         aria-controls="v-tabs-the-le" aria-selected="false">Thể lệ</a>
                 </div>
 
@@ -35,7 +35,7 @@
         <div class="row">
             <div class="col-12 pr-0">
                 <div class="tab-content" id="v-tabs-tabContent">
-                    <div class="tab-pane fade" :class="{ active: readInstructions != 0,show: readInstructions != 0}" id="v-tabs-thu-thach" role="tabpanel"
+                    <div class="tab-pane fade" :class="{ active: readInstructions != 0 && openThuThach == 1,show: readInstructions != 0 && openThuThach == 1}" id="v-tabs-thu-thach" role="tabpanel"
                         aria-labelledby="v-tabs-thu-thach-tab">
                         <div class="title text-center">
                             <h2 class="title-modal">Bảng thử thách</h2>
@@ -77,7 +77,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="v-tabs-ky-tich" role="tabpanel" aria-labelledby="v-tabs-ky-tich-tab">
+                    <div class="tab-pane fade" :class="{ active: openThuThach == 0}" id="v-tabs-ky-tich" role="tabpanel" aria-labelledby="v-tabs-ky-tich-tab">
                         <div class="title text-center">
                             <h2 class="title-modal">Chậu kỳ tích</h2>
                             <img :src="lineBreak" class="mb-3">
@@ -110,7 +110,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade lich-tuong-ky" id="v-tabs-lich" role="tabpanel"
+                    <div class="tab-pane fade lich-tuong-ky" :class="{ active: openThuThach == 0}" id="v-tabs-lich" role="tabpanel"
                         aria-labelledby="v-tabs-lich-tab">
                         <div class="title text-center">
                             <h2 class="title-modal">Lịch tưởng ký</h2>
@@ -132,7 +132,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade" :class="{ active: readInstructions == 0,show: readInstructions == 0 }" id="v-tabs-the-le" role="tabpanel" aria-labelledby="v-tabs-the-le-tab">
+                    <div class="tab-pane fade" :class="{ active: readInstructions == 0 || openThuThach == 0,show: readInstructions == 0 || openThuThach == 0}" id="v-tabs-the-le" role="tabpanel" aria-labelledby="v-tabs-the-le-tab">
                         <div class="title text-center">
                             <h2 class="title-modal">Thể lệ</h2>
                             <img :src="lineBreak" class="mb-3">
@@ -146,8 +146,7 @@
                             </p>
                             <ul type="disc" style="margin: 0pt; padding-left: 0pt;">
                                 <li style="margin-top: 14pt; margin-left: 27.6pt; margin-bottom: 14pt; text-align: justify; line-height: normal; padding-left: 8.4pt; font-family: serif; font-size: 11pt;">
-                                    <span style="font-family: Cambria; font-size: 14pt;">To&agrave;n thể nh&acirc;n sự&nbsp;</span><strong><span style="font-family: Cambria; font-size: 14pt; color: #e67e22;">C&ocirc;ng ty GOSU:&nbsp;</span></strong>
-                                    <span style="font-family: Cambria; font-size: 14pt;">ch&iacute;nh thức + thử việc.</span>
+                                    <span style="font-family: Cambria; font-size: 14pt;">Toàn thể nhân sự chính thức và thử việc của </span><strong><span style="font-family: Cambria; font-size: 14pt; color: #e67e22;">C&ocirc;ng ty GOSU&nbsp;</span></strong>
                                 </li>
                             </ul>
                             <p style="margin-top: 14pt; margin-bottom: 14pt; text-align: justify; line-height: normal; font-size: 14pt;">
@@ -188,18 +187,18 @@
                                 <span style="font-family: Cambria;">&nbsp;thường hay gh&eacute; thăm nơi n&agrave;y v&agrave;o mỗi ng&agrave;y để điểm danh. Tại đ&acirc;y bao gồm c&aacute;c hoạt động m&agrave; Ph&ugrave; thủy tập sự cần lưu t&acirc;m như:</span>
                             </p>
                             <p style="margin-top: 14pt; margin-left: 36pt; margin-bottom: 0pt; text-indent: -18pt; text-align: justify; line-height: normal; font-size: 14pt;">
-                                <span style="font-family: Cambria;">-</span><span style="width: 14.02pt; font: 7pt 'Times New Roman'; display: inline-block;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                <span style="font-family: Cambria;">-</span><span style="width: 14.02pt; font: 7pt 'Cambria'; display: inline-block;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
                                 <strong><span style="font-family: Cambria;">Bảng Thử Th&aacute;ch:</span></strong>
                                 <span style="font-family: Cambria;">&nbsp;Bảng ghi ch&uacute; liệt k&ecirc; c&aacute;c hoạt động, lớp học m&agrave; Ph&ugrave; thủy tập sự cần l&agrave;m mỗi ng&agrave;y để thu thập&nbsp;</span>
                                 <strong><span style="font-family: Cambria;">Đ&aacute; Mặt Trăng</span></strong><span style="font-family: Cambria;">.&nbsp;</span>
                             </p>
                             <p style="margin-top: 0pt; margin-left: 36pt; margin-bottom: 0pt; text-indent: -18pt; text-align: justify; line-height: normal; font-size: 14pt;">
-                                <span style="font-family: Cambria;">-</span><span style="width: 14.02pt; font: 7pt 'Times New Roman'; display: inline-block;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                <span style="font-family: Cambria;">-</span><span style="width: 14.02pt; font: 7pt 'Cambria'; display: inline-block;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
                                 <strong><span style="font-family: Cambria;">Chậu Kỳ T&iacute;ch:&nbsp;</span></strong><span style="font-family: Cambria;">Chiếc vạc</span><strong><span style="font-family: Cambria;">&nbsp;</span></strong>
                                 <span style="font-family: Cambria;">ti&ecirc;n đo&aacute;n bảng xếp hạng nỗ lực của c&aacute;c Ph&ugrave; thủy tập sự.</span>
                             </p>
                             <p style="margin-top: 0pt; margin-left: 36pt; margin-bottom: 0pt; text-indent: -18pt; text-align: justify; line-height: normal; font-size: 14pt;">
-                                <span style="font-family: Cambria;">-</span><span style="width: 14.02pt; font: 7pt 'Times New Roman'; display: inline-block;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                <span style="font-family: Cambria;">-</span><span style="width: 14.02pt; font: 7pt 'Cambria'; display: inline-block;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
                                 <strong><span style="font-family: Cambria;">Lịch Tưởng K&yacute;:&nbsp;</span></strong><span style="font-family: Cambria;">Tấm lịch ghi ch&uacute; lại lịch sử hoạt động của Ph&ugrave; thủy tập sự.</span>
                             </p>
                             <p style="margin-top: 0pt; margin-left: 36pt; margin-bottom: 0pt; text-align: justify; line-height: normal; font-size: 14pt;"><span style="font-family: Cambria;">&nbsp;</span></p>
@@ -213,26 +212,26 @@
                             <p style="margin-top: 0pt; margin-bottom: 0pt; text-align: justify; line-height: normal; font-size: 14pt;"><span style="font-family: Cambria;">Luật chơi như sau:</span></p>
                             <p style="margin-top: 0pt; margin-bottom: 0pt; text-align: justify; line-height: normal; font-size: 14pt;">
                                 <strong><span style="font-family: Cambria;">B1:</span></strong>
-                                <span style="font-family: Cambria;">&nbsp;bảng puzzle gồm 45 &ocirc; &uacute;p mặt được sắp xếp vị tr&iacute; ngẫu nhi&ecirc;n tr&ecirc;n s&agrave;n đấu, b&ecirc;n dưới s&agrave;n đấu c&oacute; 1 thanh chờ gồm 4 &ocirc; chứa.</span>
+                                <span style="font-family: Cambria;">&nbsp;Bảng puzzle gồm 45 &ocirc; &uacute;p mặt được sắp xếp vị tr&iacute; ngẫu nhi&ecirc;n tr&ecirc;n s&agrave;n đấu, b&ecirc;n dưới s&agrave;n đấu c&oacute; 1 thanh chờ gồm 4 &ocirc; chứa.</span>
                             </p>
                             <p style="margin-top: 0pt; margin-bottom: 0pt; text-align: justify; line-height: normal; font-size: 14pt;"><span style="font-family: Cambria;">&nbsp;</span></p>
                             <p style="margin-top: 0pt; margin-bottom: 0pt; text-align: justify; line-height: normal; font-size: 14pt;">
                                 <strong><span style="font-family: Cambria;">B2:</span></strong><span style="font-family: Cambria;">&nbsp;Mỗi một lượt, Ph&ugrave; thủy tập sự chọn 3 &ocirc; ngẫu nhi&ecirc;n:</span>
                             </p>
                             <p style="margin-top: 0pt; margin-left: 36pt; margin-bottom: 0pt; text-indent: -18pt; text-align: justify; line-height: normal; font-size: 14pt;">
-                                <span style="font-family: Wingdings;"></span><span style="width: 5.19pt; font: 7pt 'Times New Roman'; display: inline-block;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                <span style="font-family: Wingdings;"></span><span style="width: 5.19pt; font: 7pt 'Cambria'; display: inline-block;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
                                 <span style="font-family: Cambria;">Mở được 3 &ocirc; chứa b&oacute;ng lửa c&ugrave;ng loại -&gt; 3 &ocirc; chứa b&oacute;ng lửa sẽ biến mất.</span>
                             </p>
                             <p style="margin-top: 0pt; margin-left: 36pt; margin-bottom: 0pt; text-indent: -18pt; text-align: justify; line-height: normal; font-size: 14pt;">
-                                <span style="font-family: Wingdings;"></span><span style="width: 5.19pt; font: 7pt 'Times New Roman'; display: inline-block;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                <span style="font-family: Wingdings;"></span><span style="width: 5.19pt; font: 7pt 'Cambria'; display: inline-block;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
                                 <span style="font-family: Cambria;">Kh&ocirc;ng mở được 3 &ocirc; chứa b&oacute;ng lửa c&ugrave;ng loại:</span>
                             </p>
                             <p style="margin-top: 0pt; margin-bottom: 0pt; text-align: justify; line-height: normal; font-size: 14pt;">
-                                <span style="font-family: Cambria;">&nbsp;&nbsp;&nbsp;&nbsp;</span><em><span style="font-family: Cambria;">**TH 3 &ocirc; kh&aacute;c nhau: b&oacute;ng lửa của &ocirc; mở cuối c&ugrave;ng sẽ rớt xuống thanh chờ.</span></em>
+                                <span style="font-family: Cambria;">&nbsp;&nbsp;&nbsp;&nbsp;</span><em><span style="font-family: Cambria;">*TH 3 &ocirc; kh&aacute;c nhau: b&oacute;ng lửa của &ocirc; mở cuối c&ugrave;ng sẽ rớt xuống thanh chờ.</span></em>
                             </p>
                             <p style="margin-top: 0pt; margin-bottom: 0pt; text-align: justify; line-height: normal; font-size: 14pt;">
                                 <em><span style="font-family: Cambria;">&nbsp;&nbsp;&nbsp;&nbsp;</span></em>
-                                <em><span style="font-family: Cambria;">**TH 2 &ocirc; giống nhau, 1 &ocirc; kh&aacute;c: b&oacute;ng lửa của &ocirc; kh&aacute;c 2 &ocirc; c&ograve;n lại sẽ rớt xuống thanh chờ.</span></em>
+                                <em><span style="font-family: Cambria;">*TH 2 &ocirc; giống nhau, 1 &ocirc; kh&aacute;c: b&oacute;ng lửa của &ocirc; kh&aacute;c 2 &ocirc; c&ograve;n lại sẽ rớt xuống thanh chờ.</span></em>
                             </p>
                             <p style="margin-top: 0pt; margin-bottom: 0pt; text-align: justify; line-height: normal; font-size: 14pt;">
                                 <em><span style="font-family: Cambria;">&nbsp;</span></em>
@@ -241,25 +240,25 @@
                                 <strong><span style="font-family: Cambria;">B3:</span></strong><span style="font-family: Cambria;">&nbsp;Ph&ugrave; thủy tập sự chọn 3 &ocirc; ngẫu nhi&ecirc;n tiếp theo:</span>
                             </p>
                             <p style="margin-top: 0pt; margin-left: 36pt; margin-bottom: 0pt; text-indent: -18pt; text-align: justify; line-height: normal; font-size: 14pt;">
-                                <span style="font-family: Wingdings;"></span><span style="width: 5.19pt; font: 7pt 'Times New Roman'; display: inline-block;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                <span style="font-family: Wingdings;"></span><span style="width: 5.19pt; font: 7pt 'Cambria'; display: inline-block;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
                                 <span style="font-family: Cambria;">Mở được 3 &ocirc; chứa b&oacute;ng lửa c&ugrave;ng loại&nbsp;</span>
                                 <em><span style="font-family: Cambria; color: #ff0000;">(hoặc trong số c&aacute;c &ocirc; đ&atilde; mở tới giờ xuất hiện 3 b&oacute;ng lửa c&ugrave;ng m&agrave;u)&nbsp;</span></em>
                                 <span style="font-family: Cambria;">-&gt; 3 &ocirc; chứa b&oacute;ng lửa sẽ biến mất.</span>
                             </p>
                             <p style="margin-top: 0pt; margin-left: 36pt; margin-bottom: 0pt; text-indent: -18pt; text-align: justify; line-height: normal; font-size: 14pt;">
-                                <span style="font-family: Wingdings;"></span><span style="width: 5.19pt; font: 7pt 'Times New Roman'; display: inline-block;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                <span style="font-family: Wingdings;"></span><span style="width: 5.19pt; font: 7pt 'Cambria'; display: inline-block;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
                                 <span style="font-family: Cambria;">Cứ xuất hiện 3 b&oacute;ng lửa c&ugrave;ng loại tr&ecirc;n bảng puzzle v&agrave; thanh chờ th&igrave; 3 b&oacute;ng đ&oacute; sẽ biến mất.</span>
                             </p>
                             <p style="margin-top: 0pt; margin-left: 36pt; margin-bottom: 0pt; text-indent: -18pt; text-align: justify; line-height: normal; font-size: 14pt;">
-                                <span style="font-family: Wingdings;"></span><span style="width: 5.19pt; font: 7pt 'Times New Roman'; display: inline-block;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                <span style="font-family: Wingdings;"></span><span style="width: 5.19pt; font: 7pt 'Cambria'; display: inline-block;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
                                 <span style="font-family: Cambria;">Kh&ocirc;ng mở được 3 &ocirc; chứa b&oacute;ng lửa c&ugrave;ng loại:</span>
                             </p>
                             <p style="margin-top: 0pt; margin-bottom: 0pt; text-align: justify; line-height: normal; font-size: 14pt;">
-                                <span style="font-family: Cambria;">&nbsp;&nbsp;&nbsp;&nbsp;</span><em><span style="font-family: Cambria;">**TH 3 &ocirc; kh&aacute;c nhau: b&oacute;ng lửa của &ocirc; mở cuối c&ugrave;ng sẽ rớt xuống thanh chờ.</span></em>
+                                <span style="font-family: Cambria;">&nbsp;&nbsp;&nbsp;&nbsp;</span><em><span style="font-family: Cambria;">*TH 3 &ocirc; kh&aacute;c nhau: b&oacute;ng lửa của &ocirc; mở cuối c&ugrave;ng sẽ rớt xuống thanh chờ.</span></em>
                             </p>
                             <p style="margin-top: 0pt; margin-bottom: 0pt; text-align: justify; line-height: normal; font-size: 14pt;">
                                 <em><span style="font-family: Cambria;">&nbsp;&nbsp;&nbsp;&nbsp;</span></em>
-                                <em><span style="font-family: Cambria;">**TH 2 &ocirc; giống nhau, 1 &ocirc; kh&aacute;c: b&oacute;ng lửa của &ocirc; kh&aacute;c 2 &ocirc; c&ograve;n lại sẽ rớt xuống thanh chờ.</span></em>
+                                <em><span style="font-family: Cambria;">*TH 2 &ocirc; giống nhau, 1 &ocirc; kh&aacute;c: b&oacute;ng lửa của &ocirc; kh&aacute;c 2 &ocirc; c&ograve;n lại sẽ rớt xuống thanh chờ.</span></em>
                             </p>
                             <p style="margin-top: 0pt; margin-bottom: 0pt; text-align: justify; line-height: normal; font-size: 14pt;"><span style="font-family: Cambria;">&nbsp;</span></p>
                             <p style="margin-top: 0pt; margin-bottom: 0pt; text-align: justify; line-height: normal; font-size: 14pt;">
@@ -291,27 +290,27 @@
                             <p style="margin-top: 14pt; margin-bottom: 14pt; text-align: justify; line-height: normal; font-size: 14pt;"><span style="font-family: Cambria;">Tr&ograve; chơi: T&iacute;ch Kỳ.</span></p>
                             <p style="margin-top: 14pt; margin-bottom: 14pt; text-align: justify; line-height: normal; font-size: 14pt;"><span style="font-family: Cambria;">Mệnh gi&aacute;: 5 Đ&aacute; Mặt Trăng.</span></p>
                             <p style="margin-top: 14pt; margin-bottom: 14pt; text-align: justify; line-height: normal; font-size: 14pt;">
-                                <strong><span style="font-family: 'Times New Roman'; color: #2980b9;">C&aacute;ch thức tham gia</span></strong><strong><span style="font-family: 'Times New Roman'; color: #2980b9;">&nbsp;</span></strong>
+                                <strong><span style="font-family: 'Cambria'; color: #2980b9;">C&aacute;ch thức tham gia</span></strong><strong><span style="font-family: 'Cambria'; color: #2980b9;">&nbsp;</span></strong>
                             </p>
                             <p style="margin-top: 14pt; margin-left: 36pt; margin-bottom: 0pt; text-indent: -18pt; text-align: justify; line-height: normal; font-size: 14pt;">
-                                <span style="font-family: Cambria;">-</span><span style="width: 14.02pt; font: 7pt 'Times New Roman'; display: inline-block;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                                <span style="font-family: 'Times New Roman';">1 Bảng &ocirc;&nbsp;</span><span style="font-family: Cambria;">&uacute;p mặt được sắp xếp vị tr&iacute; ngẫu nhi&ecirc;n</span>
-                                <span style="font-family: 'Times New Roman';">&nbsp;sẽ hiện ra.&nbsp;</span>
+                                <span style="font-family: Cambria;">-</span><span style="width: 14.02pt; font: 7pt 'Cambria'; display: inline-block;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                <span style="font-family: 'Cambria';">1 Bảng &ocirc;&nbsp;</span><span style="font-family: Cambria;">&uacute;p mặt được sắp xếp vị tr&iacute; ngẫu nhi&ecirc;n</span>
+                                <span style="font-family: 'Cambria';">&nbsp;sẽ hiện ra.&nbsp;</span>
                             </p>
                             <p style="margin-top: 0pt; margin-left: 36pt; margin-bottom: 0pt; text-indent: -18pt; text-align: justify; line-height: normal; font-size: 14pt;">
-                                <span style="font-family: Cambria;">-</span><span style="width: 14.02pt; font: 7pt 'Times New Roman'; display: inline-block;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                                <span style="font-family: 'Times New Roman';">Ph&ugrave; thủy chọn 1 &ocirc; bất kỳ.</span>
+                                <span style="font-family: Cambria;">-</span><span style="width: 14.02pt; font: 7pt 'Cambria'; display: inline-block;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                <span style="font-family: 'Cambria';">Ph&ugrave; thủy chọn 1 &ocirc; bất kỳ.</span>
                             </p>
                             <p style="margin-top: 0pt; margin-left: 36pt; margin-bottom: 0pt; text-indent: -18pt; text-align: justify; line-height: normal; font-size: 14pt;">
-                                <span style="font-family: Cambria;">-</span><span style="width: 14.02pt; font: 7pt 'Times New Roman'; display: inline-block;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                                <span style="font-family: 'Times New Roman';">&Ocirc; được chọn sẽ mở ra v&agrave; hiển thị vật phẩm/giải thưởng m&agrave; Ph&ugrave; thủy tập sự nhận được.</span>
+                                <span style="font-family: Cambria;">-</span><span style="width: 14.02pt; font: 7pt 'Cambria'; display: inline-block;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                <span style="font-family: 'Cambria';">&Ocirc; được chọn sẽ mở ra v&agrave; hiển thị vật phẩm/giải thưởng m&agrave; Ph&ugrave; thủy tập sự nhận được.</span>
                             </p>
                             <p style="margin-top: 0pt; margin-left: 36pt; margin-bottom: 0pt; text-indent: -18pt; text-align: justify; line-height: normal; font-size: 14pt;">
-                                <span style="font-family: Cambria;">-</span><span style="width: 14.02pt; font: 7pt 'Times New Roman'; display: inline-block;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                                <span style="font-family: 'Times New Roman';">
+                                <span style="font-family: Cambria;">-</span><span style="width: 14.02pt; font: 7pt 'Cambria'; display: inline-block;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                <span style="font-family: 'Cambria';">
                                     Phần thưởng c&oacute; thể bao gồm: L&ocirc;ng Phượng Ho&agrave;ng, Đ&aacute; Mặt Trăng, c&aacute;c vật phẩm qu&agrave; tặng đặc biệt từ Ban Gi&aacute;m Hiệu Học viện ph&aacute;p thuật&nbsp;
                                 </span>
-                                <strong><span style="font-family: 'Times New Roman'; color: #ed7d31;">GOSU</span></strong><span style="font-family: 'Times New Roman';">&nbsp;</span>
+                                <strong><span style="font-family: 'Cambria'; color: #ed7d31;">GOSU</span></strong><span style="font-family: 'Cambria';">&nbsp;</span>
                             </p>
                             <ol start="4" type="1" style="margin: 0pt; padding-left: 0pt; padding-top: 14pt;">
                                 <li style="margin-left: 34.54pt; margin-bottom: 14pt; text-align: justify; line-height: normal; padding-left: 1.46pt; font-family: Cambria; font-size: 14pt; font-weight: bold;">
@@ -346,7 +345,7 @@
                                                 <strong><span style="font-family: Cambria; color: #ffffff;">Số lượng</span></strong>
                                             </p>
                                         </td>
-                                        <td style="width: 103.05pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle; background-color: #2e75b5;">
+                                        <td style="width: 110.05pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle; background-color: #2e75b5;">
                                             <p style="margin-top: 0pt; margin-bottom: 0pt; text-align: center; font-size: 11pt;">
                                                 <strong><span style="font-family: Cambria; color: #ffffff;">T&ecirc;n giải</span></strong>
                                             </p>
@@ -366,7 +365,7 @@
                                         <td style="border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
                                             <p style="margin-top: 0pt; margin-bottom: 0pt; text-align: center; font-size: 11pt;"><span style="font-family: Cambria;">1</span></p>
                                         </td>
-                                        <td style="width: 103.05pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
+                                        <td style="width: 110.05pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
                                             <p style="margin-top: 0pt; margin-bottom: 0pt; text-align: justify; font-size: 11pt;"><span style="font-family: Cambria;">Ph&ugrave; Thủy Huyền Thoại</span></p>
                                         </td>
                                         <td style="width: 185.25pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
@@ -380,7 +379,7 @@
                                         <td style="border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
                                             <p style="margin-top: 0pt; margin-bottom: 0pt; text-align: center; font-size: 11pt;"><span style="font-family: Cambria;">1</span></p>
                                         </td>
-                                        <td style="width: 103.05pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
+                                        <td style="width: 110.05pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
                                             <p style="margin-top: 0pt; margin-bottom: 0pt; text-align: justify; font-size: 11pt;"><span style="font-family: Cambria;">Ph&ugrave; Thủy Quyền Năng</span></p>
                                         </td>
                                         <td style="width: 185.25pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
@@ -394,7 +393,7 @@
                                         <td style="border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
                                             <p style="margin-top: 0pt; margin-bottom: 0pt; text-align: center; font-size: 11pt;"><span style="font-family: Cambria;">1</span></p>
                                         </td>
-                                        <td style="width: 103.05pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
+                                        <td style="width: 110.05pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
                                             <p style="margin-top: 0pt; margin-bottom: 0pt; text-align: justify; font-size: 11pt;"><span style="font-family: Cambria;">Ph&ugrave; Thủy Đo&agrave;n Trưởng</span></p>
                                         </td>
                                         <td style="width: 185.25pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
@@ -408,7 +407,7 @@
                                         <td style="border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
                                             <p style="margin-top: 0pt; margin-bottom: 0pt; text-align: center; font-size: 11pt;"><span style="font-family: Cambria;">1</span></p>
                                         </td>
-                                        <td style="width: 103.05pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
+                                        <td style="width: 110.05pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
                                             <p style="margin-top: 0pt; margin-bottom: 0pt; text-align: justify; font-size: 11pt;"><span style="font-family: Cambria;">Ph&ugrave; Thủy Bản Lĩnh</span></p>
                                         </td>
                                         <td style="width: 185.25pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
@@ -424,7 +423,7 @@
                                         <td style="border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
                                             <p style="margin-top: 0pt; margin-bottom: 0pt; text-align: center; font-size: 11pt;"><span style="font-family: Cambria;">1</span></p>
                                         </td>
-                                        <td style="width: 103.05pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
+                                        <td style="width: 110.05pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
                                             <p style="margin-top: 0pt; margin-bottom: 0pt; text-align: justify; font-size: 11pt;"><span style="font-family: Cambria;">Ph&ugrave; Thủy Chăm Chỉ</span></p>
                                         </td>
                                         <td style="width: 185.25pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
@@ -435,7 +434,7 @@
                                         <td style="border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
                                             <p style="margin-top: 0pt; margin-bottom: 0pt; text-align: center; font-size: 11pt;"><span style="font-family: Cambria;">3</span></p>
                                         </td>
-                                        <td style="width: 103.05pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
+                                        <td style="width: 110.05pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
                                             <p style="margin-top: 0pt; margin-bottom: 0pt; text-align: justify; font-size: 11pt;"><span style="font-family: Cambria;">Ph&ugrave; Thủy Thiện Chiến</span></p>
                                         </td>
                                         <td style="width: 185.25pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
@@ -446,7 +445,7 @@
                                         <td style="border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
                                             <p style="margin-top: 0pt; margin-bottom: 0pt; text-align: center; font-size: 11pt;"><span style="font-family: Cambria;">3</span></p>
                                         </td>
-                                        <td style="width: 103.05pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
+                                        <td style="width: 110.05pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
                                             <p style="margin-top: 0pt; margin-bottom: 0pt; text-align: justify; font-size: 11pt;"><span style="font-family: Cambria;">Ph&ugrave; Thủy Ti&ecirc;n Tri</span></p>
                                         </td>
                                         <td style="width: 185.25pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
@@ -457,7 +456,7 @@
                                         <td style="border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
                                             <p style="margin-top: 0pt; margin-bottom: 0pt; text-align: center; font-size: 11pt;"><span style="font-family: Cambria;">3</span></p>
                                         </td>
-                                        <td style="width: 103.05pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
+                                        <td style="width: 110.05pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
                                             <p style="margin-top: 0pt; margin-bottom: 0pt; text-align: justify; font-size: 11pt;"><span style="font-family: Cambria;">Ph&ugrave; Thủy Thần Tốc</span></p>
                                         </td>
                                         <td style="width: 185.25pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
@@ -470,7 +469,7 @@
                                         <td style="border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
                                             <p style="margin-top: 0pt; margin-bottom: 0pt; text-align: center; font-size: 11pt;"><span style="font-family: Cambria;">189</span></p>
                                         </td>
-                                        <td style="width: 103.05pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
+                                        <td style="width: 110.05pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
                                             <p style="margin-top: 0pt; margin-bottom: 0pt; text-align: justify; font-size: 11pt;"><span style="font-family: Cambria;">Ph&ugrave; Thủy Tiềm Long</span></p>
                                         </td>
                                         <td style="width: 185.25pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
@@ -490,14 +489,14 @@
                                 </strong>
                                 <span style="font-family: Cambria;">&nbsp;</span><em><span style="font-family: Cambria;">Mỗi người chỉ được nhận duy nhất&nbsp;</span></em>
                                 <strong>
-                                    <em><span style="font-family: Cambria;">01 giải thưởng</span></em>
+                                    <em><span style="font-family: Cambria;">01 giải thưởng </span></em>
                                 </strong>
                                 <em>
                                     <span style="font-family: Cambria;">
-                                        &nbsp;(ưu ti&ecirc;n giải c&oacute; gi&aacute; trị cao hơn, trường hợp tr&uacute;ng c&ugrave;ng l&uacute;c 2 giải, giải c&oacute; gi&aacute; trị thấp hơn sẽ được chuyển giao cho người c&oacute; thứ hạng ngay sau đ&oacute;).
+                                        (ưu ti&ecirc;n giải c&oacute; gi&aacute; trị cao hơn, trường hợp tr&uacute;ng c&ugrave;ng l&uacute;c 2 giải, giải c&oacute; gi&aacute; trị thấp hơn sẽ được chuyển giao cho người c&oacute; thứ hạng ngay sau đ&oacute;). 
                                     </span>
                                 </em>
-                                <em><span style="font-family: Cambria;">&nbsp;</span></em><em><span style="font-family: Cambria;">Thời gian trao qu&agrave; l&agrave; 30 ng&agrave;y kể</span></em><em><span style="font-family: Cambria;">&nbsp;</span></em>
+                                <em><span style="font-family: Cambria;"></span></em><em><span style="font-family: Cambria;">Thời gian trao qu&agrave; l&agrave; 30 ng&agrave;y kể</span></em><em><span style="font-family: Cambria;">&nbsp;</span></em>
                                 <em><span style="font-family: Cambria;">từ l&uacute;c c&ocirc;ng bố danh s&aacute;ch tr&uacute;ng thưởng.</span></em>
                             </p>
                             <p style="margin-top: 14pt; margin-bottom: 14pt; text-align: justify; line-height: normal; font-size: 14pt;">
@@ -528,6 +527,7 @@ export default {
         user_code: String,
         readInstructions: Number,
         muitenimgUrl: String,
+        openThuThach: Number,
     },
     data() {
         return {
@@ -583,7 +583,7 @@ export default {
                                 //     self.$emit("updateAttrLongvu", response.data.data.user.feathers);
                                 //     // this.$store.actions.saveInfoUser(response.data.data.user);
                                 // }
-                                if(response.data.message == 'Không tìm thấy Bạn học này'){
+                                if(response.data.message == 'Không tìm thấy Bạn học này' || response.data.message == 'Bạn không thể mời chính mình đi học!' || response.data.message == 'Bạn đã hết Lượt mời đi học!' || response.data.message == 'Bạn đã mời bạn học này trước đó!'){
                                     self.$swal.fire({
                                         position: "center",
                                         icon: "error",
@@ -704,7 +704,7 @@ export default {
             existingElement.appendChild(el);
             el.select();
             document.execCommand('copy');
-            
+            existingElement.removeChild(el);
             this.$toast.success('Liên kết đã được sao chép', {
                 autoClose: 1500,
             });

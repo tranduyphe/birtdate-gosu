@@ -249,7 +249,7 @@ export default {
                                             text: message,
                                             title:"Bạn đã nhận được",
                                             showConfirmButton: false,
-                                            timer: 2500,
+                                            timer: 1500,
                                             customClass: customClass,
                                             imageUrl: imageUrl,
                                             imageHeight: 80,
@@ -358,7 +358,7 @@ export default {
                 $('#GameOverModal').css('display','flex');
                 setTimeout(() => {
                     $('#GameOverModal').hide();
-                }, 3000);
+                }, 1000);
             }
         },
     },
