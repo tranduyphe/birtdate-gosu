@@ -125,18 +125,16 @@
                         <div class="task row justify-content-evenly">
                             <div v-for="(item, index) in logActivity" :key="index"
                                 class="item-task col-12 row justify-content-between text-center">
-                                <div class="item-created-at col-2">
+                                <div class="item-created-at col-2 p-2">
                                     <p class="m-0">{{ item.formatted_created_at }} </p>
                                 </div>
-                                <div class="item-reason col-8">
+                                <div class="item-reason col-8 p-2">
                                     <p class="m-0">{{ item.reason }}</p>
                                 </div>
-                                <div class="item-reason col-1">
-                                    <img v-if="item.log_item && item.log_item[0].item_id == 1" :src="iconLongvu" alt="" width="40">
-                                    <img v-if="item.log_item && item.log_item[0].item_id == 2" :src="iconKimcuong" alt="" width="40">
-
-                                    <img :src="icon" alt="" width="40">
+                                <div class="item-reason p-1 col-1 d-flex justify-content-evenly">
                                     <p v-if="item.log_item" class="m-0">{{ item.log_item[0].record ?? 0}}</p>
+                                    <img v-if="item.log_item && item.log_item[0].item_id == 1" :src="iconLongvu" alt="" width="30">
+                                    <img v-if="item.log_item && item.log_item[0].item_id == 2" :src="iconKimcuong" alt="" width="30">
                                 </div>
                             </div>
                         </div>
