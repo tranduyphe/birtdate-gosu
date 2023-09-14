@@ -1,20 +1,20 @@
 <script>
+
 import Header from '@/components/layouts/Header';
+
 export default {
     components: {
         Header
     },
-    data() {
-        return {}
-    },
+    data() {},
     computed: {
     },
     methods: {
     },
-    created(){  
-           
+    created: () => {       
     },
-    mounted(){}
+    mounted: async () =>{
+    }
 }
 </script>
 <template>

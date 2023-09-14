@@ -173,6 +173,7 @@ class FlipController extends Controller
             $saveWaiting = $dataActionFlip['save_waiting'] ?? [];
             $activeFlips = $dataActionFlip['active_flip'];
 
+            
             if ($gameData->flag == 0) {
 
                 $gameData->flag = 1;
@@ -321,9 +322,7 @@ class FlipController extends Controller
                         }
                     }
                     if ($isWin) {
-                        $this->winGameReward($user, 10);
-
-
+                        $this->winGameReward($user, 2);
                         $response = [
                             "status" => 200,
                             "message" => "success",
@@ -331,7 +330,7 @@ class FlipController extends Controller
                                 'data_flip' => $dataActionFlip,
                                 'game_status' => 2,
                                 'user' => $user,
-                                'reward' => [['item_id' => 1, 'record' => 10]]
+                                'reward' => [['item_id' => 1, 'record' => 2]]
                             ],
                             "success" => true
                         ];

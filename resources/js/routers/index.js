@@ -5,13 +5,15 @@ import login from '@/components/login/';
 import home from '@/components/home/index.vue';
 import Minigame from '@/components/home/Minigame.vue';
 import Quest from '@/components/home/Quest.vue';
-import wall from '@/components/wall/';
 import ManhGhep from '@/components/home/ManhGhep.vue';
-import ThuVienToanTri from '../components/home/ThuVienToanTri.vue';
-import Launch from '../components/sinhnhat11nam/landing-page/Launch.vue';
-import BachNhat from '../components/sinhnhat11nam/landing-page/BachNhat.vue';
-import SiteMap from '../components/sinhnhat11nam/landing-page/SiteMap.vue';
 
+import ThuVienToanTri from '../components/home/ThuVienToanTri.vue';
+
+import Launch from '../components/sinhnhat11nam/landing-page/Launch.vue';
+
+import BachNhat from '../components/sinhnhat11nam/landing-page/BachNhat.vue';
+
+import SiteMap from '../components/sinhnhat11nam/landing-page/SiteMap.vue';
 const routes = [
 	{
 		path: '/',
@@ -91,14 +93,6 @@ const routes = [
 		},
 		
 	},
-	{
-		name: 'wall',
-		path: '/wall',
-		component: wall,
-		meta: {
-			middleware: "auth"
-		},
-	},
 ]
 
 const router = createRouter({
@@ -121,7 +115,8 @@ router.beforeEach((to, from, next) => {
 		if (authenticated) {
 			next()
 		} else {
-			next({ name: "login" })			
+			next({ name: "login" })
+			
 		}
 	}
 })

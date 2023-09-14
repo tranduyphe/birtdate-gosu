@@ -2,10 +2,10 @@
     <div class="game-nhathidauxoetxoet">
         <div class="btn-start-div">
             <button @click="reloadFlip()">Làm mới</button>
-            <span>Nhấp "Làm mới" để bắt đầu. Mỗi lượt tốn 2 Đá Mặt Trăng để lật 3 ô ngẫu nhiên. Tìm kiếm bóng lửa cùng loại để mở hết bảng và nhận 2 Lông Phượng Hoàng.</span>
+            <span>Nhấp "Làm mới" để bắt đầu. Mỗi màn chơi tốn 2 Đá Mặt Trăng. Hãy lật tìm 3 bóng lửa cùng loại để mở hết bảng và nhận 2 Lông Phượng Hoàng.</span>
         </div>
         
-        <p class="text-center text-white" v-if="checkGameOver">Bạn đã thua cuộc, vui lòng "Làm mới" để tiếp tục (Trừ 5 đá mặt trăng)</p>
+        <p class="text-center text-white" v-if="checkGameOver">Bạn đã thua cuộc, vui lòng "Làm mới" để tiếp tục (Trừ 2 đá mặt trăng)</p>
         <div class="row justify-content-center align-items-center">
             <div class="minigame-thuvien">
                 <div class="" v-if="flipList != nul">
@@ -109,6 +109,8 @@ export default {
             itemPink: '/images/sinhnhat11nam/img_main/thuvien-itemPink.png',
             imgtransparent: '/images/sinhnhat11nam/img_main/transparent.png',
             imgloser: '/images/sinhnhat11nam/img_main/loser.png',
+            iconLongvu: '/images/sinhnhat11nam/img_main/icon-longvu.png',
+            iconDamattrang: '/images/sinhnhat11nam/img_main/icon-da-mat-trang.png',
         };
     },
     created() {
@@ -193,7 +195,6 @@ export default {
                     let self = this;
                     let flipList = this.flipList;
                     this.flag = true;
-
                     axios.post('/api/active-flip', formData, {
                     })
                         .then(function (response) {
@@ -202,6 +203,8 @@ export default {
                                 flipList[index] = { active: true, color: response.data.data.data_flip.active_flip[index].color };
 
                                 self.flipList = flipList;
+                                
+                                let customClass = 'swal-wide';
                                 // self.flipList = response.data.data.data_flip.active_flip;
                                 if (response.data.data.user) {
                                     // const userResponseJSON = JSON.stringify(response.data.data.user);
@@ -222,22 +225,36 @@ export default {
                                     if (response.data.data.reward) {
                                         let reward = response.data.data.reward;
                                         let message = "";
+                                        let imageUrl = "";
                                         for (let i = 0; i < reward.length; i++) {
 
                                             if (reward[i].item_id == "1") {
-                                                message = message + " Lông Phượng Hoàng +" + reward[i].record;
+                                                message = message + reward[i].record + " Lông Phượng Hoàng";
+                                                imageUrl = self.iconLongvu;
                                             }
                                             if (reward[i].item_id == "2") {
-                                                message = message + " Đá mặt trăng +" + reward[i].record;
+                                                message = message + reward[i].record + " Đá mặt trăng";
+                                                imageUrl = self.iconDamattrang;
                                             }
                                         }
                                         // alert(message);
+                                        // self.$swal.fire({
+                                        //     position: "center",
+                                        //     icon: "success",
+                                        //     title: message,
+                                        //     showConfirmButton: false,
+                                        //     timer: 1500
+                                        // });
                                         self.$swal.fire({
                                             position: "center",
-                                            icon: "success",
-                                            title: message,
+                                            // icon: "success",
+                                            text: message,
+                                            title:"Bạn đã nhận được",
                                             showConfirmButton: false,
-                                            timer: 1500
+                                            timer: 2500,
+                                            customClass: customClass,
+                                            imageUrl: imageUrl,
+                                            imageHeight: 80,
                                         });
                                     }
                                     self.flag = false;
@@ -251,7 +268,7 @@ export default {
                             }
                         })
                         .catch((error) => {
-                            this.flag = true;
+                            this.flag = false;
                             console.log(error);
                             if (error.response && error.response.status === 401) {
                                 this.logoutSubmit()
