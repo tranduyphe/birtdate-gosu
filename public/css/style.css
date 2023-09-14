@@ -129,11 +129,34 @@
     font-size: 1rem;
     font-family: 'UVNLacLongQuan';
 }
-
+.bg-images-file {
+    background-image: url('../images/bg_svg_padlet.svg');
+    min-height: 165px;
+}
+.main-padlet {
+    /* background-image: url('../images/bg_padlet.png');
+    background-size: cover;
+    padding-top: 90px;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    height: 100%; */
+}
+.wrap-padlet {
+    background-image: url('../images/bg_padlet.png');
+    background-size: cover;    
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    overflow-x: hidden;
+    height: 100vh;
+    overflow-y: scroll;
+    scrollbar-color: rgba(0, 0, 0, 0.5) #fff;
+    scrollbar-width: thin;
+}
 .frmLogin button{
     font-family: 'UVNLacLongQuan' !important;
 }
-
 .main-bachnhat .countdown-part{
     font-family: 'Barlow';
     background-image: url('../images/sinhnhat11nam/img_main/bg-countdown.png');

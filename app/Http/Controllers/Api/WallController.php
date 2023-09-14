@@ -24,7 +24,7 @@ class WallController extends Controller
      */
     public function index()
     {
-        $results = $this->wallRepo->getAll();
+        $results = $this->wallRepo->getAllWall();
         return response()->json($results->toArray());
     }
 
