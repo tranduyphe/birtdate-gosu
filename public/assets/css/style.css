@@ -579,6 +579,14 @@ textarea {
   font-family: "UVNLacLongQuan";
 }
 
+.swal-wide.error {
+  background: url(/images/popup-error.png?6cdeaa8913bf5a01704b71e03cc52303);
+}
+
+.swal-wide.error .swal2-title {
+  opacity: 0;
+}
+
 .swal-wide .swal2-image {
   order: 2;
   margin-bottom: 0;

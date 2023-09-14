@@ -7,7 +7,12 @@
                 <img :src="muitenimgUrl" alt="" width="120">
             </div>
         </div>
-        
+        <div class="div-img mui-ten nhan-da" v-if="readInstructions == 0 && isPopupVisible" :class="{'d-none': clickedtabThanhTuu}">
+            <div class="popup">Các Phù Thủy hãy hoàn thành nhiệm vụ tại đây để nhận nguyên liệu tham gia minigame!</div>
+            <div class="img">
+                <img :src="muitenimgUrl" alt="" width="120">
+            </div>
+        </div>
         <div class="tab-thanhtuu">
             <div class="nav flex-column nav-tabs border-0" id="v-tabs-tab" role="tablist" aria-orientation="vertical">
                 <div class="nav-item mb-3">
@@ -96,10 +101,10 @@
                                             <p class="m-0" v-else>{{ index + 1 }}</p>
                                         </div>
                                         <div class="avatar">
-                                            <img :src="iconBtn" width="40" height="40">
+                                            <img :src="item.avatar" width="40" height="40">
                                         </div>
                                         <div class="col-5">
-                                            <p class="m-0">{{ item.name }}</p>
+                                            <p class="m-0">{{ item.first_name }} {{ item.last_name }}</p>
                                         </div>
                                         <div class="attr-longvu col-2">
                                             <p class="m-0">{{ item.feathers }}</p>
@@ -127,7 +132,11 @@
                                     <p class="m-0">{{ item.reason }}</p>
                                 </div>
                                 <div class="item-reason col-1">
-                                    <p class="m-0">123</p>
+                                    <img v-if="item.log_item && item.log_item[0].item_id == 1" :src="iconLongvu" alt="" width="40">
+                                    <img v-if="item.log_item && item.log_item[0].item_id == 2" :src="iconKimcuong" alt="" width="40">
+
+                                    <img :src="icon" alt="" width="40">
+                                    <p v-if="item.log_item" class="m-0">{{ item.log_item[0].record ?? 0}}</p>
                                 </div>
                             </div>
                         </div>
@@ -320,7 +329,7 @@
                             </ol>
                             <p style="margin-top: 14pt; margin-bottom: 14pt; text-align: justify; line-height: normal; font-size: 14pt;">
                                 <span style="font-family: Cambria;">
-                                    Đ&acirc;y l&agrave; khu vực thường được sử dụng l&agrave;m nơi tập trung của c&aacute;c Ph&ugrave; thủy, tuy nhi&ecirc;n ẩn b&ecirc;n dưới nền sảnh l&agrave; 1 ấn ch&uacute; phong ấn đặc biệt m&agrave; chỉ khi c&aacute;c Ph&ugrave;
+                                    Đ&acirc;y l&agrave; khu vực thường được sử dụng l&agrave;m nơi tập trung của c&aacute;c ph&ugrave; thủy, tuy nhi&ecirc;n ẩn b&ecirc;n dưới nền sảnh l&agrave; 1 ấn ch&uacute; phong ấn đặc biệt m&agrave; chỉ khi c&aacute;c Ph&ugrave;
                                     thủy tập sự ho&agrave;n th&agrave;nh nhiệm vụ được giao th&igrave; ấn ch&uacute; mới được gỡ bỏ v&agrave; h&eacute; lộ điều kỳ diệu đ&atilde; bị cất giấu suốt nhiều thập kỷ tại nơi đ&acirc;y.
                                 </span>
                             </p>
@@ -534,6 +543,7 @@ export default {
             lineBreak: '/images/sinhnhat11nam/img_main/linebreak-title.png',
             iconBtn: '/images/sinhnhat11nam/img_main/icon-button-task.png',
             iconLongvu: '/images/sinhnhat11nam/img_main/icon-longvu.png',
+            iconKimcuong: '/images/sinhnhat11nam/img_main/icon-da-mat-trang.png',
             img_chauthanhtich: '/images/sinhnhat11nam/img_main/321.png',
             img_rank1: '/images/sinhnhat11nam/img_main/rank1.png',
             img_rank2: '/images/sinhnhat11nam/img_main/rank2.png',
@@ -617,7 +627,6 @@ export default {
             }
         },
         async logoutSubmit() {
-            console.log("signOut");
             await this.logout();
         },
         async getReWard(questId) {
@@ -643,7 +652,29 @@ export default {
                                     self.$emit("updateAttrKimcuong", response.data.data.user.diamond);
                                     self.$emit("updateAttrLongvu", response.data.data.user.feathers);
                                 }
+                                if(response.data.data.log_activity){
+                                    let dataLog = response.data.data.log_activity ?? [];
+                                    let logActivity = []
+                                    dataLog.forEach(element => {
+                                        logActivity.push({
+                                            "reason": element.reason,
+                                            "log_item": JSON.parse(element.log_item ?? "[]"),
+                                            "name": element.name,
+                                            "formatted_created_at": element.formatted_created_at
+                                        });
+                                    });
+                                    
+                                    self.updateLogActivityTtt(logActivity);
+                                }
                                 // alert(response.data.message);
+                                // self.$swal.fire({
+                                //     position: "center",
+                                //     icon: "success",
+                                //     title: response.data.message,
+                                //     showConfirmButton: false,
+                                //     timer: 1500
+                                // });
+
                                 self.$swal.fire({
                                     position: "center",
                                     icon: "success",
@@ -651,18 +682,6 @@ export default {
                                     showConfirmButton: false,
                                     timer: 1500
                                 });
-
-                                // self.$swal.fire({
-                                //     position: "center",
-                                //     // icon: "success",
-                                //     text: response.data.message,
-                                //     title:"Bạn đã nhận được",
-                                //     showConfirmButton: false,
-                                //     timer: 2000,
-                                //     customClass: 'swal-wide',
-                                //     imageUrl: '/images/sinhnhat11nam/img_main/icon-da-mat-trang.png',
-                                //     imageHeight: 80,
-                                // });
                             } else {
                                 if (response.data.data.quests) {
                                     // self.nhiemvu = response.data.data.nhiemvu;
@@ -694,6 +713,9 @@ export default {
         updateNhiemvuTtt(newValue){
             console.log("updateNhiemvuTtt newValue:",newValue);
             this.$emit("updateNhiemvu", newValue);
+        },
+        updateLogActivityTtt(newValue){
+            this.$emit("updateLogActivity", newValue);
         },
 
         copyContent() {
