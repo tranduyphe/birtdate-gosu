@@ -24,7 +24,8 @@
             <!-- <button class="div-img thap-thanh-tuu" @click="showMedalPopupCKT"> <img :src="thapthanhtuuimgUrl" alt="Tháp Thành Tựu" width="485"></button> -->
             <div class="div-img thu-vien-toan-tri"  data-aos="fade-right">
                 <div class="group-img">
-                    <button class="" data-bs-toggle="modal" data-bs-target="#ThuVienModal"  @click="activeQuest">
+                    <!-- <button class="" data-bs-toggle="modal" data-bs-target="#ThuVienModal" @click="activeQuest"> -->
+                    <button class="" data-bs-toggle="modal" data-bs-target="#ThuVienModal">
                         <img :src="thuvienimgUrl" alt="Thư Viện Toàn Tri" width="295">
                     </button>
                     <div class="bubble-content">
@@ -54,12 +55,16 @@
                 </div>
             </div>
             <div class="div-img items thongbao" data-aos="fade-left">
-                <button class="" data-bs-toggle="modal" data-bs-target="#ThapThanhTuuModal">
+                <button class="" data-bs-toggle="modal" data-bs-target="#ThapThanhTuuModal" v-if="completedQuestCount > 0">
                     <img :src="thongbaoimgUrl" alt="Thông báo" width="" @click="getDataPhapThanhTuu">
-                    <span class="font-size-16 text-white">{{ attrThongbao }}</span>
+                    <span class="font-size-16 text-white">{{ completedQuestCount }}</span>
+                </button>
+                <button class="" data-bs-toggle="modal" data-bs-target="" v-else>
+                    <img :src="thongbaoimgUrl" alt="Thông báo" width="" @click="getDataPhapThanhTuu">
+                    <span class="font-size-16 text-white">{{ completedQuestCount }}</span>
                 </button>
                 <div class="bubble-content">
-                    <p>Thông báo</p>
+                    <p>Thông báo </p>
                 </div>
             </div>
             <div class="div-img items kimcuong" data-aos="fade-left">
@@ -83,7 +88,7 @@
             <div class="infor-user d-flex align-items-center justify-content-between">
                 <div class="group-info d-flex align-items-center">
                     <img :src="avatar" alt="" class="avatar" width="65" height="65">
-                    <p class="mb-0">&nbsp;Xin chào&nbsp;<strong>{{user_name}} -- {{ readInstructions }}</strong></p>
+                    <p class="mb-0">&nbsp;Xin chào&nbsp;<strong>{{ user_name }} </strong></p>
                 </div>
                 <a href="javascript:void(0)" @click="logoutSubmit" class="logout">Thoát</a>
             </div>
@@ -93,8 +98,10 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-body">
-                        <button type="button" ref="closeModal" class="btn close-button" data-bs-dismiss="modal" aria-label="Close"><img :src="closeimgUrl" alt=""></button>
-                        <ModalNhaThiDau :attrKimcuong="attrKimcuong" :attrLongvu="attrLongvu" @updateAttrKimcuong="updateAttrKimcuong" @updateAttrLongvu="updateAttrLongvu"></ModalNhaThiDau>
+                        <button type="button" ref="closeModal" class="btn close-button" data-bs-dismiss="modal"
+                            aria-label="Close"><img :src="closeimgUrl" alt=""></button>
+                        <ModalNhaThiDau :attrKimcuong="attrKimcuong" :attrLongvu="attrLongvu"
+                            @updateAttrKimcuong="updateAttrKimcuong" @updateAttrLongvu="updateAttrLongvu"></ModalNhaThiDau>
                     </div>
                 </div>
             </div>
@@ -104,8 +111,11 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-body">
-                        <button type="button" ref="closeModal" class="btn close-button" data-bs-dismiss="modal" aria-label="Close"><img :src="closeimgUrl" alt=""></button>
-                        <ModalThuVienToanTri :attrKimcuong="attrKimcuong" :attrLongvu="attrLongvu" @updateAttrKimcuong="updateAttrKimcuong" @updateAttrLongvu="updateAttrLongvu"></ModalThuVienToanTri>
+                        <button type="button" ref="closeModal" class="btn close-button" data-bs-dismiss="modal"
+                            aria-label="Close"><img :src="closeimgUrl" alt=""></button>
+                        <ModalThuVienToanTri :attrKimcuong="attrKimcuong" :attrLongvu="attrLongvu"
+                            @updateAttrKimcuong="updateAttrKimcuong" @updateAttrLongvu="updateAttrLongvu">
+                        </ModalThuVienToanTri>
                     </div>
                 </div>
             </div>
@@ -202,6 +212,27 @@ export default {
     created() {
         this.getItemUser();
         this.user();
+        this.getQuest();
+
+
+        // Khai báo một biến để theo dõi trạng thái tab
+        let tabActive = true;
+
+        // Sử dụng sự kiện visibilitychange để kiểm tra trạng thái của tab
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible') {
+                tabActive = true; // Tab đã trở lại trạng thái hiển thị
+            } else {
+                tabActive = false; // Tab không hoạt động
+            }
+        });
+        setInterval(() => {
+            console.log('tabActive',tabActive);
+            if (tabActive) {
+
+                this.getQuest();
+            }
+        }, 10000); // 10000 mili giây = 10 giây
     },
     mounted() {
         // Khởi tạo AOS và cấu hình tùy chọn theo ý muốn
@@ -212,7 +243,26 @@ export default {
         
     },
     computed: {
-        
+        questOpened() {
+            let tabVisible = false;
+            if (document.visibilityState === 'visible') {
+                tabVisible = true; // Tab đang hiển thị
+            } else {
+                tabVisible = false; // Tab đã đóng hoặc không hiển thị
+            }
+            return tabVisible;
+        },
+        completedQuestCount() {
+            // Tính toán số lượng nhiệm vụ đã hoàn thành dựa trên dữ liệu của bạn
+            // Ví dụ:
+            let completedQuest = 0;
+            for (let i = 0; i < this.nhiemvu.length; i++) {
+                if (this.nhiemvu[i].current_attempts >= this.nhiemvu[i].total_attempts && this.nhiemvu[i].is_reward == 0) {
+                    completedQuest++;
+                }
+            }
+            return completedQuest;
+        }
     },
     methods: {
         ...authMethods,
@@ -253,7 +303,19 @@ export default {
             })
                 .then(function (response) {
                     if (response.data.status === 200 && response.data.success == true) {
-                        self.logActivity = response.data.data.log_activity;
+                        let dataLog = response.data.data.log_activity ?? [];
+
+                        self.logActivity = [];
+                        dataLog.forEach(element => {
+                            self.logActivity.push({
+                                "reason": element.reason,
+                                "log_item": JSON.parse(element.log_item),
+                                "name": element.name,
+                                "formatted_created_at": element.formatted_created_at
+                            });
+                        });
+                        // console.log("check logActivity",this.logActivity);
+                        // self.logActivity = response.data.data.log_activity;
                     }
                 })
                 .catch((error) => {
@@ -346,6 +408,7 @@ export default {
         },
         updateLogActivity(newValue) {
             // Cập nhật giá trị của attrKimcuong từ sự kiện
+            console.log("check updateLogActivity newValue",newValue)
             this.logActivity = newValue;
         },
         updateTopFeathers(newValue) {

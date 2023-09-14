@@ -5,7 +5,7 @@
             <span>Nhấp "Làm mới" để bắt đầu. Mỗi lượt tốn 2 Đá Mặt Trăng để lật 3 ô ngẫu nhiên. Tìm kiếm bóng lửa cùng loại để mở hết bảng và nhận 2 Lông Phượng Hoàng.</span>
         </div>
         
-        <p class="text-center text-white" v-if="checkGameOver">Bạn đã thua cuộc, vui lòng "Làm mới" để tiếp tục (Trừ 2 đá mặt trăng)</p>
+        <p class="text-center text-white" v-if="checkGameOver">Bạn đã thua cuộc, vui lòng "Làm mới" để tiếp tục (Trừ 5 đá mặt trăng)</p>
         <div class="row justify-content-center align-items-center">
             <div class="minigame-thuvien">
                 <div class="" v-if="flipList != nul">
@@ -159,7 +159,6 @@ export default {
         },
 
         async getFlip() {
-            console.log("check  minigame: this.attrKimcuong =",this.attrKimcuong);
             let gameId = await this.getGameId();
             let self = this;
             axios.get('/api/get-flip', {
@@ -171,7 +170,6 @@ export default {
                     if (response.data.status === 200 && response.data.success == true) {
                         self.flipList = response.data.data.data_flip.active_flip;
                         self.waiting = response.data.data.data_flip.waiting ?? [];
-                        console.log("response.data.data", response.data.data);
 
                     }
                 })
@@ -225,37 +223,21 @@ export default {
                                         let reward = response.data.data.reward;
                                         let message = "";
                                         for (let i = 0; i < reward.length; i++) {
-                                            console.log("reward[i]", reward[i].record);
-                                            console.log("reward[i].item_id: ", reward[i].item_id);
 
                                             if (reward[i].item_id == "1") {
-                                                console.log("message: ", message);
-                                                console.log("reward[i].record: ", reward[i].record);
-                                                message = message + reward[i].record + " Lông Phượng Hoàng";
-                                                console.log("message: ", message);
+                                                message = message + " Lông Phượng Hoàng +" + reward[i].record;
                                             }
                                             if (reward[i].item_id == "2") {
                                                 message = message + " Đá mặt trăng +" + reward[i].record;
                                             }
                                         }
                                         // alert(message);
-                                        // self.$swal.fire({
-                                        //     position: "center",
-                                        //     icon: "success",
-                                        //     title: message,
-                                        //     showConfirmButton: false,
-                                        //     timer: 1500
-                                        // });
                                         self.$swal.fire({
                                             position: "center",
-                                            // icon: "success",
-                                            text: message,
-                                            title:"Bạn đã nhận được",
+                                            icon: "success",
+                                            title: message,
                                             showConfirmButton: false,
-                                            timer: 2500,
-                                            customClass: 'swal-wide',
-                                            imageUrl: '/images/sinhnhat11nam/img_main/icon-longvu.png',
-                                            imageHeight: 80,
+                                            timer: 1500
                                         });
                                     }
                                     self.flag = false;
@@ -350,7 +332,6 @@ export default {
                 .finally();
         },
         async logoutSubmit() {
-            console.log("signOut");
             await this.logout();
         },
     },

@@ -136,7 +136,7 @@ class HomeController extends Controller
     // }
     public function getTopFeathers(Request $request)
     {
-        $usersWithFeathers = User::select('id', 'name', 'email', 'feathers')
+        $usersWithFeathers = User::select('id', 'name', 'first_name', 'last_name', 'email', 'feathers', 'avatar')
             ->orderBy('feathers', 'desc')
             ->orderBy('id', 'asc') // Sắp xếp tiếp theo id nếu feathers bằng nhau
             ->limit(10)
@@ -154,7 +154,7 @@ class HomeController extends Controller
     public function getLogActivity(Request $request)
     {
         $user = $request->user();
-        $logActivities = LogActivity::selectRaw('log_activity.user_id, log_activity.reason, users.name, DATE_FORMAT(log_activity.created_at, "%Y-%m-%d %H:%i:%s") as formatted_created_at')
+        $logActivities = LogActivity::selectRaw('log_activity.user_id, log_activity.reason, log_activity.log_item, users.name, DATE_FORMAT(log_activity.created_at, "%Y-%m-%d %H:%i:%s") as formatted_created_at')
             ->join('users', 'users.id', '=', 'log_activity.user_id')
             ->where('log_activity.user_id', $user->id)
             ->orderBy('log_activity.id', 'desc')
@@ -189,6 +189,20 @@ class HomeController extends Controller
                 'feathers' => $feathers,
                 'read_instructions' => $readInstructions
             ],
+            "success" => true
+        ];
+        return response()->json($response);
+    }
+
+    public function doneInstructions(Request $request)
+    {
+        $user = $request->user();
+        $user->read_instructions = 1;
+        $user->save();
+        $response = [
+            "status" => 200,
+            "message" => "success",
+            "data" => [],
             "success" => true
         ];
         return response()->json($response);

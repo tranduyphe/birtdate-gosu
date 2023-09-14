@@ -726,6 +726,23 @@ export default {
                     this.isDivVisible = false;
                 }, 5000);
             }, 5000);
+            axios.get('/api/done-instructions', {
+                    })
+                    .then(function (response) {
+                        if (response.data.status === 200) {
+                           
+                        }
+                    })
+                    .catch((error) => {
+                        self.rewardFlag = false;
+                        console.log(error);
+                        if (error.response && error.response.status === 401) {
+                            this.logoutSubmit()
+                        }
+                    })
+                    .finally();
+                    
+
         }
     },
     mounted(){
