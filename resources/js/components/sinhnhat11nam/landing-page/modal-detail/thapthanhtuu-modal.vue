@@ -7,6 +7,12 @@
                 <img :src="muitenimgUrl" alt="" width="120">
             </div>
         </div>
+        <div class="div-img mui-ten nhan-da" v-if="readInstructions == 0 && isPopupVisible" :class="{'d-none': clickedtabThanhTuu}">
+            <div class="popup">Các Phù Thủy hãy hoàn thành nhiệm vụ tại đây để nhận nguyên liệu tham gia minigame!</div>
+            <div class="img">
+                <img :src="muitenimgUrl" alt="" width="120">
+            </div>
+        </div>
         <div class="tab-thanhtuu">
             <div class="nav flex-column nav-tabs border-0" id="v-tabs-tab" role="tablist" aria-orientation="vertical">
                 <div class="nav-item mb-3">
@@ -48,6 +54,12 @@
                         <div class="task row justify-content-evenly align-items-center">
                             <div v-for="(item, index) in nhiemvu" :key="index"
                                 class="item-task col-lg-5 d-flex align-items-center justify-content-between">
+                                <div class="div-img mui-ten nhan-da" v-if="readInstructions == 0 && index == 0 && isDivVisible">
+                                    <div class="popup">Bấm vào đây để nhận ĐÁ MẶT TRĂNG.</div>
+                                    <div class="img">
+                                        <img :src="muitenimgUrl" alt="" width="120">
+                                    </div>
+                                </div>
                                 <span class="star"
                                     :style="{ color: item.is_reward == 0 ? '#b2ad8a' : '#289e11' }">&#10022;</span>
                                 <div class="item-info col-9 d-flex align-items-center">
@@ -77,7 +89,7 @@
                         </div>
                         <div class="task row justify-content-between">
                             <div class="img-phoenix col-5">
-                                <img :src="img_chauthanhtich" alt="">
+                                <img :src="img_chauthanhtich" alt="" width="445">
                             </div>
                             <div class="thanhtich col-7">
                                 <div v-for="(item, index) in topFeathers" :key="index" class="item-task p-1">
@@ -89,7 +101,7 @@
                                             <p class="m-0" v-else>{{ index + 1 }}</p>
                                         </div>
                                         <div class="avatar">
-                                            <img :src="iconBtn" width="40" height="40">
+                                            <img :src="item.avatar" width="40" height="40" style="object-fit: cover;">
                                         </div>
                                         <div class="col-5">
                                             <p class="m-0">{{ item.first_name }} {{ item.last_name }}</p>
@@ -113,18 +125,16 @@
                         <div class="task row justify-content-evenly">
                             <div v-for="(item, index) in logActivity" :key="index"
                                 class="item-task col-12 row justify-content-between text-center">
-                                <div class="item-created-at col-2">
+                                <div class="item-created-at col-2 p-2">
                                     <p class="m-0">{{ item.formatted_created_at }} </p>
                                 </div>
-                                <div class="item-reason col-8">
+                                <div class="item-reason col-8 p-2">
                                     <p class="m-0">{{ item.reason }}</p>
                                 </div>
-                                <div class="item-reason col-1">
-                                    <img v-if="item.log_item && item.log_item[0].item_id == 1" :src="iconLongvu" alt="" width="40">
-                                    <img v-if="item.log_item && item.log_item[0].item_id == 2" :src="iconKimcuong" alt="" width="40">
-
-                                    <img :src="icon" alt="" width="40">
+                                <div class="item-reason p-1 col-1 d-flex justify-content-evenly">
                                     <p v-if="item.log_item" class="m-0">{{ item.log_item[0].record ?? 0}}</p>
+                                    <img v-if="item.log_item && item.log_item[0].item_id == 1" :src="iconLongvu" alt="" width="30">
+                                    <img v-if="item.log_item && item.log_item[0].item_id == 2" :src="iconKimcuong" alt="" width="30">
                                 </div>
                             </div>
                         </div>
@@ -542,6 +552,7 @@ export default {
             inviteFlag: false,
             clickedtabThanhTuu: false,
             isPopupVisible: false,
+            isDivVisible: false,
         };
     },
     created() {
@@ -580,24 +591,23 @@ export default {
                                 //     self.$emit("updateAttrLongvu", response.data.data.user.feathers);
                                 //     // this.$store.actions.saveInfoUser(response.data.data.user);
                                 // }
-                                if(response.data.message == 'Không tìm thấy Bạn học này'){
-                                    self.$swal.fire({
-                                        position: "center",
-                                        icon: "error",
-                                        title: response.data.message,
-                                        showConfirmButton: false,
-                                        timer: 1500
-                                    });
-                                }else{
-                                    self.$swal.fire({
+                                self.$swal.fire({
                                         position: "center",
                                         icon: "success",
                                         title: response.data.message,
                                         showConfirmButton: false,
                                         timer: 1500
                                     });
-                                }
                                
+                            }
+                            if (response.data.status === 200 && response.data.success == false) {
+                                self.$swal.fire({
+                                        position: "center",
+                                        icon: "error",
+                                        title: response.data.message,
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                    });
                             }
                         })
                         .catch((error) => {
@@ -633,6 +643,7 @@ export default {
                             if (response.data.success == true) {
                                 // self.nhiemvu = response.data.data.nhiemvu;
                                 
+                                console.log("response.data.data.quests",response.data.data.quests);
                                     self.updateNhiemvuTtt(response.data.data.quests);
                                     if (response.data.data.user) {
                                     self.$emit("updateAttrKimcuong", response.data.data.user.diamond);
@@ -653,6 +664,14 @@ export default {
                                     self.updateLogActivityTtt(logActivity);
                                 }
                                 // alert(response.data.message);
+                                // self.$swal.fire({
+                                //     position: "center",
+                                //     icon: "success",
+                                //     title: response.data.message,
+                                //     showConfirmButton: false,
+                                //     timer: 1500
+                                // });
+
                                 self.$swal.fire({
                                     position: "center",
                                     icon: "success",
@@ -663,6 +682,7 @@ export default {
                             } else {
                                 if (response.data.data.quests) {
                                     // self.nhiemvu = response.data.data.nhiemvu;
+                                    console.log("response.data.data.quests",response.data.data.quests);
                                     self.updateNhiemvuTtt(response.data.data.quests);
                                 }
                                 // alert(response.data.message);
@@ -688,6 +708,7 @@ export default {
 
         },
         updateNhiemvuTtt(newValue){
+            console.log("updateNhiemvuTtt newValue:",newValue);
             this.$emit("updateNhiemvu", newValue);
         },
         updateLogActivityTtt(newValue){
@@ -717,23 +738,28 @@ export default {
 
         doneInstructions(){
             this.clickedtabThanhTuu = true;
-            axios.get('/api/done-instructions', {
-                    })
-                    .then(function (response) {
-                        if (response.data.status === 200) {
-                           
-                        }
-                    })
-                    .catch((error) => {
-                        self.rewardFlag = false;
-                        console.log(error);
-                        if (error.response && error.response.status === 401) {
-                            this.logoutSubmit()
-                        }
-                    })
-                    .finally();
-                    
 
+            setTimeout(() => {
+                this.isDivVisible = true;
+                setTimeout(() => {
+                    this.isDivVisible = false;
+                }, 5000);
+            }, 3000);
+            
+            axios.get('/api/done-instructions', { })
+            .then(function (response) {
+                if (response.data.status === 200) {
+                    
+                }
+            })
+            .catch((error) => {
+                self.rewardFlag = false;
+                console.log(error);
+                if (error.response && error.response.status === 401) {
+                    this.logoutSubmit()
+                }
+            })
+            .finally();
         }
     },
     mounted(){
@@ -915,6 +941,7 @@ export default {
 .img-phoenix img{
     position: fixed;
     top: 30%;
+    padding-top: 50px;
 }
 
 #v-tabs-the-le .content{
@@ -945,6 +972,12 @@ export default {
     top: 10%;
 }
 
+#ThapThanhTuu-Modal .div-img.mui-ten.nhan-da{
+    position: absolute;
+    left: 34%;
+    top: 34%;
+}
+
 #ThapThanhTuu-Modal .div-img.mui-ten {
     -webkit-animation: mover 0.5s infinite  alternate;
     animation: mover 0.5s infinite  alternate;
@@ -969,5 +1002,10 @@ export default {
     color: #ffffff;
     background: linear-gradient(to bottom, #f1c461, #a1813f);
     border: 1px solid #ffffff;
+}
+
+#ThapThanhTuu-Modal .div-img.mui-ten.nhan-da .popup{
+    width: 170px;
+    margin-bottom: -20px
 }
 </style>

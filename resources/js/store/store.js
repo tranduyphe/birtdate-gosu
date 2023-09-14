@@ -5,4 +5,3 @@ export const socketMethods = mapActions(['connect', 'disconnect', 'joinRoom', 's
 export const walltMethods = mapActions(['createWall', 'indexWall', 'updateWall']);
 export const wallGetters = mapGetters(['listWall']);
 export const commentMethods = mapActions(['createComment', 'indexComment', 'updateComment', 'deleteComment']);
-//export const socketGetters = mapGetters(['listMessengers']);

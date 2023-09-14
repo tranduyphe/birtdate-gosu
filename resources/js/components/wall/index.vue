@@ -966,7 +966,7 @@ export default {
         }
         .btn-sm{
             &.dropdown-toggle{
-                background: #fff;
+                background: transparent;
             }
         }
     }
