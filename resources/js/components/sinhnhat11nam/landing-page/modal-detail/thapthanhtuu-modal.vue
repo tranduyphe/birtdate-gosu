@@ -7,6 +7,12 @@
                 <img :src="muitenimgUrl" alt="" width="120">
             </div>
         </div>
+        <div class="div-img mui-ten nhan-da" v-if="readInstructions == 0 && isPopupVisible" :class="{'d-none': clickedtabThanhTuu}">
+            <div class="popup">Các Phù Thủy hãy hoàn thành nhiệm vụ tại đây để nhận nguyên liệu tham gia minigame!</div>
+            <div class="img">
+                <img :src="muitenimgUrl" alt="" width="120">
+            </div>
+        </div>
         <div class="tab-thanhtuu">
             <div class="nav flex-column nav-tabs border-0" id="v-tabs-tab" role="tablist" aria-orientation="vertical">
                 <div class="nav-item mb-3">
@@ -77,7 +83,7 @@
                         </div>
                         <div class="task row justify-content-between">
                             <div class="img-phoenix col-5">
-                                <img :src="img_chauthanhtich" alt="">
+                                <img :src="img_chauthanhtich" alt="" width="445">
                             </div>
                             <div class="thanhtich col-7">
                                 <div v-for="(item, index) in topFeathers" :key="index" class="item-task p-1">
@@ -633,6 +639,7 @@ export default {
                             if (response.data.success == true) {
                                 // self.nhiemvu = response.data.data.nhiemvu;
                                 
+                                console.log("response.data.data.quests",response.data.data.quests);
                                     self.updateNhiemvuTtt(response.data.data.quests);
                                     if (response.data.data.user) {
                                     self.$emit("updateAttrKimcuong", response.data.data.user.diamond);
@@ -653,16 +660,29 @@ export default {
                                     self.updateLogActivityTtt(logActivity);
                                 }
                                 // alert(response.data.message);
+                                // self.$swal.fire({
+                                //     position: "center",
+                                //     icon: "success",
+                                //     title: response.data.message,
+                                //     showConfirmButton: false,
+                                //     timer: 1500
+                                // });
+
                                 self.$swal.fire({
                                     position: "center",
-                                    icon: "success",
-                                    title: response.data.message,
+                                    // icon: "success",
+                                    text: response.data.message,
+                                    title:"Bạn đã nhận được",
                                     showConfirmButton: false,
-                                    timer: 1500
+                                    timer: 2000,
+                                    customClass: 'swal-wide',
+                                    imageUrl: '/images/sinhnhat11nam/img_main/icon-da-mat-trang.png',
+                                    imageHeight: 80,
                                 });
                             } else {
                                 if (response.data.data.quests) {
                                     // self.nhiemvu = response.data.data.nhiemvu;
+                                    console.log("response.data.data.quests",response.data.data.quests);
                                     self.updateNhiemvuTtt(response.data.data.quests);
                                 }
                                 // alert(response.data.message);
@@ -688,6 +708,7 @@ export default {
 
         },
         updateNhiemvuTtt(newValue){
+            console.log("updateNhiemvuTtt newValue:",newValue);
             this.$emit("updateNhiemvu", newValue);
         },
         updateLogActivityTtt(newValue){
@@ -915,6 +936,7 @@ export default {
 .img-phoenix img{
     position: fixed;
     top: 30%;
+    padding-top: 50px;
 }
 
 #v-tabs-the-le .content{

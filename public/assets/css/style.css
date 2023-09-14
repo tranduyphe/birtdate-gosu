@@ -567,6 +567,38 @@ textarea {
   padding-right: 7rem;
 }
 
+.swal-wide {
+  background: url(/images/popup-qua.png?9d7292d7ee615b0a04bb9ddb41ee711d);
+  width: 850px !important;
+  color: #fff;
+  background-size: cover;
+  background-position: center;
+  height: 892px;
+  display: flex !important;
+  flex-direction: column;
+  font-family: "UVNLacLongQuan";
+}
+
+.swal-wide .swal2-image {
+  order: 2;
+  margin-bottom: 0;
+  margin-top: 20px;
+}
+
+.swal-wide .swal2-title {
+  order: 1;
+  padding-top: 130px;
+  font-size: 22pt;
+  font-weight: 500;
+  color: #4f382a;
+}
+
+.swal-wide .swal2-html-container {
+  order: 3;
+  font-weight: bold;
+  color: #4f382a;
+}
+
 .effect {
   display: block;
   background-image: url(/images/effect.png?05b9fdca69f4127c0b5a2cfd5efcb3b6);
