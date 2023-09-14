@@ -286,14 +286,9 @@
                                     xếp vị tr&iacute; ngẫu nhi&ecirc;n tr&ecirc;n s&agrave;n đấu, b&ecirc;n dưới s&agrave;n
                                     đấu c&oacute; 1 thanh chờ gồm 4 &ocirc; chứa.</span>
                             </p>
-                            <p
-                                style="margin-top: 0pt; margin-bottom: 0pt; text-align: justify; line-height: normal; font-size: 14pt;">
-                                <span style="font-family: Cambria;">&nbsp;</span></p>
-                            <p
-                                style="margin-top: 0pt; margin-bottom: 0pt; text-align: justify; line-height: normal; font-size: 14pt;">
-                                <strong><span style="font-family: Cambria;">B2:</span></strong><span
-                                    style="font-family: Cambria;">&nbsp;Mỗi một lượt, Ph&ugrave; thủy tập sự chọn 3 &ocirc;
-                                    ngẫu nhi&ecirc;n:</span>
+                            <p style="margin-top: 0pt; margin-bottom: 0pt; text-align: justify; line-height: normal; font-size: 14pt;"><span style="font-family: Cambria;">&nbsp;</span></p>
+                            <p style="margin-top: 0pt; margin-bottom: 0pt; text-align: justify; line-height: normal; font-size: 14pt;">
+                                <strong><span style="font-family: Cambria;">B2:</span></strong><span style="font-family: Cambria;">&nbsp;Mỗi một lượt, Ph&ugrave; thủy tập sự chọn 3 &ocirc; ngẫu nhi&ecirc;n. Ở lượt mở đầu tiên:</span>
                             </p>
                             <p
                                 style="margin-top: 0pt; margin-left: 36pt; margin-bottom: 0pt; text-indent: -18pt; text-align: justify; line-height: normal; font-size: 14pt;">
