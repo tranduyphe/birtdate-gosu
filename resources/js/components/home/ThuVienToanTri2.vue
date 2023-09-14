@@ -1,4 +1,7 @@
 <template>
+    <div class="custom-cusor" >
+      <img :src="imgDuaPhep" class="img-dua" id="img-dua" style="opacity: 0;">
+    </div>
     <div class="game-thuvientoantri">
         <button class="btn-start" @click="reloadFlip()">Làm mới</button>
         <p class="text-center text-white" v-if="checkGameOver">Bạn đã thua cuộc, vui lòng "Làm mới" để tiếp tục (Trừ 5 đá
@@ -93,6 +96,7 @@ export default {
             imgloser: '/images/sinhnhat11nam/img_main/loser.png',
             imgPopUpQua: '/images/sinhnhat11nam/img_main/popup-qua.png',
             iconLongvu: '/images/sinhnhat11nam/img_main/icon-longvu.png',
+            imgDuaPhep: '/images/sinhnhat11nam/img_main/dua-phep.png',
             iconDamattrang: '/images/sinhnhat11nam/img_main/icon-da-mat-trang.png',
             randomMessages: [
                 "Hãy mở tiếp cho đến khi tổ tiên mách bảo!",
@@ -341,6 +345,7 @@ export default {
 </script>
 
 <style>
+
 .game-thuvientoantri .card {
     perspective: 1000px;
     position: relative;

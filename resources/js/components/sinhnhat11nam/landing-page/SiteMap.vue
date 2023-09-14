@@ -435,7 +435,6 @@ export default {
     font-family: 'UVNLacLongQuan';
     position: relative;
     transition: all 500ms linear;
-    cursor: url('../../../../assets/images/sinhnhat11nam/img_main/dua-phep.png') 0 0, auto;
 }
 
 
