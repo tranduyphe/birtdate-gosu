@@ -42,7 +42,7 @@
                             <img :src="lineBreak" class="mb-3">
                         </div>
                         <div class="user_code">
-                            <p class="mb-0">Mã của bạn: </p>
+                            <p class="mb-0">Mã của bạn:&nbsp;</p>
                             <strong>{{ user_code }}</strong>
                             <button class="btn btn-success" @click="copyContent">Sao chép mã của bạn</button>
                         </div>
