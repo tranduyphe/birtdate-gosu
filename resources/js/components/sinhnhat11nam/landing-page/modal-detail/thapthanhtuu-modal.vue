@@ -7,13 +7,6 @@
                 <img :src="muitenimgUrl" alt="" width="120">
             </div>
         </div>
-        <div class="div-img mui-ten nhan-da" v-if="readInstructions == 0 && isPopupVisible"
-            :class="{ 'd-none': clickedtabThanhTuu }">
-            <div class="popup">Các Phù Thủy hãy hoàn thành nhiệm vụ tại đây để nhận nguyên liệu tham gia minigame!</div>
-            <div class="img">
-                <img :src="muitenimgUrl" alt="" width="120">
-            </div>
-        </div>
         <div class="tab-thanhtuu">
             <div class="nav flex-column nav-tabs border-0" id="v-tabs-tab" role="tablist" aria-orientation="vertical">
                 <div class="nav-item mb-3">
@@ -1293,9 +1286,13 @@ export default {
 }
 
 #ThapThanhTuu-Modal .div-img.mui-ten.nhan-da {
-    position: absolute;
+    /* position: absolute;
     left: 34%;
-    top: 34%;
+    top: 34%; */
+
+    position: fixed;
+    left: 40%;
+    top: 35%;
 }
 
 #ThapThanhTuu-Modal .div-img.mui-ten {

@@ -124,6 +124,7 @@ class QuestRepository
 
             // Thực hiện truy vấn trong bảng minigame_quest
             $count = MinigameQuests::where('user_id', $userId)
+                ->whereDate('created_at', '<>', $today)
                 ->count();
             if ($count >= 2) {
                 $currentAttempts9 = 1;
