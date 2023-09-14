@@ -433,8 +433,7 @@ export default {
 <style scoped>
 
 .wrapper-content{
-    min-height: 100vh;
-    height: auto;
+    height: 100vh;
     width: 100%;
     background-size: cover;
     background-repeat: no-repeat;

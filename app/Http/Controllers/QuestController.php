@@ -47,22 +47,48 @@ class QuestController extends Controller
     // {
     //     return view('home');
     // }
+    // public function getQuests(Request $request)
+    // {
+    //     $user = $request->user();
+    //     $QuestRepository = new QuestRepository();
+    //     $getQuest = $QuestRepository->getQuests($user->id);
+    //     $response = [
+    //         "status" => 200,
+    //         "message" => "success",
+    //         "data" => [
+    //             'quests' => $getQuest
+    //         ],
+    //         "success" => true
+    //     ];
+    //     return response()->json($response);
+    // }
+    
     public function getQuests(Request $request)
     {
         $user = $request->user();
         $QuestRepository = new QuestRepository();
         $getQuest = $QuestRepository->getQuests($user->id);
+        $getQuestOrder = [];
+        $getQuestOrder[] = $getQuest[0];
+        $getQuestOrder[] = $getQuest[3];
+        $getQuestOrder[] = $getQuest[4];
+        $getQuestOrder[] = $getQuest[5];
+        $getQuestOrder[] = $getQuest[1];
+        $getQuestOrder[] = $getQuest[2];
+        $getQuestOrder[] = $getQuest[6];
+        $getQuestOrder[] = $getQuest[7];
+        $getQuestOrder[] = $getQuest[8];
+        $getQuestOrder[] = $getQuest[9];
         $response = [
             "status" => 200,
             "message" => "success",
             "data" => [
-                'quests' => $getQuest
+                'quests' => $getQuestOrder
             ],
             "success" => true
         ];
         return response()->json($response);
     }
-    
     
     public function invite(Request $request)
     {
