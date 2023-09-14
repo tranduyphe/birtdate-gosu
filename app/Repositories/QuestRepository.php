@@ -124,21 +124,11 @@ class QuestRepository
 
             // Thực hiện truy vấn trong bảng minigame_quest
             $count = MinigameQuests::where('user_id', $userId)
-                ->where(function ($query) use ($yesterday, $twoDaysAgo) {
-                    $query->whereDate('created_at', $yesterday)
-                        ->orWhereDate('created_at', $twoDaysAgo);
-                })
                 ->count();
-            // dump($yesterday);
-            // dump($twoDaysAgo);
-            // dump($count);die;
             if ($count >= 2) {
                 $currentAttempts9 = 1;
-                // Lấy ngày hôm nay
-                // dump("check today");
-                // dump($today);die;
                 SanhHopHep::updateOrInsert(
-                    ['user_id' => $userId, 'created_at' => $today],
+                    ['user_id' => $userId],
                     ['user_id' => $userId]
                 );
             }
@@ -160,6 +150,20 @@ class QuestRepository
                 $questData->quests =  json_encode($quests);
                 $questData->save();
             }
+            // kiểm tra nhiệm vụ 6
+            if(
+                $quests[6]["current_attempts"] == 0
+                && $quests[0]["current_attempts"] >=$quests[0]["total_attempts"]
+                && $quests[1]["current_attempts"] >=$quests[1]["total_attempts"]
+                && $quests[2]["current_attempts"] >=$quests[2]["total_attempts"]
+                && $quests[3]["current_attempts"] >=$quests[3]["total_attempts"]
+                && $quests[4]["current_attempts"] >=$quests[4]["total_attempts"]
+                && $quests[5]["current_attempts"] >=$quests[5]["total_attempts"]
+            ){
+                $quests[6]["current_attempts"] =1;
+                $questData->quests =  json_encode($quests);
+                $questData->save();
+            }
         } else {
 
             //nên sửa lại thành creater or update nếu created_at = ngày hôm nay
@@ -173,6 +177,8 @@ class QuestRepository
 
             $quests = $quests;
         }
+
+        
         $hoanthanh9nhiemvudautien = true;
         for ($i=0; $i < 9; $i++) { 
             if ($quests[$i]["current_attempts"] < $quests[$i]["total_attempts"] ){

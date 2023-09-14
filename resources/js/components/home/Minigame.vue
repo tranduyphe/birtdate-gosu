@@ -195,7 +195,6 @@ export default {
                     let self = this;
                     let flipList = this.flipList;
                     this.flag = true;
-
                     axios.post('/api/active-flip', formData, {
                     })
                         .then(function (response) {
@@ -204,6 +203,8 @@ export default {
                                 flipList[index] = { active: true, color: response.data.data.data_flip.active_flip[index].color };
 
                                 self.flipList = flipList;
+                                
+                                let customClass = 'swal-wide';
                                 // self.flipList = response.data.data.data_flip.active_flip;
                                 if (response.data.data.user) {
                                     // const userResponseJSON = JSON.stringify(response.data.data.user);
@@ -224,6 +225,7 @@ export default {
                                     if (response.data.data.reward) {
                                         let reward = response.data.data.reward;
                                         let message = "";
+                                        let imageUrl = "";
                                         for (let i = 0; i < reward.length; i++) {
 
                                             if (reward[i].item_id == "1") {
@@ -266,7 +268,7 @@ export default {
                             }
                         })
                         .catch((error) => {
-                            this.flag = true;
+                            this.flag = false;
                             console.log(error);
                             if (error.response && error.response.status === 401) {
                                 this.logoutSubmit()

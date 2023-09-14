@@ -90,7 +90,7 @@ class QuestController extends Controller
                 "data" => [
                     'quests' => $getQuest
                 ],
-                "success" => true
+                "success" => false
             ];
             Cache::forget($cacheKey); // Lưu trong cache trong 5 phút
             return response()->json($response);
@@ -102,7 +102,7 @@ class QuestController extends Controller
                 "data" => [
                     'quests' => $getQuest
                 ],
-                "success" => true
+                "success" => false
             ];
             Cache::forget($cacheKey); // Lưu trong cache trong 5 phút
             return response()->json($response);
@@ -112,11 +112,11 @@ class QuestController extends Controller
         if (!$friend) {
             $response = [
                 "status" => 200,
-                "message" => "Không tìm thấy Bạn học này",
+                "message" => "Không tìm thấy Bạn học này!",
                 "data" => [
                     'quests' => $getQuest
                 ],
-                "success" => true
+                "success" => false
             ];
             Cache::forget($cacheKey); // Lưu trong cache trong 5 phút
             return response()->json($response);
@@ -127,11 +127,11 @@ class QuestController extends Controller
         if (count($friendInvites) >= 10) {
             $response = [
                 "status" => 200,
-                "message" => "Cú của bạn đã gửi thư cho phù thủy tập sự!",
+                "message" => "Phù thủy này đã đi học rồi!",
                 "data" => [
                     'quests' => $getQuest
                 ],
-                "success" => true
+                "success" => false
             ];
             Cache::forget($cacheKey); // Lưu trong cache trong 5 phút
             return response()->json($response);
@@ -151,7 +151,7 @@ class QuestController extends Controller
                 "data" => [
                     'quests' => $getQuest
                 ],
-                "success" => true
+                "success" => false
             ];
         Cache::forget($cacheKey); // Lưu trong cache trong 5 phút
             return response()->json($response);

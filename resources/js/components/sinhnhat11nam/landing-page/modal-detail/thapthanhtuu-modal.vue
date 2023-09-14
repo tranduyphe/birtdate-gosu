@@ -101,7 +101,7 @@
                                             <p class="m-0" v-else>{{ index + 1 }}</p>
                                         </div>
                                         <div class="avatar">
-                                            <img :src="item.avatar" width="40" height="40">
+                                            <img :src="item.avatar" width="40" height="40" style="object-fit: cover;">
                                         </div>
                                         <div class="col-5">
                                             <p class="m-0">{{ item.first_name }} {{ item.last_name }}</p>
@@ -591,24 +591,23 @@ export default {
                                 //     self.$emit("updateAttrLongvu", response.data.data.user.feathers);
                                 //     // this.$store.actions.saveInfoUser(response.data.data.user);
                                 // }
-                                if(response.data.message == 'Không tìm thấy Bạn học này'){
-                                    self.$swal.fire({
-                                        position: "center",
-                                        icon: "error",
-                                        title: response.data.message,
-                                        showConfirmButton: false,
-                                        timer: 1500
-                                    });
-                                }else{
-                                    self.$swal.fire({
+                                self.$swal.fire({
                                         position: "center",
                                         icon: "success",
                                         title: response.data.message,
                                         showConfirmButton: false,
                                         timer: 1500
                                     });
-                                }
                                
+                            }
+                            if (response.data.status === 200 && response.data.success == false) {
+                                self.$swal.fire({
+                                        position: "center",
+                                        icon: "error",
+                                        title: response.data.message,
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                    });
                             }
                         })
                         .catch((error) => {
