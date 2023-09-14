@@ -18,4 +18,8 @@ class WallRepository extends BaseRepository implements WallRepositoryInterface
     {
         return $this->model->select('file_name')->take(5)->get();
     }
+
+    public function getAllWall(){
+        return $this->model->with(['comments'])->get();
+    }
 }

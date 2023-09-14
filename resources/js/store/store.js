@@ -4,4 +4,5 @@ export const authGetters = mapGetters(['authenticated', 'user']);
 export const socketMethods = mapActions(['connect', 'disconnect', 'joinRoom', 'sendData', 'sendUpdateData']);
 export const walltMethods = mapActions(['createWall', 'indexWall', 'updateWall']);
 export const wallGetters = mapGetters(['listWall']);
+export const commentMethods = mapActions(['createComment', 'indexComment', 'updateComment', 'deleteComment']);
 //export const socketGetters = mapGetters(['listMessengers']);

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Comment;
 
 class Walls extends Model
 {
@@ -20,4 +21,9 @@ class Walls extends Model
         'created_at',
         'updated_at',
     ];
+    
+    public function comments()
+    {
+        return $this->hasMany(Comment::class, 'target_id', 'id');
+    }
 }

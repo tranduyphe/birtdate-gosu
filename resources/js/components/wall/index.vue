@@ -5,13 +5,15 @@ import $ from "jQuery";
 import Masonry from "masonry-layout";
 import imagesLoaded from "imagesloaded";
 import "remixicon/fonts/remixicon.css";
-import { socketMethods, walltMethods, wallGetters } from "@/store/store";
+import { socketMethods, walltMethods, wallGetters, commentMethods } from "@/store/store";
 import { socket } from "@/store/socket";
 import Header from '@/components/layouts/Header';
+import DetailPadlet from '@/components/wall/detail';
 import { Helper } from "@/helper";
 export default {
     components: {
         name: "MasonryLayout",
+        DetailPadlet,
         Header
     },
     data: () => {
@@ -59,6 +61,11 @@ export default {
             infoUsers: false,
             currentPadlets: false,
             checkMessenger: false,
+            comment: [],
+            showEditComment:[],
+            oldContentComment: [],
+            showSend:[],
+            currentId : false
         };
     },
     computed: {
@@ -67,6 +74,7 @@ export default {
     methods: {
         ...socketMethods,
         ...walltMethods,
+        ...commentMethods,
         initializeMasonry() {
             this.masonry = new Masonry(this.$refs.masonryContainer, {
                 itemSelector: ".masonry-item",
@@ -100,7 +108,7 @@ export default {
             if (resultData) {
                 this.handleShowForm();
                 this.items.push(resultData);
-                this.sendData(resultData);
+                //this.sendData(resultData);
             }
         },
         handleRemoveFile() {
@@ -184,9 +192,9 @@ export default {
                 data["liked"] = currentWall["liked"];
             }
             let results = await this.updateWall(data);
-            if (results) {
-                this.sendUpdateData(results);
-            }
+            // if (results) {
+            //     this.sendUpdateData(results);
+            // }
         },
         checkLiked(item) {
             return JSON.parse(item).some(
@@ -199,12 +207,146 @@ export default {
             this.currentPadlets = this.currentPadlets[0];
             this.$refs.padletModal.click();
         },
+        // postToFacebook() {
+        //     FB.api('/me/feed', 'POST', { message: this.postContent }, (response) => {
+        //         if (response && !response.error) {
+        //             alert('Bài viết đã được đăng lên Facebook thành công!');
+        //         } else {
+        //             alert('Lỗi khi đăng bài viết lên Facebook.');
+        //         }
+        //     });
+        // },
+        //Comment
+        async handleAddComment(id) {
+            if (this.comment[id]) {
+                try {
+                    let checkComment = Helper.checkRibaldry(this.comment[id]);
+                    if (checkComment) {
+                        alert('Vui lòng không dùng từ ngữ kiếm nhã');
+                        return;
+                    }
+                    let data = {};
+                    data['content'] = this.comment[id];
+                    data['target_id'] = id;
+                    data['profile_id'] = this.dataUser.profile_id;
+                    let results = await this.createComment(data);
+                    if (results) {
+                        console.log('results', results);
+                        this.items.filter((item) => {
+                            if(id == item.id){
+                                item.comments.push(results)
+                            }
+                        });
+                        this.comment = []
+                    }
+                } catch (error) {
+                    console.log('Lỗi khi post comment')
+                }
+                
+            }
+        },
+        // show edit comment
+        editComment(id, padlet_id){
+            this.showEditComment = [];
+            this.showEditComment[id] = true;
+            //oldContentComment
+            let oldData = this.items.filter((item) => padlet_id == item.id);
+            if(oldData){
+                let oldComment = oldData[0]['comments'].filter((item) => id == item.id);
+                if (oldComment) {
+                    oldComment = oldComment[0];
+                    this.oldContentComment[id] = oldComment.content;
+                }
+            }
+        },
+        handleCancelComment(id, padlet_id){
+            this.showEditComment = [];
+            this.items.filter((item) => {
+                if(padlet_id == item.id){
+                    item.comments.filter((_item) => {
+                        if(_item.id == id)
+                        _item.content = this.oldContentComment[id];
+                    })
+                }
+            });
+        },
+        // updated comments
+        async handleUpdateComment(id, padlet_id) {
+            try {
+                let newContentComment= ''; 
+                this.items.filter((item) => {
+                    if(padlet_id == item.id){
+                        item.comments.filter((_item) => {                            
+                            if(_item.id == id){
+                                console.log('_item1', _item);
+                                newContentComment = _item.content
+                            }
+                        })
+                    }
+                });
+                if (newContentComment.length > 0) {
+                    let data = {};
+                    data['id'] = id;              
+                    data['content'] = newContentComment;   
+                    let checkComment = Helper.checkRibaldry(newContentComment);
+                    if (checkComment) {
+                        alert('Vui lòng không dùng từ ngữ kiếm nhã');
+                        return;
+                    }           
+                    var results = await this.updateComment(data);
+                    if(results){
+                        this.showEditComment = [];
+                        this.oldContentComment = [];
+                    }
+                }else{
+                    alert('Vui lòng nhập comment');
+                }
+
+            } catch (error) {
+                console.log('error updated comment');
+            }
+        },
+        // remove comments
+        async handleRemoveComment(id, padlet_id){
+            try {
+                let results = await this.deleteComment(id);
+                let currentListComments = this.items.filter((item) => item.id == padlet_id);
+                console.log(currentListComments);
+                let listComment;
+                listComment = currentListComments[0]['comments'].filter((_item, index) => { 
+                    return _item.id != id
+                })
+                this.items.filter((item) => {
+                    if(padlet_id == item.id){
+                        item.comments = listComment;
+                    }
+                });
+            } catch (error) {
+                console.log('Error delete comment');
+            }
+            
+        },
+        handleGetId(id){
+            this.currentId = id
+        },
+        // show icon send comment
+        showIconSendComment(){
+            if ( this.currentId ) {
+                if (this.comment[this.currentId]) {
+                    this.showSend[this.currentId] = true
+                }else{
+                    this.showSend = []
+                }
+            }
+        }
     },
     watch: { },
     updated() {
+        //this.handleCheckComment(id);
         if(!this.hidden)
         this.initializeMasonry();
-        this.handleDisabledForm();        
+        this.handleDisabledForm();  
+        this.showIconSendComment()      
         const $this = this;
         $(document).ready(function () {
             $('.nav-main').remove();
@@ -218,17 +360,32 @@ export default {
                     .find(".color")
                     .css("background-color", "rgb(" + $color + ")");
             });
+            autoSizeTextArea();
+            function autoSizeTextArea(){
+                var text = $('.autosize');
+
+                text.each(function(){
+                    $(this).attr('rows',1);
+                    resize($(this));
+                });
+
+                text.on('input', function(){
+                    resize($(this));
+                });
+                
+                function resize ($text) {
+                    $text.css('height', 'auto');
+                    $text.css('height', $text[0].scrollHeight+'px');
+                }
+            }
         });
     },
     created() {
-        // this.initializeMasonry();
     },
     async mounted() {
-        // var body = document.getElementsByTagName('body');
-        // body.classList.setAttribute("class", "overflow-hidden");
         const $this = this;
         this.dataUser = JSON.parse(localStorage.getItem("users") || "{}");
-        this.connect();
+        //this.connect();
         if (Object.keys(this.dataUser).length > 0) {
             const dataRoom = {
                 room: "padlet",
@@ -239,7 +396,7 @@ export default {
         this.items = await this.indexWall();
         
         // get data from server
-        socket.on("listen data", function (data) {
+        /*socket.on("listen data", function (data) {
             try {
                 $this.items.push(data);
             } catch (error) {
@@ -263,7 +420,7 @@ export default {
             }
 
             // socket.removeListener('listen messenger');
-        });
+        });*/
         const wow = new WOW({
             boxClass: "wow",
             animateClass: "animated",
@@ -277,6 +434,9 @@ export default {
 <template>
     <div class="wrap-padlet">
         <div class="main-padlet">
+            <!-- <DetailPadlet :currentPadlet="demoTest"></DetailPadlet> -->
+            <!-- <textarea v-model="postContent" placeholder="Nhập nội dung bài viết"></textarea>
+            <button @click="postToFacebook">Đăng lên Facebook</button> -->
             <div class="header-padlet container-fluid py-4 px-5">
                 <Header></Header>
             </div>
@@ -330,6 +490,53 @@ export default {
                                     item.liked && item.liked != 0 ? item.liked : ""
                                 }}</small>
                             </span>
+                            <span class="comment"><i class="ri-chat-3-line"></i><small>{{ item.comments && item.comments.length ? item.comments.length : '' }}</small></span>
+                        </div>
+                        <div class="">
+                            <div class="list-messenger mt-3" v-if="item.comments && item.comments.length">
+                                <div class="d-flex mt-2" v-for="comment in item.comments" :key="comment.id">
+                                    <div class="avatar">
+                                        <img :src="comment.avatar" alt="">
+                                    </div>
+                                    <div class="content-messenger">
+                                        <div class="">
+                                            <div class="d-flex justify-content-between">
+                                                <h6 class="name">{{ comment.fullname }}</h6>
+                                                <div class="more-button">
+                                                    <div class="btn-group">
+                                                        <button type="button" class="btn btn-light btn-sm dropdown-toggle border-0 px-0 pb-0 pt-0" data-bs-toggle="dropdown" aria-expanded="false">
+                                                            <i class="ri-more-2-fill"></i>
+                                                        </button>
+                                                        <ul class="dropdown-menu pt-0 pb-0" v-if="dataUser.profile_id == comment.profile_id">
+                                                            <li class="d-flex px-2" @click="editComment(comment.id, item.id)"><span><i class="ri-pencil-line"></i></span><span>Chỉnh sửa bình luận</span></li>
+                                                            <li class="d-flex px-2 color-red" @click="handleRemoveComment(comment.id, item.id)"><span><i class="ri-delete-bin-line"></i></span><span>Xoá bình luận</span></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <p v-if="!showEditComment[comment.id]">{{ comment.content }}</p>
+                                        </div>
+                                        <div class="messenger" v-if="showEditComment[comment.id]">
+                                            <textarea class="autosize" v-model="comment.content"></textarea>
+                                            <div class="d-flex justify-content-end mt-2 mb-2">
+                                                <button class="btn btn-outline-secondary btn-sm me-2"  @click="handleCancelComment(comment.id, item.id)">Huỷ</button>
+                                                <button class="btn btn-outline-primary btn-sm" @click="handleUpdateComment(comment.id, item.id)">Cập nhập</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex mt-3">
+                                <div class="avatar">
+                                    <img :src="dataUser.avatar" alt="">
+                                </div>
+                                <div class="form-messenger">
+                                    <textarea @click="handleGetId(item.id)" class="autosize" v-model="comment[item.id]" placeholder="Thêm bình luận"></textarea>
+                                    <span class="send" @click="handleAddComment(item.id)" v-if="showSend[item.id]">
+                                        <i class="ri-arrow-right-line"></i>
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -606,6 +813,51 @@ export default {
                                         : ""
                                 }}</small>
                             </span>
+                            <span class="comment"><i class="ri-chat-3-line"></i><small>{{ currentPadlets && currentPadlets.comments.length ? currentPadlets.comments.length : '' }}</small></span>
+                        </div>
+                        <div class="">
+                            <div class="list-messenger mt-3" v-if="currentPadlets && currentPadlets.comments.length">
+                                <div class="d-flex mt-2" v-for="comment in currentPadlets.comments" :key="comment.id">
+                                    <div class="avatar">
+                                        <img :src="comment.avatar" alt="">
+                                    </div>
+                                    <div class="content-messenger">
+                                        <div class="">
+                                            <div class="d-flex justify-content-between">
+                                                <h6 class="name">{{ comment.fullname }}</h6>
+                                                <div class="more-button">
+                                                    <div class="btn-group">
+                                                        <button type="button" class="btn btn-light btn-sm dropdown-toggle border-0 px-0 pb-0 pt-0" data-bs-toggle="dropdown" aria-expanded="false">
+                                                            <i class="ri-more-2-fill"></i>
+                                                        </button>
+                                                        <ul class="dropdown-menu pt-0 pb-0" v-if="dataUser.profile_id == comment.profile_id">
+                                                            <li class="d-flex px-2" @click="editComment(comment.id, currentPadlets.id)"><span><i class="ri-pencil-line"></i></span><span>Chỉnh sửa bình luận</span></li>
+                                                            <li class="d-flex px-2 color-red" @click="handleRemoveComment(comment.id, currentPadlets.id)"><span><i class="ri-delete-bin-line"></i></span><span>Xoá bình luận</span></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <p v-if="!showEditComment[comment.id]">{{ comment.content }}</p>
+                                        </div>
+                                        <div class="messenger" v-if="showEditComment[comment.id]">
+                                            <textarea class="autosize" v-model="comment.content"></textarea>
+                                            <div class="d-flex justify-content-end mt-2 mb-2">
+                                                <button class="btn btn-outline-secondary btn-sm me-2"  @click="handleCancelComment(comment.id, currentPadlets.id)">Huỷ</button>
+                                                <button class="btn btn-outline-primary btn-sm" @click="handleUpdateComment(comment.id, currentPadlets.id)">Cập nhập</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex mt-3">
+                                <div class="avatar">
+                                    <img :src="dataUser.avatar" alt="">
+                                </div>
+                                <div class="form-messenger">
+                                    <textarea @click="handleGetId(currentPadlets.id)" class="autosize" v-model="comment[currentPadlets.id]" placeholder="Thêm bình luận"></textarea>
+                                    <span class="send" @click="handleAddComment(currentPadlets.id)" v-if="showSend[currentPadlets.id]"><i class="ri-arrow-right-line"></i></span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -657,6 +909,105 @@ export default {
             i {
                 color: red;
             }
+        }
+    }
+    .avatar {
+        min-width: 25px;
+        height: 25px;
+        margin-right: 5px;
+        max-width: 25px;
+        img {
+            border-radius: 100%;
+            width: 100%;
+            height: 100%;
+            object-fit: fill;
+        }
+    }
+    .more-button{
+        .dropdown-toggle:after{
+            display: none;
+        }
+        .dropdown-menu {
+            left: auto !important;
+            right: 0 !important;
+            width: 175px !important;
+            box-shadow: 0px 5px 10px 0px var(--bs-dropdown-divider-bg);
+            li {
+                cursor: pointer;
+                position: relative;
+                font-size:14px;
+                padding-top: 0.5rem;
+                padding-bottom: 0.5rem;
+                span{
+                    display: inline-block;
+                    &:first-child {
+                        margin-right: 5px;
+                    }
+                }
+                &.color-red {
+                    color: red;
+                }
+                &:first-child {
+                    &:after {                    
+                        content:none;
+                    }
+                }
+                &:after {
+                    position: absolute;
+                    height: 1px;
+                    background: rgba(0,0,0,.2);
+                    left: 0.5rem;
+                    width: calc(100% - 1rem);
+                    content:'';
+                    top:0
+                }
+                
+            }
+        }
+        .btn-sm{
+            &.dropdown-toggle{
+                background: #fff;
+            }
+        }
+    }
+    .content-messenger {
+        width: 100%;
+        .name {
+            font-size: 13px;
+            margin-bottom: 0;
+            position: relative;
+            top: 5px;
+        }
+        p {
+            margin: 0;
+            font-size: 13px;
+        }
+        .messenger {
+            
+        }
+    }
+    textarea {
+        border: 0;
+        font-size: 14px;
+        width: 100%;
+        resize: none;
+        background-color: transparent;
+        outline: none;
+        &.autosize {
+            min-height: 30px;
+        }
+    }
+    .form-messenger {
+        position: relative;
+        width: 100%;
+        textarea {
+            padding-right: 20px;
+        }
+        .send {
+            position: absolute;
+            right: 0px;
+            top:5px;
+            cursor: pointer;
         }
     }
 }
@@ -943,5 +1294,48 @@ export default {
 .modal-body {
     scrollbar-color: rgba(0, 0, 0, 0.5) #fff;
     scrollbar-width: thin;
+}
+@media screen and (max-width: 1440px){
+    .masonry-sizer, .masonry-item  {
+        width: 19%;
+    }
+    .masonry {
+        margin-left: 1%;
+    }
+    .gutter-sizer {
+        width: 1%;
+    }
+}
+@media screen and (max-width: 1168px){
+    .masonry-sizer, .masonry-item  {
+        width: 24%;
+    }
+}
+@media screen and (max-width: 1168px){
+    .masonry-sizer, .masonry-item  {
+        width: 24%;
+    }
+}
+@media screen and (max-width: 992px){
+    .masonry-sizer, .masonry-item  {
+        width: 32.3333333333333333333%;
+    }
+}
+@media screen and (max-width: 568px){
+    .masonry-sizer, .masonry-item  {
+        width: 49%;
+    }
+}
+@media screen and (max-width: 568px){
+    .masonry-sizer, .masonry-item  {
+        width: 100%;
+    }
+    .masonry {
+        margin-left: 1%;
+        margin-right: 1%;
+    }
+    .gutter-sizer {
+        width: 0%;
+    }
 }
 </style>
