@@ -1,4 +1,7 @@
 <template>
+    <div class="custom-cusor" >
+      <img :src="imgDuaPhep" class="img-dua" id="img-dua" width="100" style="opacity: 0;">
+    </div>
     <div class="game-thuvientoantri">
         <button class="btn-start" @click="reloadFlip()">Làm mới</button>
         <p class="text-center text-white" v-if="checkGameOver">Bạn đã thua cuộc, vui lòng "Làm mới" để tiếp tục (Trừ 5 đá
@@ -93,6 +96,7 @@ export default {
             imgloser: '/images/sinhnhat11nam/img_main/loser.png',
             imgPopUpQua: '/images/sinhnhat11nam/img_main/popup-qua.png',
             iconLongvu: '/images/sinhnhat11nam/img_main/icon-longvu.png',
+            imgDuaPhep: '/images/sinhnhat11nam/img_main/dua-phep.png',
             iconDamattrang: '/images/sinhnhat11nam/img_main/icon-da-mat-trang.png',
             randomMessages: [
                 "Hãy mở tiếp cho đến khi tổ tiên mách bảo!",
@@ -244,7 +248,7 @@ export default {
                                             text: message,
                                             title:"Bạn đã nhận được",
                                             showConfirmButton: false,
-                                            timer: 2500,
+                                            timer: 1500,
                                             customClass: customClass,
                                             imageUrl: imageUrl,
                                             imageHeight: 80,
@@ -321,6 +325,53 @@ export default {
             console.log("signOut");
             await this.logout();
         },
+
+        cursorDua() {
+            const cursorDua = document.getElementById('img-dua'),
+                mainLDFirst = document.getElementsByClassName("game-thuvientoantri"),
+
+                withClassHover = document.getElementsByClassName("cursor-hover"),
+                cPointer = document.getElementsByClassName("c-pointer"),
+
+                withInMainKimCuong = [
+                ...mainLDFirst,
+                // ...mainKimCuong, 
+                // ...bgKimCuong, 
+                // ...imgBgKimCuong, 
+                // ...listKimCuong, 
+                // ...itKimCuong,
+                // ...imgAni,
+            ];
+            
+            document.addEventListener("mousemove", onMouseMove);
+            document.addEventListener("mousedown", PressBua);
+            document.addEventListener("mouseup", exitPressBua);
+
+            withInMainKimCuong.forEach((element) => {
+            element.addEventListener("mouseover", showBua);
+            element.addEventListener("mouseout", hideBua);
+
+            
+            })
+
+            function showBua() {
+                cursorDua.style.opacity = 1;
+            }
+            function hideBua() {
+                cursorDua.style.opacity = 0;
+            }
+            function PressBua() {
+                cursorDua.style.transform  = "rotate(-30deg)";
+            }
+            function exitPressBua() {
+                cursorDua.style.transform  = "rotate(0deg)";
+            }
+
+            function onMouseMove(e) {
+                cursorDua.style.left = e.clientX-(40)+'px'
+                cursorDua.style.top = e.clientY-(20)+'px'
+            }
+        },
     },
     // code test keyboard
     watch: {
@@ -336,11 +387,17 @@ export default {
         }
     },
     mounted() {
+        this.cursorDua();
     },
 };
 </script>
 
 <style>
+
+.game-thuvientoantri{
+    cursor: none;
+}
+
 .game-thuvientoantri .card {
     perspective: 1000px;
     position: relative;

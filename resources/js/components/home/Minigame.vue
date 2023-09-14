@@ -57,7 +57,7 @@
                 </div>
             </div>
             <div class="modalGameOver" data-aos="zoom-in-up" id="GameOverModal">
-                <h1>Thua rồi!</h1>
+                <h1>{{message_thua}}</h1>
                 <img :src="imgloser" width="500">
             </div>
         </div>
@@ -111,6 +111,15 @@ export default {
             imgloser: '/images/sinhnhat11nam/img_main/loser.png',
             iconLongvu: '/images/sinhnhat11nam/img_main/icon-longvu.png',
             iconDamattrang: '/images/sinhnhat11nam/img_main/icon-da-mat-trang.png',
+            randomMessages: [
+                "Chưa may mắn rồi, luyện tập thêm rồi quay lại đây nhé.",
+                "Lại làm sai nữa rồi, còn không mau thử lại đi.",
+                "Phù thủy tập sự cần luyện tập thêm đấy.",
+                "E là ngươi khó qua nổi kỳ thi này rồi.",
+                "Cố lên nào, thử lại lần nữa nhé.",
+                "Thiếu một xíu may mắn thôi, làm lại lần nữa nào."
+            ],
+            message_thua: "",
         };
     },
     created() {
@@ -251,7 +260,7 @@ export default {
                                             text: message,
                                             title:"Bạn đã nhận được",
                                             showConfirmButton: false,
-                                            timer: 2500,
+                                            timer: 1500,
                                             customClass: customClass,
                                             imageUrl: imageUrl,
                                             imageHeight: 80,
@@ -356,11 +365,13 @@ export default {
     watch: {
         checkGameOver(newValue) {
             if (newValue) {
+                const randomIndex = Math.floor(Math.random() * this.randomMessages.length);
+                this.message_thua = this.randomMessages[randomIndex];
                 // Hiển thị modal khi game over
                 $('#GameOverModal').css('display','flex');
                 setTimeout(() => {
                     $('#GameOverModal').hide();
-                }, 3000);
+                }, 1500);
             }
         },
     },
