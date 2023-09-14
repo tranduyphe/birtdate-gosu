@@ -91,7 +91,7 @@ class QuestRepository
                 'diamond_reward' => 5
             ],
             [
-                'name' => 'Thắp sáng 1 mảnh mosaic ở  sảnh trường bằng cách điểm danh 3 ngày liên tiếp ',
+                'name' => 'Điểm danh 3 ngày trong khóa học để thắp sáng 1 mảnh mosaic ở Sảnh Trường Họp Hẹp',
                 'type' => '9',
                 'total_attempts' => 1,
                 'current_attempts' => 0,
@@ -124,6 +124,7 @@ class QuestRepository
 
             // Thực hiện truy vấn trong bảng minigame_quest
             $count = MinigameQuests::where('user_id', $userId)
+                ->whereDate('created_at', '<>', $today)
                 ->count();
             if ($count >= 2) {
                 $currentAttempts9 = 1;

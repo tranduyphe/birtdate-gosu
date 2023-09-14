@@ -13,35 +13,39 @@
 <script>
 import {list_back} from '../script.js'
 export default {
+    
+    props: {
+        dataPuzzle: Array,
+    },
     data(){
         return{
             list_back: list_back,
-            dataPuzzle: [],
+            // dataPuzzle: [],
         }
     },
     methods: {
-        getDataSanhTruongHopHep() {
+        // getDataSanhTruongHopHep() {
             
-            let self = this;
-            axios.get('/api/get-data-sanh-truong-hop-hep', {
-            })
-                .then(function (response) {
-                    if (response.data.status === 200 && response.data.success == true) {
-                        self.dataPuzzle = response.data.data ?? [];
-                        console.log(self.dataPuzzle);
-                    }
-                })
-                .catch((error) => {
-                    console.log(error);
-                    if (error.response && error.response.status === 401) {
-                        this.logoutSubmit()
-                    }
-                })
-                .finally();
-        },
+        //     let self = this;
+        //     axios.get('/api/get-data-sanh-truong-hop-hep', {
+        //     })
+        //         .then(function (response) {
+        //             if (response.data.status === 200 && response.data.success == true) {
+        //                 self.dataPuzzle = response.data.data ?? [];
+        //                 console.log(self.dataPuzzle);
+        //             }
+        //         })
+        //         .catch((error) => {
+        //             console.log(error);
+        //             if (error.response && error.response.status === 401) {
+        //                 this.logoutSubmit()
+        //             }
+        //         })
+        //         .finally();
+        // },
     },
     created() {
-        this.getDataSanhTruongHopHep();
+        // this.getDataSanhTruongHopHep();
     },
 };
 </script>
