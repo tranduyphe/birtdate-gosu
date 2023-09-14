@@ -135,6 +135,7 @@ export default {
 .landscape-notification img{
     animation: swingOne 1.5s ease infinite alternate;
     margin-bottom: 100px;
+    
 }
 
 .landscape-notification p{
