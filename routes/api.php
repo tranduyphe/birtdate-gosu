@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\WallController;
+use App\Http\Controllers\API\CommentController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -27,6 +28,15 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
             Route::post( '/', array( WallController::class, 'index' ) );
             Route::post( '/create', array( WallController::class, 'create' ) );
             Route::post( '/update/{id}', array( WallController::class, 'update' ) );
+        }
+    );
+    Route::group(
+        array( 'prefix' => 'comment' ),
+        function () {
+            //Route::post( '/', array( CommentController::class, 'index' ) );
+            Route::post( '/create', array( CommentController::class, 'create' ) );
+            Route::post( '/update/{id}', array( CommentController::class, 'update' ) );
+            Route::post( '/delete/{id}', array( CommentController::class, 'destroy' ) );
         }
     );
     Route::get('/get-flip', [App\Http\Controllers\FlipController::class, 'getFlip'])->name('flip');
