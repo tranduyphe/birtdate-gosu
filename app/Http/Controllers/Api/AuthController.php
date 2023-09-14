@@ -37,8 +37,11 @@ class AuthController extends Controller
         if(Auth::attempt(['email' => $email, 'password' => $password])){
             $authUser = Auth::user();
             $success['token'] =  $authUser->createToken($authUser->name)->plainTextToken; 
-            $success['name'] =  $authUser->last_name;
+            $success['name'] =  $authUser->name;
+            $success['fullname'] =  $authUser->first_name.' '.$authUser->last_name;
             $success['avatar'] =  $authUser->avatar;
+            $success['user_code'] =  $authUser->user_code;
+            $success['profile_id'] =  $authUser->profile_id;
             $results = array(
                 'message' => 'Đăng nhập thành công.',
                 'data' => $success,
@@ -61,13 +64,17 @@ class AuthController extends Controller
                         'avatar' => $infoProfile->Data->AvatarUrl,
                         'first_name' => $infoProfile->Data->FirstName,
                         'last_name' => $infoProfile->Data->LastName,
+                        //'user_code' => $this->generateUniqueUserCode()
                     );
                     $this->create($data);
                     if(Auth::attempt(['email' => $request->email, 'password' => $password])){
                         $authUser = Auth::user();
                         $success['token'] =  $authUser->createToken(current(explode("@", $infoProfile->Data->Email)))->plainTextToken; 
-                        $success['name'] =  $authUser->last_name;
+                        $success['name'] = $authUser->name;
+                        $success['fullname'] =  $authUser->first_name.' '.$authUser->last_name;
                         $success['avatar'] =  $authUser->avatar;
+                        $success['user_code'] =  $authUser->user_code;
+                        $success['profile_id'] =  $authUser->profile_id;
                         $results = array(
                             'message' => 'Đăng nhập thành công.',
                             'data' => $success,
@@ -110,5 +117,31 @@ class AuthController extends Controller
     {
         $results = User::create($data);
         return $results;
+    }
+    function generateUniqueUserCode() {
+        $code = $this->generateCode(); // Hàm generateCode() để tạo mã mới
+        
+        // Kiểm tra xem mã đã tồn tại trong cơ sở dữ liệu hay chưa
+        $userWithCode = User::where('user_code', $code)->first();
+        
+        // Lặp lại cho đến khi tìm được mã không trùng
+        while ($userWithCode) {
+            $code = $this->generateCode();
+            $userWithCode = User::where('user_code', $code)->first();
+        }
+        
+        return $code;
+    }
+    
+    function generateCode() {
+        // Đây là nơi bạn thực hiện logic để tạo mã mới, ví dụ:
+        $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $code = '';
+
+        for ($i = 0; $i < 8; $i++) {
+            $code .= $characters[random_int(0, strlen($characters) - 1)];
+        }
+
+        return $code;
     }
 }

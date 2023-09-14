@@ -5,7 +5,7 @@ const login = async (data) => {
             email: data.email,
             password: data.password,
         });
-
+        console.log("check login result",result);
         return result;
     } catch (error) {
         console.error('Lỗi khi đăng nhập', error);
@@ -29,7 +29,8 @@ const logout = async (token) => {
         return result;
     } catch (error) {
         console.error('Lỗi khi đăng xuất', error);
-        throw error;
+        // throw error;
+        return {status:-1};
     }
 };
 
