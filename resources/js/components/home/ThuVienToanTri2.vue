@@ -29,6 +29,9 @@
             <div class="line-break text-center my-3">
                 <img :src="lineBrealimg" alt="">
             </div>
+            <div class="col-md-4 text-center">
+                <img :src="imgthuvien" width="200">
+            </div>
             <div class="col-md-4">
                 <p style="margin-top: 0pt; margin-bottom: 14pt; text-align: justify; font-size: 16pt; line-height: 1;"><b><span style="text-align: left; color: rgb(255, 255, 255); font-size: 18px;">(*) Cần tốn 5 Đá Mặt Trăng cho 1 lần mở ô.</span></b></p>
             </div>
@@ -105,7 +108,8 @@ export default {
                 "Câu thần chú có vẻ chưa đúng nên chưa có trúng.",
                 "Bạn không sai, Share To Shine!",
                 "Vừa trượt tay có tí, làm lại lần nữa nào!"
-            ]
+            ],
+            imgthuvien: '/images/sinhnhat11nam/img_main/img-thuvien.png',
         };
     },
     created() {

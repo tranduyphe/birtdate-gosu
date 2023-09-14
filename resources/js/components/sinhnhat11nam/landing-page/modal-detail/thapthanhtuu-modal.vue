@@ -43,10 +43,10 @@
                         </div>
                         <div class="user_code">
                             <p class="mb-0">Mã của bạn:&nbsp;</p>
-                            <strong>{{ user_code }}</strong>
+                            <strong>{{ user_code }}&nbsp;</strong>
                             <button class="btn btn-success" @click="copyContent">Sao chép mã của bạn</button>
                         </div>
-                        <div class="task row justify-content-evenly align-items-center">
+                        <div class="task row justify-content-evenly align-items-center flex-column">
                             <div v-for="(item, index) in nhiemvu" :key="index"
                                 class="item-task col-lg-5 d-flex align-items-center justify-content-between">
                                 <div class="div-img mui-ten nhan-da" v-if="readInstructions == 0 && index == 0 && isDivVisible">
@@ -55,11 +55,11 @@
                                         <img :src="muitenimgUrl" alt="" width="120">
                                     </div>
                                 </div>
-                                <span class="star"
-                                    :style="{ color: item.is_reward == 0 ? '#b2ad8a' : '#289e11' }">&#10022;</span>
+                                <span class="star" :style="{ color: item.is_reward == 0 ? '#b2ad8a' : '#289e11' }">&#10022;</span>
+                                <span class="stt" :style="{ color: item.is_reward == 0 ? '#b2ad8a' : '#289e11' }">{{ index + 1 }}</span>
                                 <div class="item-info col-9 d-flex align-items-center">
                                     <p class="m-0">{{ item.name }}</p>
-                                    <div class="friendcode d-flex" v-if="index == 1"><input class="form-control w-75" v-model="friendCode"><button class="btn btn-success" type="button" @click="invite">Mời</button></div>
+                                    <div class="friendcode d-flex" v-if="index == 4"><input class="form-control w-75" v-model="friendCode"><button class="btn btn-success" type="button" @click="invite">Mời</button></div>
                                 </div>
                                 <div class="point">
                                     <p class="m-0" :style="{ color: item.is_reward == 0 ? '#b2ad8a' : '#289e11' }">{{
@@ -345,7 +345,7 @@
                                                 <strong><span style="font-family: Cambria; color: #ffffff;">Số lượng</span></strong>
                                             </p>
                                         </td>
-                                        <td style="width: 110.05pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle; background-color: #2e75b5;">
+                                        <td style="width: 113.05pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle; background-color: #2e75b5;">
                                             <p style="margin-top: 0pt; margin-bottom: 0pt; text-align: center; font-size: 11pt;">
                                                 <strong><span style="font-family: Cambria; color: #ffffff;">T&ecirc;n giải</span></strong>
                                             </p>
@@ -365,7 +365,7 @@
                                         <td style="border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
                                             <p style="margin-top: 0pt; margin-bottom: 0pt; text-align: center; font-size: 11pt;"><span style="font-family: Cambria;">1</span></p>
                                         </td>
-                                        <td style="width: 110.05pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
+                                        <td style="width: 113.05pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
                                             <p style="margin-top: 0pt; margin-bottom: 0pt; text-align: justify; font-size: 11pt;"><span style="font-family: Cambria;">Ph&ugrave; Thủy Huyền Thoại</span></p>
                                         </td>
                                         <td style="width: 185.25pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
@@ -379,7 +379,7 @@
                                         <td style="border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
                                             <p style="margin-top: 0pt; margin-bottom: 0pt; text-align: center; font-size: 11pt;"><span style="font-family: Cambria;">1</span></p>
                                         </td>
-                                        <td style="width: 110.05pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
+                                        <td style="width: 113.05pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
                                             <p style="margin-top: 0pt; margin-bottom: 0pt; text-align: justify; font-size: 11pt;"><span style="font-family: Cambria;">Ph&ugrave; Thủy Quyền Năng</span></p>
                                         </td>
                                         <td style="width: 185.25pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
@@ -393,7 +393,7 @@
                                         <td style="border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
                                             <p style="margin-top: 0pt; margin-bottom: 0pt; text-align: center; font-size: 11pt;"><span style="font-family: Cambria;">1</span></p>
                                         </td>
-                                        <td style="width: 110.05pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
+                                        <td style="width: 113.05pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
                                             <p style="margin-top: 0pt; margin-bottom: 0pt; text-align: justify; font-size: 11pt;"><span style="font-family: Cambria;">Ph&ugrave; Thủy Đo&agrave;n Trưởng</span></p>
                                         </td>
                                         <td style="width: 185.25pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
@@ -407,7 +407,7 @@
                                         <td style="border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
                                             <p style="margin-top: 0pt; margin-bottom: 0pt; text-align: center; font-size: 11pt;"><span style="font-family: Cambria;">1</span></p>
                                         </td>
-                                        <td style="width: 110.05pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
+                                        <td style="width: 113.05pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
                                             <p style="margin-top: 0pt; margin-bottom: 0pt; text-align: justify; font-size: 11pt;"><span style="font-family: Cambria;">Ph&ugrave; Thủy Bản Lĩnh</span></p>
                                         </td>
                                         <td style="width: 185.25pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
@@ -423,7 +423,7 @@
                                         <td style="border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
                                             <p style="margin-top: 0pt; margin-bottom: 0pt; text-align: center; font-size: 11pt;"><span style="font-family: Cambria;">1</span></p>
                                         </td>
-                                        <td style="width: 110.05pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
+                                        <td style="width: 113.05pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
                                             <p style="margin-top: 0pt; margin-bottom: 0pt; text-align: justify; font-size: 11pt;"><span style="font-family: Cambria;">Ph&ugrave; Thủy Chăm Chỉ</span></p>
                                         </td>
                                         <td style="width: 185.25pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
@@ -434,7 +434,7 @@
                                         <td style="border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
                                             <p style="margin-top: 0pt; margin-bottom: 0pt; text-align: center; font-size: 11pt;"><span style="font-family: Cambria;">3</span></p>
                                         </td>
-                                        <td style="width: 110.05pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
+                                        <td style="width: 113.05pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
                                             <p style="margin-top: 0pt; margin-bottom: 0pt; text-align: justify; font-size: 11pt;"><span style="font-family: Cambria;">Ph&ugrave; Thủy Thiện Chiến</span></p>
                                         </td>
                                         <td style="width: 185.25pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
@@ -445,7 +445,7 @@
                                         <td style="border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
                                             <p style="margin-top: 0pt; margin-bottom: 0pt; text-align: center; font-size: 11pt;"><span style="font-family: Cambria;">3</span></p>
                                         </td>
-                                        <td style="width: 110.05pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
+                                        <td style="width: 113.05pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
                                             <p style="margin-top: 0pt; margin-bottom: 0pt; text-align: justify; font-size: 11pt;"><span style="font-family: Cambria;">Ph&ugrave; Thủy Ti&ecirc;n Tri</span></p>
                                         </td>
                                         <td style="width: 185.25pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
@@ -456,12 +456,12 @@
                                         <td style="border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
                                             <p style="margin-top: 0pt; margin-bottom: 0pt; text-align: center; font-size: 11pt;"><span style="font-family: Cambria;">3</span></p>
                                         </td>
-                                        <td style="width: 110.05pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
+                                        <td style="width: 113.05pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
                                             <p style="margin-top: 0pt; margin-bottom: 0pt; text-align: justify; font-size: 11pt;"><span style="font-family: Cambria;">Ph&ugrave; Thủy Thần Tốc</span></p>
                                         </td>
                                         <td style="width: 185.25pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
                                             <p style="margin-top: 0pt; margin-bottom: 0pt; text-align: justify; font-size: 11pt;">
-                                                <span style="font-family: Cambria;">Ph&ugrave; thủy c&oacute; thời gian ho&agrave;n th&agrave;nh to&agrave;n bộ thử th&aacute;ch trong ng&agrave;y ngắn nhất</span>
+                                                <span style="font-family: Cambria;">Thời gian hoàn thành 9 thử thách đầu tiên trong ngày nhanh nhất</span>
                                             </p>
                                         </td>
                                     </tr>
@@ -469,7 +469,7 @@
                                         <td style="border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
                                             <p style="margin-top: 0pt; margin-bottom: 0pt; text-align: center; font-size: 11pt;"><span style="font-family: Cambria;">189</span></p>
                                         </td>
-                                        <td style="width: 110.05pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
+                                        <td style="width: 113.05pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
                                             <p style="margin-top: 0pt; margin-bottom: 0pt; text-align: justify; font-size: 11pt;"><span style="font-family: Cambria;">Ph&ugrave; Thủy Tiềm Long</span></p>
                                         </td>
                                         <td style="width: 185.25pt; border-style: solid; border-width: 0.75pt; padding: 0.75pt; vertical-align: middle;">
@@ -813,7 +813,14 @@ export default {
 
 #ThapThanhTuu-Modal .tab-pane .task .item-task {
     padding-right: 0;
+    position: relative;
+}
 
+#ThapThanhTuu-Modal .tab-pane .task .item-task span.stt{
+    position: absolute;
+    left: -35px;
+    font-size: 16px;
+    font-weight:bold;
 }
 
 #ThapThanhTuu-Modal .tab-pane .task::-webkit-scrollbar-track,#v-tabs-the-le .content::-webkit-scrollbar-track {
@@ -931,16 +938,16 @@ export default {
     padding: 0 50px;
 }
 
-#v-tabs-thu-thach .item-task:nth-child(1){ order: 1; }
-#v-tabs-thu-thach .item-task:nth-child(2){ order: 2; }
-#v-tabs-thu-thach .item-task:nth-child(3){ order: 4; }
+/* #v-tabs-thu-thach .item-task:nth-child(1){ order: 1; }
+#v-tabs-thu-thach .item-task:nth-child(2){ order: 9; }
+#v-tabs-thu-thach .item-task:nth-child(3){ order: 2; }
 #v-tabs-thu-thach .item-task:nth-child(4){ order: 3; }
 #v-tabs-thu-thach .item-task:nth-child(5){ order: 5; }
 #v-tabs-thu-thach .item-task:nth-child(6){ order: 7; }
-#v-tabs-thu-thach .item-task:nth-child(7){ order: 9; }
+#v-tabs-thu-thach .item-task:nth-child(7){ order: 4; }
 #v-tabs-thu-thach .item-task:nth-child(8){ order: 6; }
 #v-tabs-thu-thach .item-task:nth-child(9){ order: 8; }
-#v-tabs-thu-thach .item-task:nth-child(10){ order: 10; }
+#v-tabs-thu-thach .item-task:nth-child(10){ order: 10; } */
 
 #ThapThanhTuu-Modal .div-img.mui-ten img{
     transform: rotateZ(45deg);
