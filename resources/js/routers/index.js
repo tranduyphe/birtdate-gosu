@@ -6,7 +6,7 @@ import home from '@/components/home/index.vue';
 import Minigame from '@/components/home/Minigame.vue';
 import Quest from '@/components/home/Quest.vue';
 import ManhGhep from '@/components/home/ManhGhep.vue';
-
+import wall from '@/components/wall/';
 import ThuVienToanTri from '../components/home/ThuVienToanTri.vue';
 
 import Launch from '../components/sinhnhat11nam/landing-page/Launch.vue';
@@ -92,6 +92,14 @@ const routes = [
 			title: `Sinh Nhật GOSU 11 Năm`
 		},
 		
+	},
+	{
+		name: 'wall',
+		path: '/wall',
+		component: wall,
+		meta: {
+			middleware: "auth"
+		},
 	},
 ]
 
