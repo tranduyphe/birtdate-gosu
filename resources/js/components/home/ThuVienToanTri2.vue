@@ -206,12 +206,15 @@ export default {
                                         let reward = response.data.data.reward;
                                         let imageUrl = "";
                                         let message = "";
+                                        let customClass = "";
                                         if (reward.length == 0) {
                                             message = "Chúc bạn may mắn lần sau.";
                                             const randomIndex = Math.floor(Math.random() * self.randomMessages.length);
                                             message = self.randomMessages[randomIndex];
                                             imageUrl = '/images/sinhnhat11nam/img_main/may-man-lan-sau.png'
+                                            customClass = 'swal-wide error';
                                         } else {
+                                            customClass = 'swal-wide';
                                             for (let i = 0; i < reward.length; i++) {
                                                 console.log("reward[i]", reward[i].record);
                                                 console.log("reward[i].item_id: ", reward[i].item_id);
@@ -242,7 +245,7 @@ export default {
                                             title:"Bạn đã nhận được",
                                             showConfirmButton: false,
                                             timer: 2500,
-                                            customClass: 'swal-wide',
+                                            customClass: customClass,
                                             imageUrl: imageUrl,
                                             imageHeight: 80,
                                         });

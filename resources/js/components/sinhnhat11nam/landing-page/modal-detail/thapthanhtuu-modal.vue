@@ -320,7 +320,7 @@
                             </ol>
                             <p style="margin-top: 14pt; margin-bottom: 14pt; text-align: justify; line-height: normal; font-size: 14pt;">
                                 <span style="font-family: Cambria;">
-                                    Đ&acirc;y l&agrave; khu vực thường được sử dụng l&agrave;m nơi tập trung của c&aacute;c ph&ugrave; thủy, tuy nhi&ecirc;n ẩn b&ecirc;n dưới nền sảnh l&agrave; 1 ấn ch&uacute; phong ấn đặc biệt m&agrave; chỉ khi c&aacute;c Ph&ugrave;
+                                    Đ&acirc;y l&agrave; khu vực thường được sử dụng l&agrave;m nơi tập trung của c&aacute;c Ph&ugrave; thủy, tuy nhi&ecirc;n ẩn b&ecirc;n dưới nền sảnh l&agrave; 1 ấn ch&uacute; phong ấn đặc biệt m&agrave; chỉ khi c&aacute;c Ph&ugrave;
                                     thủy tập sự ho&agrave;n th&agrave;nh nhiệm vụ được giao th&igrave; ấn ch&uacute; mới được gỡ bỏ v&agrave; h&eacute; lộ điều kỳ diệu đ&atilde; bị cất giấu suốt nhiều thập kỷ tại nơi đ&acirc;y.
                                 </span>
                             </p>
@@ -644,25 +644,25 @@ export default {
                                     self.$emit("updateAttrLongvu", response.data.data.user.feathers);
                                 }
                                 // alert(response.data.message);
-                                // self.$swal.fire({
-                                //     position: "center",
-                                //     icon: "success",
-                                //     title: response.data.message,
-                                //     showConfirmButton: false,
-                                //     timer: 1500
-                                // });
-
                                 self.$swal.fire({
                                     position: "center",
-                                    // icon: "success",
-                                    text: response.data.message,
-                                    title:"Bạn đã nhận được",
+                                    icon: "success",
+                                    title: response.data.message,
                                     showConfirmButton: false,
-                                    timer: 2000,
-                                    customClass: 'swal-wide',
-                                    imageUrl: '/images/sinhnhat11nam/img_main/icon-da-mat-trang.png',
-                                    imageHeight: 80,
+                                    timer: 1500
                                 });
+
+                                // self.$swal.fire({
+                                //     position: "center",
+                                //     // icon: "success",
+                                //     text: response.data.message,
+                                //     title:"Bạn đã nhận được",
+                                //     showConfirmButton: false,
+                                //     timer: 2000,
+                                //     customClass: 'swal-wide',
+                                //     imageUrl: '/images/sinhnhat11nam/img_main/icon-da-mat-trang.png',
+                                //     imageHeight: 80,
+                                // });
                             } else {
                                 if (response.data.data.quests) {
                                     // self.nhiemvu = response.data.data.nhiemvu;
@@ -725,24 +725,22 @@ export default {
                 setTimeout(() => {
                     this.isDivVisible = false;
                 }, 5000);
-            }, 5000);
-            axios.get('/api/done-instructions', {
-                    })
-                    .then(function (response) {
-                        if (response.data.status === 200) {
-                           
-                        }
-                    })
-                    .catch((error) => {
-                        self.rewardFlag = false;
-                        console.log(error);
-                        if (error.response && error.response.status === 401) {
-                            this.logoutSubmit()
-                        }
-                    })
-                    .finally();
+            }, 3000);
+            
+            axios.get('/api/done-instructions', { })
+            .then(function (response) {
+                if (response.data.status === 200) {
                     
-
+                }
+            })
+            .catch((error) => {
+                self.rewardFlag = false;
+                console.log(error);
+                if (error.response && error.response.status === 401) {
+                    this.logoutSubmit()
+                }
+            })
+            .finally();
         }
     },
     mounted(){

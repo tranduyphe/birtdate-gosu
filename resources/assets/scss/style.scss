@@ -667,6 +667,14 @@ textarea {
     font-family : 'UVNLacLongQuan';
 }
 
+.swal-wide.error{
+    background: url('../../../resources/assets/images/sinhnhat11nam/img_main/popup-error.png');
+}
+
+.swal-wide.error .swal2-title{
+    opacity: 0;
+}
+
 .swal-wide .swal2-image{
     order: 2;
     margin-bottom: 0;

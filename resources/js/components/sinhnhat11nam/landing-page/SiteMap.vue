@@ -64,14 +64,14 @@
                     <span class="font-size-16 text-white">{{ completedQuestCount }}</span>
                 </button>
                 <div class="bubble-content">
-                    <p>Thông báo </p>
+                    <p>Thông báo</p>
                 </div>
             </div>
             <div class="div-img items kimcuong" data-aos="fade-left">
                 <img :src="kimcuongimgUrl" alt="Thông báo" width="">
                 <span class="font-size-16 text-white">{{ attrKimcuong }}</span>
                 <div class="bubble-content">
-                    <p>Đá mặt trăng</p>
+                    <p>Đá Mặt Trăng</p>
                 </div>
 
             </div>
@@ -79,7 +79,7 @@
                 <img :src="longvuimgUrl" alt="Thông báo" width="">
                 <span class="font-size-16 text-white">{{ attrLongvu }}</span>
                 <div class="bubble-content">
-                    <p>Lông phượng hoàng</p>
+                    <p>Lông Phượng Hoàng</p>
                 </div>
             </div>
         </div>

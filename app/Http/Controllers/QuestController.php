@@ -242,7 +242,7 @@ class QuestController extends Controller
                     ->get();
                 $response = [
                     "status" => 200,
-                    "message" => "Đá mặt trăng +" . $record,
+                    "message" => "Bạn đã nhận được" . $record . "Đá mặt trăng",
                     "data" => [
                         'quests' => $getQuest,
                         'user' => $user,
