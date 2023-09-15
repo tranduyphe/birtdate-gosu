@@ -71,7 +71,7 @@
                                         item.current_attempts }}/{{ item.total_attempts }}</p>
                                 </div>
 
-                                <div class="item-button" v-if="item.is_reward == 0">
+                                <div class="item-button" v-if="item.is_reward == 0" :class="{'item-button-active': item.current_attempts == item.total_attempts}">
                                     <button class="btn p-0" @click="getReWard(item.type)"><img :src="iconBtn"
                                             title="Bấm vào đây để nhận thưởng"></button>
                                     <span class="diamond-reward">{{ item.diamond_reward }}</span>
@@ -818,7 +818,7 @@ export default {
         ...authGetters,
 
         async invite() {
-            if (this.nhiemvu[1] && this.nhiemvu[1]['current_attempts'] < this.nhiemvu[1]['total_attempts']) {
+            if (this.nhiemvu[4] && this.nhiemvu[4]['current_attempts'] < this.nhiemvu[4]['total_attempts']) {
                 if (this.inviteFlag == false) {
                     this.inviteFlag = true;
                     let user = await this.users();
@@ -875,7 +875,8 @@ export default {
                         .finally();
                 }
 
-            } {
+            } else {
+                console.log("this.nhiemvu[4]",this.nhiemvu[4]);
                 this.$swal.fire({
                     position: "center",
                     icon: "error",
@@ -1147,6 +1148,13 @@ export default {
     border: none;
 }
 
+.item-button-active{
+    -webkit-animation: glowing 1500ms infinite;
+    -moz-animation: glowing 1500ms infinite;
+    -o-animation: glowing 1500ms infinite;
+    animation: glowing 1500ms infinite;
+}
+
 .item-button span.diamond-reward {
     position: absolute;
     right: 2px;
@@ -1286,4 +1294,29 @@ export default {
 #ThapThanhTuu-Modal .div-img.mui-ten.nhan-da .popup {
     width: 170px;
     margin-bottom: -20px
-}</style>
+}
+
+@-webkit-keyframes glowing {
+  0% { filter: brightness(120%); }
+  50% { filter: brightness(150%); }
+  100% { filter: brightness(120%); }
+}
+ 
+@-moz-keyframes glowing {
+  0% { filter: brightness(120%); }
+  50% { filter: brightness(150%); }
+  100% { filter: brightness(120%); }
+}
+ 
+@-o-keyframes glowing {
+  0% { filter: brightness(120%); }
+  50% { filter: brightness(150%); }
+  100% { filter: brightness(120%); }
+}
+ 
+@keyframes glowing {
+  0% { filter: brightness(120%); }
+  50% { filter: brightness(150%); }
+  100% { filter: brightness(120%); }
+}
+</style>
