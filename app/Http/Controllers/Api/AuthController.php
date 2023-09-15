@@ -123,8 +123,7 @@ class AuthController extends Controller
         $code = $this->generateCode(); // Hàm generateCode() để tạo mã mới
         
         // Kiểm tra xem mã đã tồn tại trong cơ sở dữ liệu hay chưa
-        $userWithCode = User::where('user_code', $code)->first();
-        
+        $userWithCode = User::where('user_code', $code)->first();        
         // Lặp lại cho đến khi tìm được mã không trùng
         while ($userWithCode) {
             $code = $this->generateCode();

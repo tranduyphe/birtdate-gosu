@@ -48,7 +48,7 @@
                         <div class="user_code">
                             <p class="mb-0">Mã của bạn:&nbsp;</p>
                             <strong>{{ user_code }}&nbsp;</strong>
-                            <button class="btn btn-success" @click="copyContent">Sao chép mã của bạn</button>
+                            <button class="btn btn-success" @click="copyContent">Sao chép mã của bạn.</button>
                         </div>
                         <div class="task row justify-content-evenly align-items-center flex-column">
                             <div v-for="(item, index) in nhiemvu" :key="index"
@@ -69,9 +69,11 @@
                                 <div class="point">
                                     <p class="m-0" :style="{ color: item.is_reward == 0 ? '#b2ad8a' : '#289e11' }">{{
                                         item.current_attempts }}/{{ item.total_attempts }}</p>
+                                    <button @click="GotoNhaThiDau" class="goto" v-if="index == 1 || index == 2">Đến</button>
+                                    <button @click="GotoThuVien" class="goto" v-if="index == 3">Đến</button>
                                 </div>
 
-                                <div class="item-button" v-if="item.is_reward == 0">
+                                <div class="item-button" v-if="item.is_reward == 0" :class="{'item-button-active': item.current_attempts == item.total_attempts}">
                                     <button class="btn p-0" @click="getReWard(item.type)"><img :src="iconBtn"
                                             title="Bấm vào đây để nhận thưởng"></button>
                                     <span class="diamond-reward">{{ item.diamond_reward }}</span>
@@ -818,7 +820,7 @@ export default {
         ...authGetters,
 
         async invite() {
-            if (this.nhiemvu[1] && this.nhiemvu[1]['current_attempts'] < this.nhiemvu[1]['total_attempts']) {
+            if (this.nhiemvu[4] && this.nhiemvu[4]['current_attempts'] < this.nhiemvu[4]['total_attempts']) {
                 if (this.inviteFlag == false) {
                     this.inviteFlag = true;
                     let user = await this.users();
@@ -875,7 +877,8 @@ export default {
                         .finally();
                 }
 
-            } {
+            } else {
+                console.log("this.nhiemvu[4]",this.nhiemvu[4]);
                 this.$swal.fire({
                     position: "center",
                     icon: "error",
@@ -990,6 +993,17 @@ export default {
                 autoClose: 1500,
             });
         },
+
+        GotoNhaThiDau(){
+            $('.modalThapThanhTuu').modal('hide');
+            $('.modalNhaThiDau').modal('show');
+        },
+
+        GotoThuVien(){
+            $('.modalThapThanhTuu').modal('hide');
+            $('.modalThuVien').modal('show');
+        },
+
 
         // startShowPopup() {
         //     setTimeout(() => {
@@ -1147,6 +1161,13 @@ export default {
     border: none;
 }
 
+.item-button-active{
+    -webkit-animation: glowing 1500ms infinite;
+    -moz-animation: glowing 1500ms infinite;
+    -o-animation: glowing 1500ms infinite;
+    animation: glowing 1500ms infinite;
+}
+
 .item-button span.diamond-reward {
     position: absolute;
     right: 2px;
@@ -1222,52 +1243,6 @@ export default {
 }
 
 
-/* #v-tabs-thu-thach .item-task:nth-child(1){ order: 1; }
-#v-tabs-thu-thach .item-task:nth-child(2){ order: 9; }
-#v-tabs-thu-thach .item-task:nth-child(3){ order: 2; }
-#v-tabs-thu-thach .item-task:nth-child(4){ order: 3; }
-#v-tabs-thu-thach .item-task:nth-child(5){ order: 5; }
-#v-tabs-thu-thach .item-task:nth-child(6){ order: 7; }
-#v-tabs-thu-thach .item-task:nth-child(7){ order: 4; }
-#v-tabs-thu-thach .item-task:nth-child(8){ order: 6; }
-#v-tabs-thu-thach .item-task:nth-child(9){ order: 8; }
-#v-tabs-thu-thach .item-task:nth-child(10){ order: 10; } */
-
-#v-tabs-thu-thach .item-task:nth-child(2) {
-    order: 2;
-}
-
-#v-tabs-thu-thach .item-task:nth-child(3) {
-    order: 4;
-}
-
-#v-tabs-thu-thach .item-task:nth-child(4) {
-    order: 3;
-}
-
-#v-tabs-thu-thach .item-task:nth-child(5) {
-    order: 5;
-}
-
-#v-tabs-thu-thach .item-task:nth-child(6) {
-    order: 7;
-}
-
-#v-tabs-thu-thach .item-task:nth-child(7) {
-    order: 9;
-}
-
-#v-tabs-thu-thach .item-task:nth-child(8) {
-    order: 6;
-}
-
-#v-tabs-thu-thach .item-task:nth-child(9) {
-    order: 8;
-}
-
-#v-tabs-thu-thach .item-task:nth-child(10) {
-    order: 10;
-}
 
 #ThapThanhTuu-Modal .div-img.mui-ten img {
     transform: rotateZ(45deg);
@@ -1332,4 +1307,52 @@ export default {
 #ThapThanhTuu-Modal .div-img.mui-ten.nhan-da .popup {
     width: 170px;
     margin-bottom: -20px
-}</style>
+}
+
+@-webkit-keyframes glowing {
+  0% { filter: brightness(120%); }
+  50% { filter: brightness(150%); }
+  100% { filter: brightness(120%); }
+}
+ 
+@-moz-keyframes glowing {
+  0% { filter: brightness(120%); }
+  50% { filter: brightness(150%); }
+  100% { filter: brightness(120%); }
+}
+ 
+@-o-keyframes glowing {
+  0% { filter: brightness(120%); }
+  50% { filter: brightness(150%); }
+  100% { filter: brightness(120%); }
+}
+ 
+@keyframes glowing {
+  0% { filter: brightness(120%); }
+  50% { filter: brightness(150%); }
+  100% { filter: brightness(120%); }
+}
+
+button.goto{
+    background: linear-gradient(to bottom, #fdd977, #efe4a3);
+    border: 1px solid #ffffff;
+    color: #4d4b39;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    border-radius: 5px;
+    font-size:14px;
+    padding: 1px 10px;
+    display: none;
+}
+
+#v-tabs-thu-thach .item-task:hover:nth-child(2) .point p,
+#v-tabs-thu-thach .item-task:hover:nth-child(3) .point p,
+#v-tabs-thu-thach .item-task:hover:nth-child(4) .point p{
+    display: none;
+}
+
+#v-tabs-thu-thach .item-task:hover:nth-child(2) .point button.goto,
+#v-tabs-thu-thach .item-task:hover:nth-child(3) .point button.goto,
+#v-tabs-thu-thach .item-task:hover:nth-child(4) .point button.goto{
+    display: block;
+}
+</style>
