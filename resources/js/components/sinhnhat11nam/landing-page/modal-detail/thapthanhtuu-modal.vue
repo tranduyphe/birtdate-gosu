@@ -1222,52 +1222,6 @@ export default {
 }
 
 
-/* #v-tabs-thu-thach .item-task:nth-child(1){ order: 1; }
-#v-tabs-thu-thach .item-task:nth-child(2){ order: 9; }
-#v-tabs-thu-thach .item-task:nth-child(3){ order: 2; }
-#v-tabs-thu-thach .item-task:nth-child(4){ order: 3; }
-#v-tabs-thu-thach .item-task:nth-child(5){ order: 5; }
-#v-tabs-thu-thach .item-task:nth-child(6){ order: 7; }
-#v-tabs-thu-thach .item-task:nth-child(7){ order: 4; }
-#v-tabs-thu-thach .item-task:nth-child(8){ order: 6; }
-#v-tabs-thu-thach .item-task:nth-child(9){ order: 8; }
-#v-tabs-thu-thach .item-task:nth-child(10){ order: 10; } */
-
-#v-tabs-thu-thach .item-task:nth-child(2) {
-    order: 2;
-}
-
-#v-tabs-thu-thach .item-task:nth-child(3) {
-    order: 4;
-}
-
-#v-tabs-thu-thach .item-task:nth-child(4) {
-    order: 3;
-}
-
-#v-tabs-thu-thach .item-task:nth-child(5) {
-    order: 5;
-}
-
-#v-tabs-thu-thach .item-task:nth-child(6) {
-    order: 7;
-}
-
-#v-tabs-thu-thach .item-task:nth-child(7) {
-    order: 9;
-}
-
-#v-tabs-thu-thach .item-task:nth-child(8) {
-    order: 6;
-}
-
-#v-tabs-thu-thach .item-task:nth-child(9) {
-    order: 8;
-}
-
-#v-tabs-thu-thach .item-task:nth-child(10) {
-    order: 10;
-}
 
 #ThapThanhTuu-Modal .div-img.mui-ten img {
     transform: rotateZ(45deg);
