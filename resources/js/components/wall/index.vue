@@ -971,6 +971,9 @@ export default {
         i {
             margin-right: 3px;
         }
+        .ri-heart-fill {
+            color: red
+        }
         &:hover {
             i {
                 color: red;

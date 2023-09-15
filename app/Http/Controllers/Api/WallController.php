@@ -56,11 +56,14 @@ class WallController extends Controller
         ];
         $results = $this->wallRepo->create($data);
         if ($results) {
+            $results->toArray();
+            $results['users'] = $user;
             $questType = 8;
             $record = 1;
             $this->questRepository->updateQuest($user, $questType, $record);
+            
         }
-        return response()->json($results->toArray());
+        return response()->json($results);
     }
 
     /**
