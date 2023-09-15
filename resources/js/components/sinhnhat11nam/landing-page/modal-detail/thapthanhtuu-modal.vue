@@ -71,7 +71,7 @@
                                         item.current_attempts }}/{{ item.total_attempts }}</p>
                                     <button @click="GotoNhaThiDau" class="goto" v-if="index == 1 || index == 2">Đến</button>
                                     <button @click="GotoThuVien" class="goto" v-if="index == 3">Đến</button>
-                                    <button @click="GotoPadlet" :class="['goto']" v-if="index == 8"><router-link to="wall">Đến</router-link></button>
+                                    <button :class="['goto']" v-if="index == 8"><router-link @click="GotoPadlet" to="wall">Đến</router-link></button>
                                 </div>
 
                                 <div class="item-button" v-if="item.is_reward == 0" :class="{'item-button-active': item.current_attempts == item.total_attempts}">
