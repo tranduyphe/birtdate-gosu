@@ -1,4 +1,4 @@
-<template>
+<template>    
     <div class="landscape-notification">
         <img src="https://dl.dir.freefiremobile.com/common/web_event/common/images/scape.png" alt="" width="300">
         <p>Vui lòng xoay thiết bị của bạn sang chế độ nằm ngang để có trải nghiệm tốt hơn.</p>
@@ -8,6 +8,18 @@
                 :src="closeimgUrl" alt=""></button>
     </div>
     <div class="wrapper-content" :style="{ backgroundImage: backgroundImageUrl() }">
+        <span class="position-absolute absolute-1">
+            <router-link to="wall"></router-link>
+        </span>
+        <span class="position-absolute absolute-2">
+            <router-link to="wall"></router-link>
+        </span>
+        <span class="position-absolute absolute-3">
+            <router-link to="wall"></router-link>
+        </span>
+        <span class="position-absolute absolute-4">
+            <router-link to="wall"></router-link>
+        </span>
         <div class="div-content">
             <div class="div-img mui-ten" v-if="readInstructions == 0" :class="{ 'd-none': clickedThanhThanhTuu }">
                 <img :src="muitenimgUrl" alt="">
@@ -466,6 +478,45 @@ export default {
 </script>
 
 <style scoped>
+.position-absolute {  
+    position: absolute;
+    display: block; 
+}
+.position-absolute a {
+    width: 50px;
+    height: 50px;   
+    display: block;
+    z-index: 9; 
+}
+.absolute-1{
+    top: 21%;
+    left: 25.5%;
+}
+.absolute-2{
+    top: 34%;
+    left: 25.5%;
+}
+.absolute-2 a{
+    width: 500px;
+    height: 120px;
+}
+.absolute-3 {
+    left: 32%;
+    top: 15%;
+}
+.absolute-3 a{
+    height: 80px;
+    width: 230px;
+}
+.absolute-4 {
+    right: 15.5%;
+    left: auto;
+    top: 43%;
+}
+.absolute-4 a {
+    height: 70px;
+    width: 70px;
+}
 .wrapper-content {
     height: 100vh;
     width: 100%;
@@ -805,4 +856,71 @@ button.close-button:focus-visible {
     100% {
         transform: translateX(-15px);
     }
-}</style>
+}
+@media screen and (max-width: 1440px){
+    .absolute-1{
+        top: 18%;
+        left: 28.5%;
+    }
+    .absolute-2{
+        top: 27%;
+        left: 28.5%;
+    }
+    .absolute-2 a{
+        width: 300px;
+  height: 100px;
+    }
+    .absolute-3{
+        left: 36%;
+        top: 11%;
+    }
+    .absolute-3 a{
+        height: 80px;
+        width: 230px;
+    }
+    .absolute-4{
+        right: 4.5%;
+        left: auto;
+        top: 36%;
+    }
+    .absolute-4 a {
+        height: 70px;
+        width: 70px;
+    }
+}
+@media screen and (max-width: 1366px){
+    .absolute-4{
+        right: 0%;
+    }
+}
+@media screen and (max-width: 1280px){
+    .absolute-1{
+        left: 32.5%;
+    }
+    .absolute-3 a{
+        height: 80px;
+        width: 150px;
+    }
+    .absolute-3{
+        left: 40%;
+        top: 11%;
+    }
+}
+@media screen and (max-width: 1024px){
+    .absolute-1, .absolute-3{
+        display: none;
+    }
+    .absolute-2{
+        top: 20%;
+        left: auto;
+        right: 3%;
+    }
+    .absolute-4{
+        right: 40px;
+
+        left: auto;
+
+        top: 43%;
+        }
+}
+</style>
