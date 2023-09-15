@@ -1289,6 +1289,7 @@ export default {
     top: 50%;
     right: -8px;
     margin-top: calc(-13px);
+    min-width: 80px;
 }
 .point-8 .goto a{
     color: #000;
