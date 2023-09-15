@@ -83,12 +83,12 @@ class QuestRepository
                 'diamond_reward' => 5
             ],
             [
-                'name' => 'Thu thập được 15 Lông Phượng Hoàng/ngày',
+                'name' => 'Gửi lời chúc qua các vì sao',
                 'type' => '8',
-                'total_attempts' => 15,
+                'total_attempts' => 1,
                 'current_attempts' => 0,
                 'is_reward' => 0,
-                'diamond_reward' => 5
+                'diamond_reward' => 10
             ],
             [
                 'name' => 'Điểm danh 3 ngày trong khóa học để thắp sáng 1 mảnh mosaic ở Sảnh Trường Họp Hẹp',

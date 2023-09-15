@@ -159,7 +159,7 @@
 
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-
+import $ from 'jquery';
 import ModalNhaThiDau from './modal-detail/nhathidau-modal.vue';
 import ModalThapThanhTuu from './modal-detail/thapthanhtuu-modal.vue';
 import ModalThuVienToanTri from './modal-detail/thuvien-modal2.vue';
@@ -241,6 +241,10 @@ export default {
         AOS.init({
             duration: 1000, // Thời gian hoàn thành hiệu ứng (milliseconds)
             easing: 'ease', // Thuật toán điều chỉnh (có thể sử dụng các giá trị khác nhau)
+        });
+
+        $(document).ready(function () {
+            $('.nav-main').removeClass('hidden-header');
         });
 
     },

@@ -1,6 +1,7 @@
 <script>
 
 import Header from '@/components/layouts/Header';
+
 export default {
     components: {
         Header
@@ -10,13 +11,9 @@ export default {
     },
     methods: {
     },
-    updated() {
-    },
-    created(){  
-
+    created(){       
     },
     mounted(){
-      
     }
 }
 </script>

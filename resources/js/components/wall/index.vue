@@ -1,7 +1,7 @@
 <script>
 import WOW from "wow.js";
 import "animate.css";
-import $ from "jQuery";
+import $ from "jquery";
 import Masonry from "masonry-layout";
 import imagesLoaded from "imagesloaded";
 import "remixicon/fonts/remixicon.css";
@@ -453,8 +453,15 @@ export default {
                         <div
                             class="content-wall pb-2"
                             @click="handleShowModal(item.id)"
-                        >
-                            <h5 v-if="item.title && item.title != 'null'">{{ item.title }}</h5>
+                        >   
+                            <div class="header">
+                                <h5  class="title" v-if="item.title && item.title != 'null'">{{ item.title }}</h5>
+                                <a class="wrap-tooltip" data-bs-toggle="tooltip" data-bs-placement="bottom" :title="item.users.first_name + ' '+item.users.last_name">
+                                    <img :src="item.users.avatar" :alt="item.users.first_name + ' '+item.users.last_name">
+                                    <span class="name">{{ item.users.first_name + ' '+item.users.last_name }}</span>
+                                </a>
+                            </div>
+                            
                             <div class="images pt-2" v-if="item.file_name">
                                 <img
                                     :src="`${publicPath + item.file_name}`"
@@ -724,7 +731,7 @@ export default {
                     </div>
                 </form>
             </div>
-            <div class="addPadlet" @click="handleShowForm">
+            <div class="addPadlet pulse"  @click="handleShowForm">
                 <span class=""><i class="ri-add-line"></i></span>
             </div>
         </div>
@@ -761,9 +768,13 @@ export default {
                 <div class="modal-body">
                     <div class="wrap-content">
                         <div class="content-wall pb-2">
-                            <h5 v-if="currentPadlets.title  && currentPadlets.title != 'null'">
-                                {{ currentPadlets.title }}
-                            </h5>
+                            <div class="header">
+                                <h5  class="title" v-if="currentPadlets.title && currentPadlets.title != 'null'">{{ currentPadlets.title }}</h5>
+                                <a class="wrap-tooltip" v-if="currentPadlets" data-bs-toggle="tooltip" data-bs-placement="bottom" :title="currentPadlets && currentPadlets.users.fullname ? currentPadlets.users.first_name+' ' +currentPadlets.users.last_name : ''">
+                                    <img :src="currentPadlets.users.avatar" :alt="currentPadlets.users.first_name+' ' +currentPadlets.users.last_name">
+                                    <span class="name">{{ currentPadlets.users.first_name+' ' +currentPadlets.users.last_name}}</span>
+                                </a>
+                            </div>
                             <div
                                 class="images pt-2"
                                 v-if="currentPadlets.file_name"
@@ -885,6 +896,61 @@ export default {
     width: 14.66666667%;
 }
 .wrap-content {
+    .header {
+        position: relative;
+        padding-right: 30px;
+        min-height: 30px;
+        img{
+            width: 30px;
+            height: 30px;
+            position: absolute;
+            right:0;
+            object-fit: fill;
+            top: 0;
+            border-radius: 100%;
+        }
+        .wrap-tooltip {
+            position: absolute;
+            right: 0;
+            top:0;
+            &:hover {
+                span {
+                    opacity: 1;
+                    transition: all .3 ease-in-out;
+                }
+            }
+            span {
+                background: #fff;
+                color: #777;
+                font-size: 14px;
+                font-weight: bold;
+                text-decoration: none;
+                position: absolute;
+                right: 0;
+                min-width: 100px;
+                padding: 3px 5px;
+                font-size: 12px;
+                text-align: center;
+                border-radius: 6px;
+                bottom: -63px;
+                box-shadow: 0px 0px 2px 0px rgba(0,0,0,.3); 
+                opacity: 0;           
+                transition: all .3 ease-in-out;    
+                &::before {
+                    content: "";
+                    position: absolute;
+                    top: -5px;
+                    right: 9px;
+                    background-color: #fff;
+                    width: 8px;
+                    height: 8px;
+                    transform: rotate(45deg);
+                    border-top: 1px solid rgba(0, 0, 0, 0.2);
+                    border-left: 1px solid rgba(0, 0, 0, 0.2)
+                }
+            }
+        }
+    }
     color: rbg(17, 17, 17);
     h5 {
         color: rbg(17, 17, 17);
@@ -1067,22 +1133,23 @@ export default {
 }
 .addPadlet {
     position: fixed;
-    right: 10px;
-    bottom: 10px;
+    right: 2rem ;
+    bottom: 1rem;
     z-index: 9;
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
     border-radius: 100%;
     background: rgb(200, 71, 53);
     transition: all 0.3s ease-in-out;
     transform: rotate(360deg);
     text-align: center;
-    line-height: 50px;
+    line-height: 60px;
+    color: #fff;
     cursor: pointer;
     i {
         transform: rotate(0deg);
         transition: all 0.3s ease-in-out;
-        font-size: 20px;
+        font-size: 30px;
         &::before {
             transform: rotate(0deg);
             transition: all 0.3s ease-in-out;
@@ -1295,7 +1362,19 @@ export default {
     scrollbar-color: rgba(0, 0, 0, 0.5) #fff;
     scrollbar-width: thin;
 }
-
+// .wrap-padlet {
+//     padding-top: 83px;
+// }
+// .nav-main {
+//     position: absolute !important;
+// }
+.pulse {
+  animation: pulse 1s infinite ease-in-out alternate;
+}
+@keyframes pulse {
+  from { transform: scale(0.8); }
+  to { transform: scale(1.2); }
+}
 @media screen and (max-width: 1440px){
     .masonry-sizer, .masonry-item  {
         width: 19%;

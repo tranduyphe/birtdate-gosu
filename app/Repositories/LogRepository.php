@@ -27,8 +27,8 @@ class LogRepository
             $QuestRepository = new QuestRepository();
             $questType = 7;
             $QuestRepository->updateQuest($user, $questType, $record);
-            $questType = 8;
-            $QuestRepository->updateQuest($user, $questType, $record);
+            // $questType = 8;
+            // $QuestRepository->updateQuest($user, $questType, $record);
         } 
         if ($itemType == 2) {
             $newLog->old = $user->diamond;
