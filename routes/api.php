@@ -25,7 +25,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/active-flip', [App\Http\Controllers\FlipController::class, 'activeFlip'])->name('active-flip');
     Route::get('/reload-flip', [App\Http\Controllers\FlipController::class, 'reloadFlip'])->name('reload-flip');
     
-    Route::get('/get-flip-tvtt', [App\Http\Controllers\FlipController::class, 'getFlipTvtt'])->name('flip');
+    Route::get('/get-flip-tvtt', [App\Http\Controllers\FlipController::class, 'getFlipTvtt'])->name('get-flip-tvtt');
     
     Route::get('/reload-flip-tvtt', [App\Http\Controllers\FlipController::class, 'reloadFlipTvtt'])->name('reload-flip-tvtt');
     Route::post('/active-flip-tvtt-2', [App\Http\Controllers\FlipController::class, 'activeFlipTvtt2'])->name('active-flip-tvtt-2');

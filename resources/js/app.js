@@ -5,6 +5,9 @@ import App from './App.vue';
 import SimpleTypeahead from 'vue3-simple-typeahead';
 import 'vue3-simple-typeahead/dist/vue3-simple-typeahead.css'; //Optional default CSS
 const app = createApp(App);
+app.config.warnHandler = function (msg, vm, trace) {
+    // Không làm gì cả, bỏ qua thông báo cảnh báo "[Vue warn]"
+  }
 app.use(SimpleTypeahead);
 import BootstrapVue3 from 'bootstrap-vue-3';
 

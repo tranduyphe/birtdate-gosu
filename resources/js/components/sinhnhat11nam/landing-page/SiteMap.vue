@@ -13,7 +13,7 @@
             </div>
             <div class="div-img thap-thanh-tuu" data-aos="fade-down">
                 <div class="group-img">
-                    <button class="" data-bs-toggle="modal" data-bs-target="#ThapThanhTuuModal" @click="clickedThanhThanhTuu = true">
+                    <button class="" data-bs-toggle="modal" data-bs-target="#ThapThanhTuuModal" @click="clickThanhThanhTuu">
                         <img :src="thapthanhtuuimgUrl" alt="Tháp Thành Tựu" width="485" @click="getDataPhapThanhTuu">
                     </button>
                     <div class="bubble-content">
@@ -46,7 +46,7 @@
             </div>
             <div class="div-img sanh-hop-hep" data-aos="fade-left">
                 <div class="group-img">
-                    <button class="" data-bs-toggle="modal" data-bs-target="#SanhHopHepModal">
+                    <button class="" data-bs-toggle="modal" data-bs-target="#SanhHopHepModal" @click="clickSanhHopHep">
                         <img :src="sanhhophepimgUrl" alt="Sảnh Họp Hẹp" width="295">
                     </button>
                     <div class="bubble-content">
@@ -55,7 +55,8 @@
                 </div>
             </div>
             <div class="div-img items thongbao" data-aos="fade-left">
-                <button class="" data-bs-toggle="modal" data-bs-target="#ThapThanhTuuModal" v-if="completedQuestCount > 0">
+                <button class="" data-bs-toggle="modal" data-bs-target="#ThapThanhTuuModal" v-if="completedQuestCount > 0"
+                    @click="openThuThach = 1">
                     <img :src="thongbaoimgUrl" alt="Thông báo" width="" @click="getDataPhapThanhTuu">
                     <span class="font-size-16 text-white">{{ completedQuestCount }}</span>
                 </button>
@@ -125,8 +126,10 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-body">
-                        <button type="button" ref="closeModal" class="btn close-button" data-bs-dismiss="modal" aria-label="Close"><img :src="closeimgUrl" alt=""></button>
-                        <ModalSanhHopHep></ModalSanhHopHep>                     
+                        <button type="button" ref="closeModal" class="btn close-button" data-bs-dismiss="modal"
+                            aria-label="Close"><img :src="closeimgUrl" alt=""></button>
+                        <ModalSanhHopHep :dataPuzzle="dataPuzzle" @updateDataSanhHopHep="updateDataSanhHopHep">
+                        </ModalSanhHopHep>
                     </div>
                 </div>
             </div>
@@ -136,17 +139,14 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-body">
-                        <button type="button" ref="closeModal" class="btn close-button" data-bs-dismiss="modal" aria-label="Close"><img :src="closeimgUrl" alt=""></button>
-                        <ModalThapThanhTuu 
-                        :nhiemvu="nhiemvu" @updateNhiemvu="updateNhiemvu" 
-                        :logActivity="logActivity" @updateLogActivity="updateLogActivity" 
-                        :topFeathers="topFeathers" @updateTopFeathers="updateTopFeathers" 
-                        :attrKimcuong="attrKimcuong" @updateAttrKimcuong="updateAttrKimcuong"
-                        :attrLongvu="attrLongvu"  @updateAttrLongvu="updateAttrLongvu"
-                        :user_code="user_code"
-                        :readInstructions="readInstructions"
-                        :muitenimgUrl="muitenimgUrl"
-                        ></ModalThapThanhTuu>
+                        <button @click="openThuThach = 0" type="button" ref="closeModal" class="btn close-button"
+                            data-bs-dismiss="modal" aria-label="Close"><img :src="closeimgUrl" alt=""></button>
+                        <ModalThapThanhTuu :nhiemvu="nhiemvu" @updateNhiemvu="updateNhiemvu" :logActivity="logActivity"
+                            @updateLogActivity="updateLogActivity" :topFeathers="topFeathers"
+                            @updateTopFeathers="updateTopFeathers" :attrKimcuong="attrKimcuong"
+                            @updateAttrKimcuong="updateAttrKimcuong" :attrLongvu="attrLongvu"
+                            @updateAttrLongvu="updateAttrLongvu" :user_code="user_code" :readInstructions="readInstructions"
+                            :muitenimgUrl="muitenimgUrl" :openThuThach="openThuThach"></ModalThapThanhTuu>
                     </div>
                 </div>
             </div>
@@ -207,6 +207,8 @@ export default {
             topFeathers: [],
             isDivVisible: true,
             clickedThanhThanhTuu: false,
+            openThuThach: 0,
+            dataPuzzle: []
         };
     },
     created() {
@@ -227,7 +229,7 @@ export default {
             }
         });
         setInterval(() => {
-            console.log('tabActive',tabActive);
+            console.log('tabActive', tabActive);
             if (tabActive) {
 
                 this.getQuest();
@@ -240,7 +242,7 @@ export default {
             duration: 1000, // Thời gian hoàn thành hiệu ứng (milliseconds)
             easing: 'ease', // Thuật toán điều chỉnh (có thể sử dụng các giá trị khác nhau)
         });
-        
+
     },
     computed: {
         questOpened() {
@@ -267,16 +269,16 @@ export default {
     methods: {
         ...authMethods,
         ...authGetters,
-        async user(){
+        async user() {
             let user = await this.users();
             this.user_name = user.name;
             this.user_code = user.user_code;
             this.avatar = user.avatar;
         },
-        getDataPhapThanhTuu(){
+        getDataPhapThanhTuu() {
             this.getQuest();
-        this.getLogActivity();
-        this.getTopFeathers();
+            this.getLogActivity();
+            this.getTopFeathers();
         },
         getQuest() {
             let self = this;
@@ -295,7 +297,7 @@ export default {
                 })
                 .finally();
         },
-        
+
         getLogActivity() {
             let self = this;
             axios.get('/api/get-log-activity', {
@@ -418,16 +420,50 @@ export default {
         toggleDivVisibility() {
             this.isDivVisible = false;
         },
-        
+
+        clickThanhThanhTuu(){
+            this.clickedThanhThanhTuu = true;
+            this.openThuThach = 1;
+        },
+
+        updateDataSanhHopHep(newValue) {
+            // Cập nhật giá trị của attrKimcuong từ sự kiện
+            console.log("check updateLogActivity newValue", newValue)
+            this.dataPuzzle = newValue;
+        },
+        clickSanhHopHep() {
+            this.getDataSanhTruongHopHep();
+
+        },
+
+        getDataSanhTruongHopHep() {
+
+            let self = this;
+            axios.get('/api/get-data-sanh-truong-hop-hep', {
+            })
+                .then(function (response) {
+                    if (response.data.status === 200 && response.data.success == true) {
+                        self.dataPuzzle = response.data.data ?? [];
+                        console.log(self.dataPuzzle);
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                    if (error.response && error.response.status === 401) {
+                        this.logoutSubmit()
+                    }
+                })
+                .finally();
+        },
+
+
     },
 };
 </script>
 
 <style scoped>
-
-.wrapper-content{
-    min-height: 100vh;
-    height: auto;
+.wrapper-content {
+    height: 100vh;
     width: 100%;
     background-size: cover;
     background-repeat: no-repeat;
@@ -435,7 +471,6 @@ export default {
     font-family: 'UVNLacLongQuan';
     position: relative;
     transition: all 500ms linear;
-    cursor: url('../../../../assets/images/sinhnhat11nam/img_main/dua-phep.png') 0 0, auto;
 }
 
 
@@ -636,6 +671,7 @@ button.close-button:focus,button.close-button:active,button.close-button:focus-v
   white-space: nowrap;
   transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
   flex-direction: column;
+  background-color: rgba(0,0,0,0.8);
 }
 
 .landscape-notification img{

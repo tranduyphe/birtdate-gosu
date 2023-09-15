@@ -693,6 +693,8 @@ textarea {
     order: 3;
     font-weight: bold;
     color: #4f382a;
+    padding-left: 50px;
+    text-align: center;
 }
 
 .effect {
@@ -706,7 +708,7 @@ textarea {
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: 100vh;
     z-index: 1;
     justify-content: center;
     align-items: center;
@@ -719,4 +721,14 @@ textarea {
     flex-direction: column;
     background-color: rgba(23, 23, 23, 0.65);
     backdrop-filter: blur(20px);
-  }
+}
+
+.custom-cusor {
+    .img-dua {
+      pointer-events: none;
+      z-index: 999;
+      position: fixed;
+      left: 50%;
+      top: 30%;
+    }
+}

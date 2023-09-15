@@ -108,6 +108,12 @@ class HomeController extends Controller
             ->get()->toArray();
         $data = [];
         for ($i = 0; $i < 198; $i++) {
+
+            
+            // $data[] = [
+            //     "user_id" => 0,
+            //     "is_open" => 1
+            // ];
             if (!empty($result[$i])) {
                 $data[] = [
                     "user_id" => $result[$i]['id'],
