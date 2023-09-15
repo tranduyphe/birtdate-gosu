@@ -212,7 +212,7 @@ export default {
             attrKimcuong: 67,
             attrLongvu: 15,
             attrThongbao: 0,
-            readInstructions: 0,
+            readInstructions: 1,
             friendCode: "",
             nhiemvu: [],
             logActivity: [],

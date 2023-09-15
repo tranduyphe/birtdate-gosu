@@ -40,7 +40,7 @@ export default {
             <div class="d-flex pe-0 pe-lg-3">
                 <ul class="nav-items-link pr-4">
                 <li>
-                    <router-link to="wall">Padlet</router-link>
+                    <router-link to="wall">Ngôi sao</router-link>
                 </li>
                 <li>
                     <a target="_blank" href="https://gosucorp.vn/">gosucorp</a>
