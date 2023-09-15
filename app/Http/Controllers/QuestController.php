@@ -79,6 +79,7 @@ class QuestController extends Controller
         $getQuestOrder[] = $getQuest[7];
         $getQuestOrder[] = $getQuest[8];
         $getQuestOrder[] = $getQuest[9];
+        
         $response = [
             "status" => 200,
             "message" => "success",
@@ -110,11 +111,22 @@ class QuestController extends Controller
         $QuestRepository = new QuestRepository();
         $getQuest = $QuestRepository->getQuests($user->id);
         if ($user->user_code == $friendCode) {
+            $getQuestOrder = [];
+        $getQuestOrder[] = $getQuest[0];
+        $getQuestOrder[] = $getQuest[3];
+        $getQuestOrder[] = $getQuest[4];
+        $getQuestOrder[] = $getQuest[5];
+        $getQuestOrder[] = $getQuest[1];
+        $getQuestOrder[] = $getQuest[2];
+        $getQuestOrder[] = $getQuest[6];
+        $getQuestOrder[] = $getQuest[7];
+        $getQuestOrder[] = $getQuest[8];
+        $getQuestOrder[] = $getQuest[9];
             $response = [
                 "status" => 200,
                 "message" => "Bạn không thể mời chính mình đi học!",
                 "data" => [
-                    'quests' => $getQuest
+                    'quests' => $getQuestOrder
                 ],
                 "success" => false
             ];
@@ -122,11 +134,22 @@ class QuestController extends Controller
             return response()->json($response);
         }
         if ($getQuest[1]['current_attempts'] >= $getQuest[1]['total_attempts']) {
+            $getQuestOrder = [];
+        $getQuestOrder[] = $getQuest[0];
+        $getQuestOrder[] = $getQuest[3];
+        $getQuestOrder[] = $getQuest[4];
+        $getQuestOrder[] = $getQuest[5];
+        $getQuestOrder[] = $getQuest[1];
+        $getQuestOrder[] = $getQuest[2];
+        $getQuestOrder[] = $getQuest[6];
+        $getQuestOrder[] = $getQuest[7];
+        $getQuestOrder[] = $getQuest[8];
+        $getQuestOrder[] = $getQuest[9];
             $response = [
                 "status" => 200,
                 "message" => "Bạn đã hết Lượt mời đi học!",
                 "data" => [
-                    'quests' => $getQuest
+                    'quests' => $getQuestOrder
                 ],
                 "success" => false
             ];
@@ -136,11 +159,22 @@ class QuestController extends Controller
         $friend = User::where('user_code', $friendCode)
             ->first();
         if (!$friend) {
+            $getQuestOrder = [];
+        $getQuestOrder[] = $getQuest[0];
+        $getQuestOrder[] = $getQuest[3];
+        $getQuestOrder[] = $getQuest[4];
+        $getQuestOrder[] = $getQuest[5];
+        $getQuestOrder[] = $getQuest[1];
+        $getQuestOrder[] = $getQuest[2];
+        $getQuestOrder[] = $getQuest[6];
+        $getQuestOrder[] = $getQuest[7];
+        $getQuestOrder[] = $getQuest[8];
+        $getQuestOrder[] = $getQuest[9];
             $response = [
                 "status" => 200,
                 "message" => "Không tìm thấy Bạn học này!",
                 "data" => [
-                    'quests' => $getQuest
+                    'quests' => $getQuestOrder
                 ],
                 "success" => false
             ];
@@ -151,11 +185,22 @@ class QuestController extends Controller
         $friendInvites = UserInvite::where('friend_id', $friend->id)->whereDate('created_at', Carbon::today())
             ->get()->toArray();
         if (count($friendInvites) >= 10) {
+            $getQuestOrder = [];
+        $getQuestOrder[] = $getQuest[0];
+        $getQuestOrder[] = $getQuest[3];
+        $getQuestOrder[] = $getQuest[4];
+        $getQuestOrder[] = $getQuest[5];
+        $getQuestOrder[] = $getQuest[1];
+        $getQuestOrder[] = $getQuest[2];
+        $getQuestOrder[] = $getQuest[6];
+        $getQuestOrder[] = $getQuest[7];
+        $getQuestOrder[] = $getQuest[8];
+        $getQuestOrder[] = $getQuest[9];
             $response = [
                 "status" => 200,
                 "message" => "Phù thủy này đã đi học rồi!",
                 "data" => [
-                    'quests' => $getQuest
+                    'quests' => $getQuestOrder
                 ],
                 "success" => false
             ];
@@ -171,11 +216,22 @@ class QuestController extends Controller
             }
         }
         if($userHasInvitation){
+            $getQuestOrder = [];
+        $getQuestOrder[] = $getQuest[0];
+        $getQuestOrder[] = $getQuest[3];
+        $getQuestOrder[] = $getQuest[4];
+        $getQuestOrder[] = $getQuest[5];
+        $getQuestOrder[] = $getQuest[1];
+        $getQuestOrder[] = $getQuest[2];
+        $getQuestOrder[] = $getQuest[6];
+        $getQuestOrder[] = $getQuest[7];
+        $getQuestOrder[] = $getQuest[8];
+        $getQuestOrder[] = $getQuest[9];
             $response = [
                 "status" => 200,
                 "message" => "Bạn đã mời bạn học này trước đó!",
                 "data" => [
-                    'quests' => $getQuest
+                    'quests' => $getQuestOrder
                 ],
                 "success" => false
             ];
@@ -190,12 +246,22 @@ class QuestController extends Controller
         $questType = 1;
         $QuestRepository->updateQuest($user, $questType, 1);
         $newQuest = $QuestRepository->getQuests($user->id);
-        
+        $getQuestOrder = [];
+        $getQuestOrder[] = $newQuest[0];
+        $getQuestOrder[] = $newQuest[3];
+        $getQuestOrder[] = $newQuest[4];
+        $getQuestOrder[] = $newQuest[5];
+        $getQuestOrder[] = $newQuest[1];
+        $getQuestOrder[] = $newQuest[2];
+        $getQuestOrder[] = $newQuest[6];
+        $getQuestOrder[] = $newQuest[7];
+        $getQuestOrder[] = $newQuest[8];
+        $getQuestOrder[] = $newQuest[9];
         $response = [
             "status" => 200,
             "message" => "Mời bạn đi học thành công!",
             "data" => [
-                'quests' => $newQuest,
+                'quests' => $getQuestOrder,
             ],
             "success" => true
         ];
@@ -266,11 +332,22 @@ class QuestController extends Controller
                     ->orderBy('log_activity.id', 'desc')
                     // ->limit(30) // Thêm dòng này để giới hạn kết quả thành 30 hàng
                     ->get();
+                    $getQuestOrder = [];
+        $getQuestOrder[] = $getQuest[0];
+        $getQuestOrder[] = $getQuest[3];
+        $getQuestOrder[] = $getQuest[4];
+        $getQuestOrder[] = $getQuest[5];
+        $getQuestOrder[] = $getQuest[1];
+        $getQuestOrder[] = $getQuest[2];
+        $getQuestOrder[] = $getQuest[6];
+        $getQuestOrder[] = $getQuest[7];
+        $getQuestOrder[] = $getQuest[8];
+        $getQuestOrder[] = $getQuest[9];
                 $response = [
                     "status" => 200,
-                    "message" => "Bạn đã nhận được" . $record . "Đá mặt trăng",
+                    "message" => "Bạn đã nhận được " . $record . " Đá mặt trăng",
                     "data" => [
-                        'quests' => $getQuest,
+                        'quests' => $getQuestOrder,
                         'user' => $user,
                         'log_activity'=>$logActivities
                     ],
@@ -281,11 +358,22 @@ class QuestController extends Controller
                 $getQuest = $QuestRepository->getQuests($user->id);
                 Cache::forget($cacheKey); // Lưu trong cache trong 5 phút
                 // Cache::forget($cacheKey);
+                    $getQuestOrder = [];
+                    $getQuestOrder[] = $getQuest[0];
+                    $getQuestOrder[] = $getQuest[3];
+                    $getQuestOrder[] = $getQuest[4];
+                    $getQuestOrder[] = $getQuest[5];
+                    $getQuestOrder[] = $getQuest[1];
+                    $getQuestOrder[] = $getQuest[2];
+                    $getQuestOrder[] = $getQuest[6];
+                    $getQuestOrder[] = $getQuest[7];
+                    $getQuestOrder[] = $getQuest[8];
+                    $getQuestOrder[] = $getQuest[9];
                 $response = [
                     "status" => 200,
                     "message" => "Nhiệm vụ chưa hoàn thành.",
                     "data" => [
-                        'quests' => $getQuest
+                        'quests' => $getQuestOrder
                     ],
                     "success" => false
                 ];
@@ -296,11 +384,22 @@ class QuestController extends Controller
             $getQuest = $QuestRepository->getQuests($user->id);
             // Cache::forget($cacheKey);
             Cache::forget($cacheKey); // Lưu trong cache trong 5 phút
+            $getQuestOrder = [];
+                    $getQuestOrder[] = $getQuest[0];
+                    $getQuestOrder[] = $getQuest[3];
+                    $getQuestOrder[] = $getQuest[4];
+                    $getQuestOrder[] = $getQuest[5];
+                    $getQuestOrder[] = $getQuest[1];
+                    $getQuestOrder[] = $getQuest[2];
+                    $getQuestOrder[] = $getQuest[6];
+                    $getQuestOrder[] = $getQuest[7];
+                    $getQuestOrder[] = $getQuest[8];
+                    $getQuestOrder[] = $getQuest[9];
             $response = [
                 "status" => 200,
                 "message" => "success",
                 "data" => [
-                    'quests' => $getQuest
+                    'quests' => $getQuestOrder
                 ],
                 "success" => true
             ];
