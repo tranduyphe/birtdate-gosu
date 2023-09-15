@@ -349,7 +349,7 @@ export default {
         this.showIconSendComment()      
         const $this = this;
         $(document).ready(function () {
-            $('.nav-main').remove();
+            $('.nav-main').addClass('hidden-header');
             $('body').addClass('overflow-hidden');
             $("#dropColor .dropdown-item").on("click", function () {
                 var $color = $(this).find(".color").attr("data-color");
@@ -966,7 +966,7 @@ export default {
         }
         .btn-sm{
             &.dropdown-toggle{
-                background: #fff;
+                background: transparent;
             }
         }
     }
@@ -1295,6 +1295,7 @@ export default {
     scrollbar-color: rgba(0, 0, 0, 0.5) #fff;
     scrollbar-width: thin;
 }
+
 @media screen and (max-width: 1440px){
     .masonry-sizer, .masonry-item  {
         width: 19%;

@@ -38,9 +38,9 @@ class AuthController extends Controller
             $authUser = Auth::user();
             $success['token'] =  $authUser->createToken($authUser->name)->plainTextToken; 
             $success['name'] =  $authUser->name;
-            $success['fullname'] =  $authUser->first_name.' '.$authUser->last_name;
             $success['avatar'] =  $authUser->avatar;
             $success['user_code'] =  $authUser->user_code;
+            $success['fullname'] =  $authUser->first_name.' '.$authUser->last_name;
             $success['profile_id'] =  $authUser->profile_id;
             $results = array(
                 'message' => 'Đăng nhập thành công.',
@@ -64,16 +64,17 @@ class AuthController extends Controller
                         'avatar' => $infoProfile->Data->AvatarUrl,
                         'first_name' => $infoProfile->Data->FirstName,
                         'last_name' => $infoProfile->Data->LastName,
-                        //'user_code' => $this->generateUniqueUserCode()
+                        'user_code' => $this->generateUniqueUserCode(),
+                        'fullname' =>  $infoProfile->first_name.' '.$infoProfile->last_name,
                     );
                     $this->create($data);
                     if(Auth::attempt(['email' => $request->email, 'password' => $password])){
                         $authUser = Auth::user();
                         $success['token'] =  $authUser->createToken(current(explode("@", $infoProfile->Data->Email)))->plainTextToken; 
                         $success['name'] = $authUser->name;
-                        $success['fullname'] =  $authUser->first_name.' '.$authUser->last_name;
                         $success['avatar'] =  $authUser->avatar;
                         $success['user_code'] =  $authUser->user_code;
+                        $success['fullname'] =  $authUser->first_name.' '.$authUser->last_name;
                         $success['profile_id'] =  $authUser->profile_id;
                         $results = array(
                             'message' => 'Đăng nhập thành công.',

@@ -655,11 +655,47 @@ textarea {
     }
 }
 
-// .swal-wide{
-//     background: url('../../../resources/assets/images/sinhnhat11nam/img_main/bg-bachnhat.png');
-//     width:850px !important;
-//     color: #fff;
-// }
+.swal-wide{
+    background: url('../../../resources/assets/images/sinhnhat11nam/img_main/popup-qua.png');
+    width: 850px !important;
+    color: #fff;
+    background-size: cover;
+    background-position: center;
+    height: 892px;
+    display: flex !important;
+    flex-direction: column;
+    font-family : 'UVNLacLongQuan';
+}
+
+.swal-wide.error{
+    background: url('../../../resources/assets/images/sinhnhat11nam/img_main/popup-error.png');
+}
+
+.swal-wide.error .swal2-title{
+    opacity: 0;
+}
+
+.swal-wide .swal2-image{
+    order: 2;
+    margin-bottom: 0;
+    margin-top: 20px;
+}
+
+.swal-wide .swal2-title{
+    order: 1;
+    padding-top: 130px;
+    font-size: 22pt;
+    font-weight: 500;
+    color: #4f382a;
+}
+
+.swal-wide .swal2-html-container{
+    order: 3;
+    font-weight: bold;
+    color: #4f382a;
+    padding-left: 50px;
+    text-align: center;
+}
 
 .effect {
     display: block;
@@ -672,7 +708,7 @@ textarea {
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: 100vh;
     z-index: 1;
     justify-content: center;
     align-items: center;
@@ -685,4 +721,14 @@ textarea {
     flex-direction: column;
     background-color: rgba(23, 23, 23, 0.65);
     backdrop-filter: blur(20px);
-  }
+}
+
+.custom-cusor {
+    .img-dua {
+      pointer-events: none;
+      z-index: 999;
+      position: fixed;
+      left: 50%;
+      top: 30%;
+    }
+}

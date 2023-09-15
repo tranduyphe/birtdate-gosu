@@ -39,11 +39,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
             Route::post( '/delete/{id}', array( CommentController::class, 'destroy' ) );
         }
     );
-    //Route::get('/get-flip', [App\Http\Controllers\FlipController::class, 'getFlip'])->name('flip');
+    Route::get('/get-flip', [App\Http\Controllers\FlipController::class, 'getFlip'])->name('flip');
     Route::post('/active-flip', [App\Http\Controllers\FlipController::class, 'activeFlip'])->name('active-flip');
     Route::get('/reload-flip', [App\Http\Controllers\FlipController::class, 'reloadFlip'])->name('reload-flip');
     
-    Route::get('/get-flip-tvtt', [App\Http\Controllers\FlipController::class, 'getFlipTvtt'])->name('flip');
+    Route::get('/get-flip-tvtt', [App\Http\Controllers\FlipController::class, 'getFlipTvtt'])->name('get-flip-tvtt');
     
     Route::get('/reload-flip-tvtt', [App\Http\Controllers\FlipController::class, 'reloadFlipTvtt'])->name('reload-flip-tvtt');
     Route::post('/active-flip-tvtt-2', [App\Http\Controllers\FlipController::class, 'activeFlipTvtt2'])->name('active-flip-tvtt-2');
@@ -64,13 +64,4 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     // Route::get('/check-notification', [App\Http\Controllers\QuestController::class, 'checkNotification'])->name('check-notification');
 
     // Route::get('/send-notification', [App\Http\Controllers\SocketController::class, 'index'])->name('send-notification');
-
-    // padlet
-    
-    // Route::group(
-    //     array( 'prefix' => 'wall' ),
-    //     function () {
-    //         Route::post( '/create', array( WallController::class, 'create' ) );
-    //     }
-    // );
 });

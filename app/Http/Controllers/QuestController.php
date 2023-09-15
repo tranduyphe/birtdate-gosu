@@ -47,22 +47,48 @@ class QuestController extends Controller
     // {
     //     return view('home');
     // }
+    // public function getQuests(Request $request)
+    // {
+    //     $user = $request->user();
+    //     $QuestRepository = new QuestRepository();
+    //     $getQuest = $QuestRepository->getQuests($user->id);
+    //     $response = [
+    //         "status" => 200,
+    //         "message" => "success",
+    //         "data" => [
+    //             'quests' => $getQuest
+    //         ],
+    //         "success" => true
+    //     ];
+    //     return response()->json($response);
+    // }
+    
     public function getQuests(Request $request)
     {
         $user = $request->user();
         $QuestRepository = new QuestRepository();
         $getQuest = $QuestRepository->getQuests($user->id);
+        $getQuestOrder = [];
+        $getQuestOrder[] = $getQuest[0];
+        $getQuestOrder[] = $getQuest[3];
+        $getQuestOrder[] = $getQuest[4];
+        $getQuestOrder[] = $getQuest[5];
+        $getQuestOrder[] = $getQuest[1];
+        $getQuestOrder[] = $getQuest[2];
+        $getQuestOrder[] = $getQuest[6];
+        $getQuestOrder[] = $getQuest[7];
+        $getQuestOrder[] = $getQuest[8];
+        $getQuestOrder[] = $getQuest[9];
         $response = [
             "status" => 200,
             "message" => "success",
             "data" => [
-                'quests' => $getQuest
+                'quests' => $getQuestOrder
             ],
             "success" => true
         ];
         return response()->json($response);
     }
-    
     
     public function invite(Request $request)
     {
@@ -90,7 +116,7 @@ class QuestController extends Controller
                 "data" => [
                     'quests' => $getQuest
                 ],
-                "success" => true
+                "success" => false
             ];
             Cache::forget($cacheKey); // Lưu trong cache trong 5 phút
             return response()->json($response);
@@ -102,7 +128,7 @@ class QuestController extends Controller
                 "data" => [
                     'quests' => $getQuest
                 ],
-                "success" => true
+                "success" => false
             ];
             Cache::forget($cacheKey); // Lưu trong cache trong 5 phút
             return response()->json($response);
@@ -112,11 +138,11 @@ class QuestController extends Controller
         if (!$friend) {
             $response = [
                 "status" => 200,
-                "message" => "Không tìm thấy Bạn học này",
+                "message" => "Không tìm thấy Bạn học này!",
                 "data" => [
                     'quests' => $getQuest
                 ],
-                "success" => true
+                "success" => false
             ];
             Cache::forget($cacheKey); // Lưu trong cache trong 5 phút
             return response()->json($response);
@@ -127,11 +153,11 @@ class QuestController extends Controller
         if (count($friendInvites) >= 10) {
             $response = [
                 "status" => 200,
-                "message" => "Cú của bạn đã gửi thư cho phù thủy tập sự!",
+                "message" => "Phù thủy này đã đi học rồi!",
                 "data" => [
                     'quests' => $getQuest
                 ],
-                "success" => true
+                "success" => false
             ];
             Cache::forget($cacheKey); // Lưu trong cache trong 5 phút
             return response()->json($response);
@@ -151,7 +177,7 @@ class QuestController extends Controller
                 "data" => [
                     'quests' => $getQuest
                 ],
-                "success" => true
+                "success" => false
             ];
         Cache::forget($cacheKey); // Lưu trong cache trong 5 phút
             return response()->json($response);
@@ -242,7 +268,7 @@ class QuestController extends Controller
                     ->get();
                 $response = [
                     "status" => 200,
-                    "message" => "Đá mặt trăng +" . $record,
+                    "message" => "Bạn đã nhận được" . $record . "Đá mặt trăng",
                     "data" => [
                         'quests' => $getQuest,
                         'user' => $user,

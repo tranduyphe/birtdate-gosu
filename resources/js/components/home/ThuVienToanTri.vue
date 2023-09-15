@@ -117,6 +117,7 @@ export default {
                                     let reward = response.data.data.reward;
                                     let user = response.data.data.user.name;
                                     let message = "";
+                                    
                                     if (reward.length == 0) {
                                         message = "Chúc bạn may mắn lần sau";
                                     } else {

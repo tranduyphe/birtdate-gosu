@@ -1,9 +1,12 @@
 <template>
+    <div class="custom-cusor" >
+      <img :src="imgDuaPhep" class="img-dua" id="img-dua" width="100" style="opacity: 0;">
+    </div>
     <div class="game-thuvientoantri">
         <button class="btn-start" @click="reloadFlip()">Làm mới</button>
         <p class="text-center text-white" v-if="checkGameOver">Bạn đã thua cuộc, vui lòng "Làm mới" để tiếp tục (Trừ 5 đá
             mặt trăng)</p>
-        <div class="row justify-content-center">
+        <div class="row justify-content-center align-items-center">
             <div class="minigame-thuvien">
                 <div class="" v-if="flipList != nul">
                     <div v-for="row in 3" :key="row" class="row justify-content-center align-items-center"
@@ -26,22 +29,11 @@
             <div class="line-break text-center my-3">
                 <img :src="lineBrealimg" alt="">
             </div>
-            <div class="col-md-4">
-                <p style="margin-top: 0pt; margin-bottom: 14pt; text-align: justify; font-size: 16pt; line-height: 1;"><b><span style="text-align: left; color: rgb(255, 255, 255); font-size: 18px;">Tỉ lệ trước khi user tr&uacute;ng Thẻ Tiềm Long</span></b></p>
-                <ul>
-                    <li style="margin-top: 0pt; margin-bottom: 14pt; text-align: justify; font-size: 16px; color: rgb(255, 255, 255); line-height: 1;"><span style="text-align: left;">T&iacute;m: 1 Thẻ Tiềm Long (1 người chỉ nhận 1 lần duy nhất) (30%)</span></li>
-                    <li style="margin-top: 0pt; margin-bottom: 14pt; text-align: justify; font-size: 16px; color: rgb(255, 255, 255); line-height: 1;"><span style="text-align: left;">Đỏ: L&ocirc;ng Phượng Ho&agrave;ng*5 (10%)</span></li>
-                    <li style="margin-top: 0pt; margin-bottom: 14pt; text-align: justify; font-size: 16px; color: rgb(255, 255, 255); line-height: 1;"><span style="text-align: left;">Xanh l&aacute;: Đ&aacute; Mặt Trăng*10 (10%)</span></li>
-                    <li style="margin-top: 0pt; margin-bottom: 14pt; text-align: justify; font-size: 16px; color: rgb(255, 255, 255); line-height: 1;"><span style="text-align: left;">V&agrave;ng &amp; Hồng: Fail (25%+25%)</span></li>
-                </ul>
+            <div class="col-md-4 text-center">
+                <img :src="imgthuvien" width="200">
             </div>
             <div class="col-md-4">
-                <p style="margin-top: 0pt; margin-bottom: 14pt; text-align: justify; font-size: 16pt; line-height: 1;"><span style="text-align: left; color: rgb(255, 255, 255); font-size: 18px;"><strong>Tỉ lệ sau khi user đ&atilde; tr&uacute;ng Thẻ Tiềm Long</strong></span></p>
-                <ul>
-                    <li style="margin-top: 0pt; margin-bottom: 14pt; text-align: justify; font-size: 16pt; color: rgb(255, 255, 255); line-height: 1;"><span style="text-align: left; font-size: 15px;">Đỏ: L&ocirc;ng Phượng Ho&agrave;ng*5 (20%)</span></li>
-                    <li style="margin-top: 0pt; margin-bottom: 14pt; text-align: justify; font-size: 16pt; color: rgb(255, 255, 255); line-height: 1;"><span style="text-align: left; font-size: 15px;">Xanh l&aacute;: Đ&aacute; Mặt Trăng*10 (20%)</span></li>
-                    <li style="margin-top: 0pt; margin-bottom: 14pt; text-align: justify; font-size: 16pt; color: rgb(255, 255, 255); line-height: 1;"><span style="text-align: left; font-size: 15px;">V&agrave;ng &amp; Hồng: Fail (30%+30%)</span></li>
-                </ul>
+                <p style="margin-top: 0pt; margin-bottom: 14pt; text-align: justify; font-size: 16pt; line-height: 1;"><b><span style="text-align: left; color: rgb(255, 255, 255); font-size: 18px;">(*) Cần tốn 5 Đá Mặt Trăng cho 1 lần mở ô.</span></b></p>
             </div>
             <div class="attribute-items mt-4 d-flex col-md-4 justify-content-around align-items-end">
                 <div class="div-img items thongbao mr-5" data-aos="fade-down">
@@ -105,6 +97,10 @@ export default {
             itemPink: '/images/sinhnhat11nam/img_main/thuvien-itemPink.png',
             imgtransparent: '/images/sinhnhat11nam/img_main/transparent.png',
             imgloser: '/images/sinhnhat11nam/img_main/loser.png',
+            imgPopUpQua: '/images/sinhnhat11nam/img_main/popup-qua.png',
+            iconLongvu: '/images/sinhnhat11nam/img_main/icon-longvu.png',
+            imgDuaPhep: '/images/sinhnhat11nam/img_main/dua-phep.png',
+            iconDamattrang: '/images/sinhnhat11nam/img_main/icon-da-mat-trang.png',
             randomMessages: [
                 "Hãy mở tiếp cho đến khi tổ tiên mách bảo!",
                 "Hãy nhận tạm ít bụi tiên để tích lũy thêm may mắn nhé~",
@@ -112,7 +108,8 @@ export default {
                 "Câu thần chú có vẻ chưa đúng nên chưa có trúng.",
                 "Bạn không sai, Share To Shine!",
                 "Vừa trượt tay có tí, làm lại lần nữa nào!"
-            ]
+            ],
+            imgthuvien: '/images/sinhnhat11nam/img_main/img-thuvien.png',
         };
     },
     created() {
@@ -215,22 +212,35 @@ export default {
                                 setTimeout(() => {
                                     if (response.data.data.reward) {
                                         let reward = response.data.data.reward;
+                                        let imageUrl = "";
                                         let message = "";
+                                        let customClass = "";
                                         if (reward.length == 0) {
                                             message = "Chúc bạn may mắn lần sau.";
                                             const randomIndex = Math.floor(Math.random() * self.randomMessages.length);
                                             message = self.randomMessages[randomIndex];
+                                            imageUrl = '/images/sinhnhat11nam/img_main/may-man-lan-sau.png'
+                                            customClass = 'swal-wide error';
                                         } else {
+                                            customClass = 'swal-wide';
                                             for (let i = 0; i < reward.length; i++) {
+                                                console.log("reward[i]", reward[i].record);
+                                                console.log("reward[i].item_id: ", reward[i].item_id);
 
                                                 if (reward[i].item_id == "1") {
-                                                    message = message + " Lông Phượng Hoàng +" + reward[i].record;
+                                                    console.log("message: ", message);
+                                                    console.log("reward[i].record: ", reward[i].record);
+                                                    message = message + reward[i].record + " Lông Phượng Hoàng";
+                                                    console.log("message: ", message);
+                                                    imageUrl = self.iconLongvu;
                                                 }
                                                 if (reward[i].item_id == "2") {
-                                                    message = message + " Đá mặt trăng +" + reward[i].record;
+                                                    message = message + reward[i].record + " Đá mặt trăng";
+                                                    imageUrl = self.iconDamattrang;
                                                 }
                                                 if (reward[i].item_id == "3") {
-                                                    message = message + "  Chúc mừng bạn đã nhận được+" + reward[i].record + " Thẻ Tiềm Long";
+                                                    message = message + reward[i].record + " Thẻ Tiềm Long";
+                                                    imageUrl = '/images/sinhnhat11nam/img_main/img_quatiemlong.png'
                                                 }
                                             }
                                         }
@@ -238,15 +248,20 @@ export default {
                                         // alert(message);
                                         self.$swal.fire({
                                             position: "center",
-                                            icon: "success",
-                                            title: message, 
+                                            // icon: "success",
+                                            text: message,
+                                            title:"Bạn đã nhận được",
                                             showConfirmButton: false,
-                                            timer: 3000
+                                            timer: 1500,
+                                            customClass: customClass,
+                                            imageUrl: imageUrl,
+                                            imageHeight: 80,
                                         });
                                     }
                                     self.flag = false;
                                 }, 500); // 500 milliseconds = 0.5 giây
                             } else {
+                                console.log("check response.data.message", response.data.message);
                                 if (response.data.data.data_flip) {
                                     // self.flipList = response.data.data.data_flip;
                                 }
@@ -311,7 +326,55 @@ export default {
                 .finally();
         },
         async logoutSubmit() {
+            console.log("signOut");
             await this.logout();
+        },
+
+        cursorDua() {
+            const cursorDua = document.getElementById('img-dua'),
+                mainLDFirst = document.getElementsByClassName("game-thuvientoantri"),
+
+                withClassHover = document.getElementsByClassName("cursor-hover"),
+                cPointer = document.getElementsByClassName("c-pointer"),
+
+                withInMainKimCuong = [
+                ...mainLDFirst,
+                // ...mainKimCuong, 
+                // ...bgKimCuong, 
+                // ...imgBgKimCuong, 
+                // ...listKimCuong, 
+                // ...itKimCuong,
+                // ...imgAni,
+            ];
+            
+            document.addEventListener("mousemove", onMouseMove);
+            document.addEventListener("mousedown", PressBua);
+            document.addEventListener("mouseup", exitPressBua);
+
+            withInMainKimCuong.forEach((element) => {
+            element.addEventListener("mouseover", showBua);
+            element.addEventListener("mouseout", hideBua);
+
+            
+            })
+
+            function showBua() {
+                cursorDua.style.opacity = 1;
+            }
+            function hideBua() {
+                cursorDua.style.opacity = 0;
+            }
+            function PressBua() {
+                cursorDua.style.transform  = "rotate(-30deg)";
+            }
+            function exitPressBua() {
+                cursorDua.style.transform  = "rotate(0deg)";
+            }
+
+            function onMouseMove(e) {
+                cursorDua.style.left = e.clientX-(40)+'px'
+                cursorDua.style.top = e.clientY-(20)+'px'
+            }
         },
     },
     // code test keyboard
@@ -328,11 +391,17 @@ export default {
         }
     },
     mounted() {
+        this.cursorDua();
     },
 };
 </script>
 
 <style>
+
+.game-thuvientoantri{
+    cursor: none;
+}
+
 .game-thuvientoantri .card {
     perspective: 1000px;
     position: relative;

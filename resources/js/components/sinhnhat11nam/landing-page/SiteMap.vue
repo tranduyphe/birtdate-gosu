@@ -14,8 +14,7 @@
             </div>
             <div class="div-img thap-thanh-tuu" data-aos="fade-down">
                 <div class="group-img">
-                    <button class="" data-bs-toggle="modal" data-bs-target="#ThapThanhTuuModal"
-                        @click="clickedThanhThanhTuu = true">
+                    <button class="" data-bs-toggle="modal" data-bs-target="#ThapThanhTuuModal" @click="clickThanhThanhTuu">
                         <img :src="thapthanhtuuimgUrl" alt="Tháp Thành Tựu" width="485" @click="getDataPhapThanhTuu">
                     </button>
                     <div class="bubble-content">
@@ -48,7 +47,7 @@
             </div>
             <div class="div-img sanh-hop-hep" data-aos="fade-left">
                 <div class="group-img">
-                    <button class="" data-bs-toggle="modal" data-bs-target="#SanhHopHepModal">
+                    <button class="" data-bs-toggle="modal" data-bs-target="#SanhHopHepModal" @click="clickSanhHopHep">
                         <img :src="sanhhophepimgUrl" alt="Sảnh Họp Hẹp" width="295">
                     </button>
                     <div class="bubble-content">
@@ -57,7 +56,8 @@
                 </div>
             </div>
             <div class="div-img items thongbao" data-aos="fade-left">
-                <button class="" data-bs-toggle="modal" data-bs-target="#ThapThanhTuuModal" v-if="completedQuestCount > 0">
+                <button class="" data-bs-toggle="modal" data-bs-target="#ThapThanhTuuModal" v-if="completedQuestCount > 0"
+                    @click="openThuThach = 1">
                     <img :src="thongbaoimgUrl" alt="Thông báo" width="" @click="getDataPhapThanhTuu">
                     <span class="font-size-16 text-white">{{ completedQuestCount }}</span>
                 </button>
@@ -73,7 +73,7 @@
                 <img :src="kimcuongimgUrl" alt="Thông báo" width="">
                 <span class="font-size-16 text-white">{{ attrKimcuong }}</span>
                 <div class="bubble-content">
-                    <p>Đá mặt trăng</p>
+                    <p>Đá Mặt Trăng</p>
                 </div>
 
             </div>
@@ -81,7 +81,7 @@
                 <img :src="longvuimgUrl" alt="Thông báo" width="">
                 <span class="font-size-16 text-white">{{ attrLongvu }}</span>
                 <div class="bubble-content">
-                    <p>Lông phượng hoàng</p>
+                    <p>Lông Phượng Hoàng</p>
                 </div>
             </div>
         </div>
@@ -127,8 +127,10 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-body">
-                        <button type="button" ref="closeModal" class="btn close-button" data-bs-dismiss="modal" aria-label="Close"><img :src="closeimgUrl" alt=""></button>
-                        <ModalSanhHopHep></ModalSanhHopHep>                     
+                        <button type="button" ref="closeModal" class="btn close-button" data-bs-dismiss="modal"
+                            aria-label="Close"><img :src="closeimgUrl" alt=""></button>
+                        <ModalSanhHopHep :dataPuzzle="dataPuzzle" @updateDataSanhHopHep="updateDataSanhHopHep">
+                        </ModalSanhHopHep>
                     </div>
                 </div>
             </div>
@@ -138,14 +140,14 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-body">
-                        <button type="button" ref="closeModal" class="btn close-button" data-bs-dismiss="modal"
-                            aria-label="Close"><img :src="closeimgUrl" alt=""></button>
+                        <button @click="openThuThach = 0" type="button" ref="closeModal" class="btn close-button"
+                            data-bs-dismiss="modal" aria-label="Close"><img :src="closeimgUrl" alt=""></button>
                         <ModalThapThanhTuu :nhiemvu="nhiemvu" @updateNhiemvu="updateNhiemvu" :logActivity="logActivity"
                             @updateLogActivity="updateLogActivity" :topFeathers="topFeathers"
                             @updateTopFeathers="updateTopFeathers" :attrKimcuong="attrKimcuong"
                             @updateAttrKimcuong="updateAttrKimcuong" :attrLongvu="attrLongvu"
                             @updateAttrLongvu="updateAttrLongvu" :user_code="user_code" :readInstructions="readInstructions"
-                            :muitenimgUrl="muitenimgUrl"></ModalThapThanhTuu>
+                            :muitenimgUrl="muitenimgUrl" :openThuThach="openThuThach"></ModalThapThanhTuu>
                     </div>
                 </div>
             </div>
@@ -157,7 +159,7 @@
 
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-
+import $ from "jQuery";
 import ModalNhaThiDau from './modal-detail/nhathidau-modal.vue';
 import ModalThapThanhTuu from './modal-detail/thapthanhtuu-modal.vue';
 import ModalThuVienToanTri from './modal-detail/thuvien-modal2.vue';
@@ -205,7 +207,8 @@ export default {
             topFeathers: [],
             isDivVisible: true,
             clickedThanhThanhTuu: false,
-
+            openThuThach: 0,
+            dataPuzzle: []
         };
     },
     created() {
@@ -226,7 +229,7 @@ export default {
             }
         });
         setInterval(() => {
-            console.log('tabActive',tabActive);
+            console.log('tabActive', tabActive);
             if (tabActive) {
 
                 this.getQuest();
@@ -239,7 +242,9 @@ export default {
             duration: 1000, // Thời gian hoàn thành hiệu ứng (milliseconds)
             easing: 'ease', // Thuật toán điều chỉnh (có thể sử dụng các giá trị khác nhau)
         });
-
+        $(document).ready(function () {
+            $('.nav-main').removeClass('hidden-header');
+        });
     },
     computed: {
         questOpened() {
@@ -313,7 +318,7 @@ export default {
                                 "formatted_created_at": element.formatted_created_at
                             });
                         });
-                        // console.log()
+                        // console.log("check logActivity",this.logActivity);
                         // self.logActivity = response.data.data.log_activity;
                     }
                 })
@@ -363,7 +368,6 @@ export default {
                 })
                 .finally();
 
-
         },
         getItemUser() {
             let self = this;
@@ -385,6 +389,7 @@ export default {
         },
 
         async logoutSubmit() {
+            console.log("signOut");
             await this.logout();
         },
 
@@ -394,6 +399,7 @@ export default {
 
         updateAttrKimcuong(newValue) {
             // Cập nhật giá trị của attrKimcuong từ sự kiện
+            console.log("check updateAttrKimcuong: ", newValue);
             this.attrKimcuong = newValue;
         },
         updateAttrLongvu(newValue) {
@@ -406,6 +412,7 @@ export default {
         },
         updateLogActivity(newValue) {
             // Cập nhật giá trị của attrKimcuong từ sự kiện
+            console.log("check updateLogActivity newValue", newValue)
             this.logActivity = newValue;
         },
         updateTopFeathers(newValue) {
@@ -416,14 +423,49 @@ export default {
             this.isDivVisible = false;
         },
 
+        clickThanhThanhTuu() {
+            this.clickedThanhThanhTuu = true;
+            this.openThuThach = 1;
+        },
+
+        updateDataSanhHopHep(newValue) {
+            // Cập nhật giá trị của attrKimcuong từ sự kiện
+            console.log("check updateLogActivity newValue", newValue)
+            this.dataPuzzle = newValue;
+        },
+        clickSanhHopHep() {
+            this.getDataSanhTruongHopHep();
+
+        },
+
+        getDataSanhTruongHopHep() {
+
+            let self = this;
+            axios.get('/api/get-data-sanh-truong-hop-hep', {
+            })
+                .then(function (response) {
+                    if (response.data.status === 200 && response.data.success == true) {
+                        self.dataPuzzle = response.data.data ?? [];
+                        console.log(self.dataPuzzle);
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                    if (error.response && error.response.status === 401) {
+                        this.logoutSubmit()
+                    }
+                })
+                .finally();
+        },
+
+
     },
 };
 </script>
 
 <style scoped>
 .wrapper-content {
-    min-height: 100vh;
-    height: auto;
+    height: 100vh;
     width: 100%;
     background-size: cover;
     background-repeat: no-repeat;
@@ -431,7 +473,6 @@ export default {
     font-family: 'UVNLacLongQuan';
     position: relative;
     transition: all 500ms linear;
-    cursor: url('../../../../assets/images/sinhnhat11nam/img_main/dua-phep.png') 0 0, auto;
 }
 
 
@@ -516,6 +557,15 @@ export default {
     text-align: center;
     transform: translate(50%, 0%);
 }
+
+.wrapper-content .div-img.items.longvu span {
+    position: absolute;
+    bottom: 28px;
+    right: 47%;
+    text-align: center;
+    transform: translate(50%, 0%);
+}
+
 
 .banner-name {
     position: absolute;
@@ -753,5 +803,4 @@ button.close-button:focus-visible {
     100% {
         transform: translateX(-15px);
     }
-}
-</style>
+}</style>

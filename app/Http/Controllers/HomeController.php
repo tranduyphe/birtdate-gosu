@@ -108,6 +108,12 @@ class HomeController extends Controller
             ->get()->toArray();
         $data = [];
         for ($i = 0; $i < 198; $i++) {
+
+            
+            // $data[] = [
+            //     "user_id" => 0,
+            //     "is_open" => 1
+            // ];
             if (!empty($result[$i])) {
                 $data[] = [
                     "user_id" => $result[$i]['id'],
@@ -136,7 +142,7 @@ class HomeController extends Controller
     // }
     public function getTopFeathers(Request $request)
     {
-        $usersWithFeathers = User::select('id', 'name', 'first_name', 'last_name', 'email', 'feathers')
+        $usersWithFeathers = User::select('id', 'name', 'first_name', 'last_name', 'email', 'feathers', 'avatar')
             ->orderBy('feathers', 'desc')
             ->orderBy('id', 'asc') // Sắp xếp tiếp theo id nếu feathers bằng nhau
             ->limit(10)

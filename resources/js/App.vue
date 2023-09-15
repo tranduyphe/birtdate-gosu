@@ -1,20 +1,23 @@
 <script>
+
 import Header from '@/components/layouts/Header';
 export default {
     components: {
         Header
     },
-    data() {
-        return {}
-    },
+    data() {},
     computed: {
     },
     methods: {
     },
-    created(){  
-           
+    updated() {
     },
-    mounted(){}
+    created(){  
+
+    },
+    mounted(){
+      
+    }
 }
 </script>
 <template>
