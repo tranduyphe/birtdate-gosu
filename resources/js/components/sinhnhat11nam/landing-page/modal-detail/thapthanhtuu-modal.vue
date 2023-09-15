@@ -71,7 +71,6 @@
                                         item.current_attempts }}/{{ item.total_attempts }}</p>
                                     <button @click="GotoNhaThiDau" class="goto" v-if="index == 1 || index == 2">Đến</button>
                                     <button @click="GotoThuVien" class="goto" v-if="index == 3">Đến</button>
-                                    <router-link to="wall">Đến</router-link>
                                     <button class="goto" v-if="index == 8"><router-link to="wall">Đến</router-link></button>
                                 </div>
 
