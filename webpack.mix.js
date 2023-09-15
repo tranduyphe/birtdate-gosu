@@ -24,7 +24,7 @@ mix.js('resources/js/app.js', 'public/assets/js')
                 '@': path.resolve(__dirname, 'resources/js/'),
             },
             extensions: [".*",".wasm",".mjs",".js",".jsx",".json",".vue"]
-        }
+        },
         plugins: [
             new webpack.DefinePlugin({
                 'process.env': {
