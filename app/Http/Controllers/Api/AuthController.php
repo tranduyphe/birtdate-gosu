@@ -65,7 +65,7 @@ class AuthController extends Controller
                         'first_name' => $infoProfile->Data->FirstName,
                         'last_name' => $infoProfile->Data->LastName,
                         'user_code' => $this->generateUniqueUserCode(),
-                        'fullname' =>  $infoProfile->first_name.' '.$infoProfile->last_name,
+                        'fullname' =>  $infoProfile->Data->FirstName.' '.$infoProfile->Data->LastName,
                     );
                     $this->create($data);
                     if(Auth::attempt(['email' => $request->email, 'password' => $password])){
