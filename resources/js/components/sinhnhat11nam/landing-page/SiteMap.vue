@@ -641,6 +641,7 @@ button.close-button:focus,button.close-button:active,button.close-button:focus-v
   white-space: nowrap;
   transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
   flex-direction: column;
+  background-color: rgba(0,0,0,0.8);
 }
 
 .landscape-notification img{

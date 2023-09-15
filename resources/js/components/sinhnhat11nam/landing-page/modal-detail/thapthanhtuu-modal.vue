@@ -64,6 +64,8 @@
                                 <div class="point">
                                     <p class="m-0" :style="{ color: item.is_reward == 0 ? '#b2ad8a' : '#289e11' }">{{
                                         item.current_attempts }}/{{ item.total_attempts }}</p>
+                                    <button @click="GotoNhaThiDau" class="goto" v-if="index == 1 || index == 2">Đến</button>
+                                    <button @click="GotoThuVien" class="goto" v-if="index == 3">Đến</button>
                                 </div>
                                 
                                 <div class="item-button" v-if="item.is_reward == 0" :class="{'item-button-active': item.current_attempts == item.total_attempts}">
@@ -710,6 +712,17 @@ export default {
             });
         },
 
+        GotoNhaThiDau(){
+            $('.modalThapThanhTuu').modal('hide');
+            $('.modalNhaThiDau').modal('show');
+        },
+
+        GotoThuVien(){
+            $('.modalThapThanhTuu').modal('hide');
+            $('.modalThuVien').modal('show');
+        },
+
+
         // startShowPopup() {
         //     setTimeout(() => {
         //         // Sau 5 giây, hiển thị popup bằng cách thay đổi trạng thái
@@ -1026,5 +1039,28 @@ export default {
   0% { filter: brightness(120%); }
   50% { filter: brightness(150%); }
   100% { filter: brightness(120%); }
+}
+
+button.goto{
+    background: linear-gradient(to bottom, #fdd977, #efe4a3);
+    border: 1px solid #ffffff;
+    color: #4d4b39;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    border-radius: 5px;
+    font-size:14px;
+    padding: 1px 10px;
+    display: none;
+}
+
+#v-tabs-thu-thach .item-task:hover:nth-child(2) .point p,
+#v-tabs-thu-thach .item-task:hover:nth-child(3) .point p,
+#v-tabs-thu-thach .item-task:hover:nth-child(4) .point p{
+    display: none;
+}
+
+#v-tabs-thu-thach .item-task:hover:nth-child(2) .point button.goto,
+#v-tabs-thu-thach .item-task:hover:nth-child(3) .point button.goto,
+#v-tabs-thu-thach .item-task:hover:nth-child(4) .point button.goto{
+    display: block;
 }
 </style>
