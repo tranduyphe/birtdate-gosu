@@ -458,7 +458,7 @@ export default {
                                 <h5  class="title" v-if="item.title && item.title != 'null'">{{ item.title }}</h5>
                                 <a class="wrap-tooltip" data-bs-toggle="tooltip" data-bs-placement="bottom" :title="item.users.first_name + ' '+item.users.last_name">
                                     <img :src="item.users.avatar" :alt="item.users.first_name + ' '+item.users.last_name">
-                                    <span class="name">{{ item.users.first_name + ' '+item.users.last_name }}</span>
+                                    <!-- <span class="name">{{ item.users.first_name + ' '+item.users.last_name }}</span> -->
                                 </a>
                             </div>
                             
@@ -772,7 +772,7 @@ export default {
                                 <h5  class="title" v-if="currentPadlets.title && currentPadlets.title != 'null'">{{ currentPadlets.title }}</h5>
                                 <a class="wrap-tooltip" v-if="currentPadlets" data-bs-toggle="tooltip" data-bs-placement="bottom" :title="currentPadlets && currentPadlets.users.fullname ? currentPadlets.users.first_name+' ' +currentPadlets.users.last_name : ''">
                                     <img :src="currentPadlets.users.avatar" :alt="currentPadlets.users.first_name+' ' +currentPadlets.users.last_name">
-                                    <span class="name">{{ currentPadlets.users.first_name+' ' +currentPadlets.users.last_name}}</span>
+                                    <!-- <span class="name">{{ currentPadlets.users.first_name+' ' +currentPadlets.users.last_name}}</span> -->
                                 </a>
                             </div>
                             <div
