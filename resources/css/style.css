@@ -167,3 +167,7 @@
     width: 135px;
     height: 135px;
 }
+
+.hidden-header {
+    display: none;
+}
