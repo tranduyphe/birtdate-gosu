@@ -66,12 +66,12 @@
                                     <p class="m-0">{{ item.name }}</p>
                                     <div class="friendcode d-flex" v-if="index == 4"><input class="form-control w-75" v-model="friendCode"><button class="btn btn-success" type="button" @click="invite">Mời</button></div>
                                 </div>
-                                <div class="point">
+                                <div :class="['point', `${index == 8 ? 'point-8' : ''} `]">
                                     <p class="m-0" :style="{ color: item.is_reward == 0 ? '#b2ad8a' : '#289e11' }">{{
                                         item.current_attempts }}/{{ item.total_attempts }}</p>
                                     <button @click="GotoNhaThiDau" class="goto" v-if="index == 1 || index == 2">Đến</button>
                                     <button @click="GotoThuVien" class="goto" v-if="index == 3">Đến</button>
-                                    <button class="goto" v-if="index == 8"><router-link to="wall">Đến</router-link></button>
+                                    <button :class="['goto']" v-if="index == 8"><router-link to="wall">Đến</router-link></button>
                                 </div>
 
                                 <div class="item-button" v-if="item.is_reward == 0" :class="{'item-button-active': item.current_attempts == item.total_attempts}">
@@ -1277,7 +1277,23 @@ export default {
     -webkit-animation: mover 0.5s infinite alternate;
     animation: mover 0.5s infinite alternate;
 }
-
+.point-8 {
+    position: relative;
+}
+.point-8 .goto {
+    position: absolute;
+    top: 50%;
+    right: -8px;
+    margin-top: calc(-13px);
+}
+.point-8 .goto a{
+    color: #000;
+    text-decoration: none;
+}
+.item-task:hover .point-8 .goto {
+    display: block;
+    opacity: 1;
+}
 @-webkit-keyframes mover {
     0% {
         transform: translateX(0);
