@@ -19,7 +19,7 @@ class QuestRepository
         // Khởi tạo danh sách mảng ở đây hoặc bạn có thể gán giá trị mặc định
         $this->listQuest = [
             [
-                'name' => 'Điểm danh đến trường hàng ngày 1',
+                'name' => 'Điểm danh đến trường hàng ngày',
                 'type' => '0',
                 'total_attempts' => 1,
                 'current_attempts' => 1,

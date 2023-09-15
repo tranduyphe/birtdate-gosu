@@ -212,7 +212,7 @@ export default {
             attrKimcuong: 67,
             attrLongvu: 15,
             attrThongbao: 0,
-            readInstructions: 0,
+            readInstructions: 1,
             friendCode: "",
             nhiemvu: [],
             logActivity: [],
@@ -487,6 +487,7 @@ export default {
     height: 50px;   
     display: block;
     z-index: 9; 
+    position: absolute;
 }
 .absolute-1{
     top: 21%;
@@ -509,9 +510,9 @@ export default {
     width: 230px;
 }
 .absolute-4 {
-    right: 15.5%;
+    right: 19%;
     left: auto;
-    top: 43%;
+    top: 42%;
 }
 .absolute-4 a {
     height: 70px;
