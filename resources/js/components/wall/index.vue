@@ -5,16 +5,21 @@ import $ from "jquery";
 import Masonry from "masonry-layout";
 import imagesLoaded from "imagesloaded";
 import "remixicon/fonts/remixicon.css";
-import { socketMethods, walltMethods, wallGetters, commentMethods } from "@/store/store";
+import {
+    socketMethods,
+    walltMethods,
+    wallGetters,
+    commentMethods,
+} from "@/store/store";
 import { socket } from "@/store/socket";
-import Header from '@/components/layouts/Header';
-import DetailPadlet from '@/components/wall/detail';
+import Header from "@/components/layouts/Header";
+import DetailPadlet from "@/components/wall/detail";
 import { Helper } from "@/helper";
 export default {
     components: {
         name: "MasonryLayout",
         DetailPadlet,
-        Header
+        Header,
     },
     data: () => {
         return {
@@ -53,7 +58,9 @@ export default {
                 file: null,
                 color: null,
             },
+            currentPadlets: {},
             images: null,
+            newImages:null,
             dataUser: {},
             hidden: false,
             expand: false,
@@ -62,19 +69,19 @@ export default {
             currentPadlets: false,
             checkMessenger: false,
             comment: [],
-            showEditComment:[],
+            showEditComment: [],
             oldContentComment: [],
-            showSend:[],
-            currentId : false,
+            showSend: [],
+            currentId: false,
         };
     },
     computed: {
         ...wallGetters,
     },
     methods: {
-        //...socketMethods,        
+        //...socketMethods,
         initializeMasonry() {
-            console.log("initializeMasonry")
+            console.log("initializeMasonry");
             this.masonry = new Masonry(this.$refs.masonryContainer, {
                 itemSelector: ".masonry-item",
                 columnWidth: ".masonry-sizer",
@@ -102,9 +109,20 @@ export default {
             };
             reader.readAsDataURL(this.data.file);
         },
+
+        handleFileUploadEdit(e) {
+            let files = e.target.files || e.dataTransfer.files;
+            if (!files.length) return;
+            this.new_file = e.target.files[0];
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                this.currentPadlets.file_name = event.target.result;
+            };
+            reader.readAsDataURL(this.new_file);
+        },
+
         async handleCreate() {
             const resultData = await this.createWall(this.data);
-            console.log(resultData);
             if (resultData) {
                 this.handleShowForm();
                 this.items.push(resultData);
@@ -113,15 +131,50 @@ export default {
                     content: null,
                     file: null,
                     color: null,
-                }
-                this.$nextTick(()=>{
-                    this.initializeMasonry()
+                };
+                this.$nextTick(() => {
+                    this.initializeMasonry();
+                });
+            }
+        },
+
+        handleShowFormEdit() {
+            this.hidden = !this.hidden;
+            if (this.hidden) {
+                this.new_file = false
+            }
+        },
+        async handleEditWall() {
+            let dataUpdated = {};
+                dataUpdated['file'] = this.new_file;
+                dataUpdated['title'] = this.currentPadlets.title;
+                dataUpdated['content'] = this.currentPadlets.content;
+                dataUpdated['color'] = this.currentPadlets.color;
+                dataUpdated['id'] = this.currentPadlets.id;
+                dataUpdated['file_name'] = this.currentPadlets.file_name;
+            console.log(dataUpdated);
+            const resultData = await this.updateWall(dataUpdated);
+            if (resultData) {
+                this.currentPadlets.file_name = resultData.file_name ? resultData.file_name : '';
+                this.new_file = false;
+                this.$refs.closeEditPadlet.click();
+                this.items.filter((item) => {
+                    if (item.id == resultData.id) {
+                        item = resultData
+                    }
+                });
+                this.$nextTick(() => {
+                    this.initializeMasonry();
                 });
             }
         },
         handleRemoveFile() {
             this.images = null;
             this.data.file = null;
+        },
+        handleRemoveFileEdit() {
+            this.new_file = null;
+            this.currentPadlets.file_name = null;
         },
         // hidden
         handleShowForm() {
@@ -145,18 +198,20 @@ export default {
                 this.data.content ||
                 this.data.title ||
                 this.image
-            ){
+            ) {
                 this.disabled = false;
                 let checkTextTitle = Helper.checkRibaldry(this.data.title);
                 let checkTextContent = Helper.checkRibaldry(this.data.content);
                 if (checkTextContent | checkTextTitle) {
                     this.disabled = true;
-                    this.checkMessenger = true
-                }else{
-                    this.checkMessenger = false
+                    this.checkMessenger = true;
+                } else {
+                    this.checkMessenger = false;
                 }
-
-            }else{ this.disabled = true; this.checkMessenger = false}
+            } else {
+                this.disabled = true;
+                this.checkMessenger = false;
+            }
         },
         async handleUpadtedWall(e) {
             let currentWall = false;
@@ -213,35 +268,31 @@ export default {
         handleShowModal(id) {
             this.currentPadlets = this.items.filter((item) => item.id == id);
             this.currentPadlets = this.currentPadlets[0];
-            this.$refs.padletModal.click();
+            this.currentPadlets.title = this.currentPadlets.title && this.currentPadlets.title != 'null' ? this.currentPadlets.title : "";
+            this.currentPadlets.content = this.currentPadlets.content && this.currentPadlets.content != 'null' ? this.currentPadlets.content : "";
+            this.currentPadlets.file_name = this.currentPadlets.file_name && this.currentPadlets.file_name != 'null' ? this.currentPadlets.file_name : "";
+            this.currentPadlets.name = this.listColor.filter((item) => this.currentPadlets.color == item.color) ;
+            this.currentPadlets.name = this.currentPadlets.name[0] ? this.currentPadlets.name[0]['name']  : "Màu Trắng";  
+            this.$refs.padletModal.click();            
         },
-        // postToFacebook() {
-        //     FB.api('/me/feed', 'POST', { message: this.postContent }, (response) => {
-        //         if (response && !response.error) {
-        //             alert('Bài viết đã được đăng lên Facebook thành công!');
-        //         } else {
-        //             alert('Lỗi khi đăng bài viết lên Facebook.');
-        //         }
-        //     });
-        // },
         //Comment
         async handleAddComment(id) {
             if (this.comment[id]) {
                 try {
                     let checkComment = Helper.checkRibaldry(this.comment[id]);
                     if (checkComment) {
-                        alert('Vui lòng không dùng từ ngữ kiếm nhã');
+                        alert("Vui lòng không dùng từ ngữ kiếm nhã");
                         return;
                     }
                     let data = {};
-                    data['content'] = this.comment[id];
-                    data['target_id'] = id;
-                    data['profile_id'] = this.dataUser.profile_id;
+                    data["content"] = this.comment[id];
+                    data["target_id"] = id;
+                    data["profile_id"] = this.dataUser.profile_id;
                     let results = await this.createComment(data);
                     if (results) {
                         this.items.filter((item) => {
-                            if(id == item.id){
-                                item.comments.push(results)
+                            if (id == item.id) {
+                                item.comments.push(results);
                             }
                         });
                         this.comment = [];
@@ -249,157 +300,169 @@ export default {
                         this.showIconSendComment();
                     }
                 } catch (error) {
-                    console.log('Lỗi khi post comment')
+                    console.log("Lỗi khi post comment");
                 }
-                
             }
         },
         // show edit comment
-        editComment(id, padlet_id){
+        editComment(id, padlet_id) {
             this.showEditComment = [];
             this.showEditComment[id] = true;
             //oldContentComment
             let oldData = this.items.filter((item) => padlet_id == item.id);
-            if(oldData){
-                let oldComment = oldData[0]['comments'].filter((item) => id == item.id);
+            if (oldData) {
+                let oldComment = oldData[0]["comments"].filter(
+                    (item) => id == item.id
+                );
                 if (oldComment) {
                     oldComment = oldComment[0];
                     this.oldContentComment[id] = oldComment.content;
                 }
             }
         },
-        handleCancelComment(id, padlet_id){
+        handleCancelComment(id, padlet_id) {
             this.showEditComment = [];
             this.items.filter((item) => {
-                if(padlet_id == item.id){
+                if (padlet_id == item.id) {
                     item.comments.filter((_item) => {
-                        if(_item.id == id)
-                        _item.content = this.oldContentComment[id];
-                    })
+                        if (_item.id == id)
+                            _item.content = this.oldContentComment[id];
+                    });
                 }
             });
         },
         // updated comments
         async handleUpdateComment(id, padlet_id) {
             try {
-                let newContentComment= ''; 
+                let newContentComment = "";
                 this.items.filter((item) => {
-                    if(padlet_id == item.id){
-                        item.comments.filter((_item) => {                            
-                            if(_item.id == id){
-                                newContentComment = _item.content
+                    if (padlet_id == item.id) {
+                        item.comments.filter((_item) => {
+                            if (_item.id == id) {
+                                newContentComment = _item.content;
                             }
-                        })
+                        });
                     }
                 });
                 if (newContentComment.length > 0) {
                     let data = {};
-                    data['id'] = id;              
-                    data['content'] = newContentComment;   
+                    data["id"] = id;
+                    data["content"] = newContentComment;
                     let checkComment = Helper.checkRibaldry(newContentComment);
                     if (checkComment) {
-                        alert('Vui lòng không dùng từ ngữ kiếm nhã');
+                        alert("Vui lòng không dùng từ ngữ kiếm nhã");
                         return;
-                    }           
+                    }
                     var results = await this.updateComment(data);
-                    if(results){
+                    if (results) {
                         this.showEditComment = [];
                         this.oldContentComment = [];
                         this.initializeMasonry();
                     }
-                }else{
-                    alert('Vui lòng nhập comment');
+                } else {
+                    alert("Vui lòng nhập comment");
                 }
-
             } catch (error) {
-                console.log('error updated comment');
+                console.log("error updated comment");
             }
         },
         // remove comments
-        async handleRemoveComment(id, padlet_id){
+        async handleRemoveComment(id, padlet_id) {
             try {
                 let results = await this.deleteComment(id);
-                let currentListComments = this.items.filter((item) => item.id == padlet_id);
+                let currentListComments = this.items.filter(
+                    (item) => item.id == padlet_id
+                );
                 let listComment;
-                listComment = currentListComments[0]['comments'].filter((_item, index) => { 
-                    return _item.id != id
-                })
+                listComment = currentListComments[0]["comments"].filter(
+                    (_item, index) => {
+                        return _item.id != id;
+                    }
+                );
                 this.items.filter((item) => {
-                    if(padlet_id == item.id){
+                    if (padlet_id == item.id) {
                         item.comments = listComment;
                     }
                 });
                 this.initializeMasonry();
             } catch (error) {
-                console.log('Error delete comment');
+                console.log("Error delete comment");
             }
-            
         },
-        handleGetId(id){
-            this.currentId = id
+        handleGetId(id) {
+            this.currentId = id;
         },
         // show icon send comment
-        showIconSendComment(){
-            if ( this.currentId ) {
+        showIconSendComment() {
+            if (this.currentId) {
                 if (this.comment[this.currentId]) {
-                    this.showSend[this.currentId] = true
-                }else{
-                    this.showSend = []
+                    this.showSend[this.currentId] = true;
+                } else {
+                    this.showSend = [];
                 }
             }
         },
         ...walltMethods,
         ...commentMethods,
     },
-    watch: { },
-    updated() {     
-        // this.showIconSendComment();
-        // this.$nextTick(()=>{
-        //     this.handleDisabledForm();  
-        //     //this.showIconSendComment();
-        // });
+    watch: {},
+    updated() {
         const $this = this;
         $(document).ready(function () {
-            $('.nav-main').addClass('hidden-header');
-            $('body').addClass('overflow-hidden');
-            $("#dropColor .dropdown-item").on("click", function () {
+            $(".nav-main").addClass("hidden-header");
+            $("body").addClass("overflow-hidden");
+            $(".drop-color-1 .dropdown-item").on("click", function () {
                 var $color = $(this).find(".color").attr("data-color");
                 var $name = $(this).find(".color").attr("data-name");
-                $this.data.color = $color ? $color : '255,255,255';
+                $this.data.color = $color ? $color : "255,255,255";
                 $("#dropContent").find(".name").text($name);
                 $("#dropContent")
                     .find(".color")
                     .css("background-color", "rgb(" + $color + ")");
             });
-            $this.handleDisabledForm();            
+            $this.handleDisabledForm();
             autoSizeTextArea();
-            function autoSizeTextArea(){
-                var text = $('.autosize');
-                text.each(function(){
-                    $(this).attr('rows',1);
+            function autoSizeTextArea() {
+                var text = $(".autosize");
+                text.each(function () {
+                    $(this).attr("rows", 1);
                     resize($(this));
                 });
-                text.on('input', function(){
+                text.on("input", function () {
                     $this.showIconSendComment();
                     resize($(this));
                 });
-                function resize ($text) {
-                    $text.css('height', 'auto');
-                    $text.css('height', $text[0].scrollHeight+'px');
+                function resize($text) {
+                    $text.css("height", "auto");
+                    $text.css("height", $text[0].scrollHeight + "px");
                 }
-            }              
+            }
         });
     },
-    created() {
-    },
+    created() {},
     async mounted() {
         this.dataUser = JSON.parse(localStorage.getItem("users") || "{}");
         this.items = await this.indexWall();
         const $this = this;
         $(document).ready(function () {
-            $this.initializeMasonry();                      
-        })
-        
+            $this.initializeMasonry();
+            $(".drop-color-2 .dropdown-item").on("click", function () {
+                var $color = $(this).find(".color").attr("data-color");
+                var $name = $(this).find(".color").attr("data-name");
+                $this.data.color = $color ? $color : "255,255,255";
+                if ($this.currentPadlets) {
+                    $this.currentPadlets.color = $color ? $color : "255,255,255";
+                    $this.$nextTick(()=>{
+                        $this.initializeMasonry();
+                    });
+                }
+                $("#dropContent").find(".name").text($name);
+                $("#dropContent")
+                    .find(".color")
+                    .css("background-color", "rgb(" + $color + ")");
+            });
+        });
+
         // get data from server
         /*socket.on("listen data", function (data) {
             try {
@@ -426,7 +489,6 @@ export default {
 
             // socket.removeListener('listen messenger');
         });*/
-        
     },
 };
 </script>
@@ -446,21 +508,46 @@ export default {
                     v-for="item in items"
                     :key="item.id"
                     :class="['masonry-item pb-2 px-2 pt-2']"
-                    v-bind:style="`background-color:rgb(${item.color && item.color != 'null' ? item.color : '255,255,255'})`"
+                    v-bind:style="`background-color:rgb(${
+                        item.color && item.color != 'null'
+                            ? item.color
+                            : '255,255,255'
+                    })`"
                 >
                     <div class="wrap-content">
                         <div
                             class="content-wall pb-2"
                             @click="handleShowModal(item.id)"
-                        >   
+                        >
                             <div class="header">
-                                <h5  class="title" v-if="item.title && item.title != 'null'">{{ item.title }}</h5>
-                                <a class="wrap-tooltip" data-bs-toggle="tooltip" data-bs-placement="bottom" :title="item.users.first_name + ' '+item.users.last_name">
-                                    <img :src="item.users.avatar" :alt="item.users.first_name + ' '+item.users.last_name">
+                                <h5
+                                    class="title"
+                                    v-if="item.title && item.title != 'null'"
+                                >
+                                    {{ item.title }}
+                                </h5>
+                                <a
+                                    class="wrap-tooltip"
+                                    data-bs-toggle="tooltip"
+                                    data-bs-placement="bottom"
+                                    :title="
+                                        item.users.first_name +
+                                        ' ' +
+                                        item.users.last_name
+                                    "
+                                >
+                                    <img
+                                        :src="item.users.avatar"
+                                        :alt="
+                                            item.users.first_name +
+                                            ' ' +
+                                            item.users.last_name
+                                        "
+                                    />
                                     <!-- <span class="name">{{ item.users.first_name + ' '+item.users.last_name }}</span> -->
                                 </a>
                             </div>
-                            
+
                             <div class="images pt-2" v-if="item.file_name">
                                 <img
                                     :src="`${publicPath + item.file_name}`"
@@ -493,40 +580,142 @@ export default {
                                     :data-id="item.id"
                                 ></i>
                                 <small>{{
-                                    item.liked && item.liked != 0 ? item.liked : ""
+                                    item.liked && item.liked != 0
+                                        ? item.liked
+                                        : ""
                                 }}</small>
                             </span>
-                            <span class="comment"><i class="ri-chat-3-line"></i><small>{{ item.comments && item.comments.length ? item.comments.length : '' }}</small></span>
+                            <span class="comment"
+                                ><i class="ri-chat-3-line"></i
+                                ><small>{{
+                                    item.comments && item.comments.length
+                                        ? item.comments.length
+                                        : ""
+                                }}</small></span
+                            >
                         </div>
                         <div class="">
-                            <div class="list-messenger mt-3" v-if="item.comments && item.comments.length">
-                                <div class="d-flex mt-2" v-for="comment in item.comments" :key="comment.id">
+                            <div
+                                class="list-messenger mt-3"
+                                v-if="item.comments && item.comments.length"
+                            >
+                                <div
+                                    class="d-flex mt-2"
+                                    v-for="comment in item.comments"
+                                    :key="comment.id"
+                                >
                                     <div class="avatar">
-                                        <img :src="comment.avatar" alt="">
+                                        <img :src="comment.avatar" alt="" />
                                     </div>
                                     <div class="content-messenger">
                                         <div class="">
-                                            <div class="d-flex justify-content-between">
-                                                <h6 class="name">{{ comment.fullname }}</h6>
+                                            <div
+                                                class="d-flex justify-content-between"
+                                            >
+                                                <h6 class="name">
+                                                    {{ comment.fullname }}
+                                                </h6>
                                                 <div class="more-button">
                                                     <div class="btn-group">
-                                                        <button type="button" class="btn btn-light btn-sm dropdown-toggle border-0 px-0 pb-0 pt-0" data-bs-toggle="dropdown" aria-expanded="false">
-                                                            <i class="ri-more-2-fill"></i>
+                                                        <button
+                                                            type="button"
+                                                            class="btn btn-light btn-sm dropdown-toggle border-0 px-0 pb-0 pt-0"
+                                                            data-bs-toggle="dropdown"
+                                                            aria-expanded="false"
+                                                        >
+                                                            <i
+                                                                class="ri-more-2-fill"
+                                                            ></i>
                                                         </button>
-                                                        <ul class="dropdown-menu pt-0 pb-0" v-if="dataUser.profile_id == comment.profile_id">
-                                                            <li class="d-flex px-2" @click="editComment(comment.id, item.id)"><span><i class="ri-pencil-line"></i></span><span>Chỉnh sửa bình luận</span></li>
-                                                            <li class="d-flex px-2 color-red" @click="handleRemoveComment(comment.id, item.id)"><span><i class="ri-delete-bin-line"></i></span><span>Xoá bình luận</span></li>
+                                                        <ul
+                                                            class="dropdown-menu pt-0 pb-0"
+                                                            v-if="
+                                                                dataUser.profile_id ==
+                                                                comment.profile_id
+                                                            "
+                                                        >
+                                                            <li
+                                                                class="d-flex px-2"
+                                                                @click="
+                                                                    editComment(
+                                                                        comment.id,
+                                                                        item.id
+                                                                    )
+                                                                "
+                                                            >
+                                                                <span
+                                                                    ><i
+                                                                        class="ri-pencil-line"
+                                                                    ></i></span
+                                                                ><span
+                                                                    >Chỉnh sửa
+                                                                    bình
+                                                                    luận</span
+                                                                >
+                                                            </li>
+                                                            <li
+                                                                class="d-flex px-2 color-red"
+                                                                @click="
+                                                                    handleRemoveComment(
+                                                                        comment.id,
+                                                                        item.id
+                                                                    )
+                                                                "
+                                                            >
+                                                                <span
+                                                                    ><i
+                                                                        class="ri-delete-bin-line"
+                                                                    ></i></span
+                                                                ><span
+                                                                    >Xoá bình
+                                                                    luận</span
+                                                                >
+                                                            </li>
                                                         </ul>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <p v-if="!showEditComment[comment.id]">{{ comment.content }}</p>
+                                            <p
+                                                v-if="
+                                                    !showEditComment[comment.id]
+                                                "
+                                            >
+                                                {{ comment.content }}
+                                            </p>
                                         </div>
-                                        <div class="messenger" v-if="showEditComment[comment.id]">
-                                            <textarea class="autosize" v-model="comment.content"></textarea>
-                                            <div class="d-flex justify-content-end mt-2 mb-2">
-                                                <button class="btn btn-outline-secondary btn-sm me-2"  @click="handleCancelComment(comment.id, item.id)">Huỷ</button>
-                                                <button class="btn btn-outline-primary btn-sm" @click="handleUpdateComment(comment.id, item.id)">Cập nhập</button>
+                                        <div
+                                            class="messenger"
+                                            v-if="showEditComment[comment.id]"
+                                        >
+                                            <textarea
+                                                class="autosize"
+                                                v-model="comment.content"
+                                            ></textarea>
+                                            <div
+                                                class="d-flex justify-content-end mt-2 mb-2"
+                                            >
+                                                <button
+                                                    class="btn btn-outline-secondary btn-sm me-2"
+                                                    @click="
+                                                        handleCancelComment(
+                                                            comment.id,
+                                                            item.id
+                                                        )
+                                                    "
+                                                >
+                                                    Huỷ
+                                                </button>
+                                                <button
+                                                    class="btn btn-outline-primary btn-sm"
+                                                    @click="
+                                                        handleUpdateComment(
+                                                            comment.id,
+                                                            item.id
+                                                        )
+                                                    "
+                                                >
+                                                    Cập nhập
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -534,11 +723,20 @@ export default {
                             </div>
                             <div class="d-flex mt-3">
                                 <div class="avatar">
-                                    <img :src="dataUser.avatar" alt="">
+                                    <img :src="dataUser.avatar" alt="" />
                                 </div>
                                 <div class="form-messenger">
-                                    <textarea @click="handleGetId(item.id)" class="autosize" v-model="comment[item.id]" placeholder="Thêm bình luận"></textarea>
-                                    <span class="send" @click="handleAddComment(item.id)" v-if="showSend[item.id]">
+                                    <textarea
+                                        @click="handleGetId(item.id)"
+                                        class="autosize"
+                                        v-model="comment[item.id]"
+                                        placeholder="Thêm bình luận"
+                                    ></textarea>
+                                    <span
+                                        class="send"
+                                        @click="handleAddComment(item.id)"
+                                        v-if="showSend[item.id]"
+                                    >
                                         <i class="ri-arrow-right-line"></i>
                                     </span>
                                 </div>
@@ -548,11 +746,18 @@ export default {
                 </div>
             </div>
             <div
-                :class="['wrap-model w-100', `${expand ? 'show' : ''}`]"
+                :class="[
+                    'wrap-model w-100 wrapper-model',
+                    `${expand ? 'show' : ''}`,
+                ]"
                 v-if="hidden"
             >
                 <span class="close" @click="handleShowForm"></span>
-                <form class="wrapper-form" action="" @submit.prevent="handleCreate">
+                <form
+                    class="wrapper-form"
+                    action=""
+                    @submit.prevent="handleCreate"
+                >
                     <div
                         class="d-flex flex-row justify-content-between pt-3 pb-2 px-3"
                     >
@@ -576,11 +781,6 @@ export default {
                                     ></i>
                                 </span>
                             </li>
-                            <!-- <li class="nav-item">
-                                <span class="btn btn-light">
-                                    <i class="ri-subtract-line"></i>
-                                </span>
-                            </li> -->
                         </ul>
                         <div class="d-flex fjustify-content-end ps-3">
                             <button
@@ -615,29 +815,6 @@ export default {
                                 class="d-flex justify-content-center w-100 align-items-center"
                                 v-else
                             >
-                                <!-- <div class="button-upload button-choice">
-                                    <div class="icon green">
-                                        <svg
-                                            width="32"
-                                            height="37"
-                                            viewBox="0 0 32 37"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                d="M11.894 1.183a7.716 7.716 0 0 1 8.212 0l7.788 4.835C30.435 7.595 32 10.51 32 13.665v9.67c0 3.155-1.565 6.07-4.106 7.647l-7.788 4.835a7.716 7.716 0 0 1-8.212 0l-7.788-4.835C1.566 29.404 0 26.49 0 23.335v-9.67c0-3.155 1.565-6.07 4.106-7.647l7.788-4.835z"
-                                            />
-                                        </svg>
-                                        <span class="upload"
-                                            ><i class="ri-camera-fill"></i
-                                        ></span>
-                                    </div>
-                                    <input
-                                        class="form-control"
-                                        type="file"
-                                        id="formFile"
-                                        @change="handleFileUpload"
-                                    />
-                                </div> -->
                                 <div class="button-upload button-choice">
                                     <div class="icon green">
                                         <svg
@@ -662,29 +839,6 @@ export default {
                                         accept="image/*"
                                     />
                                 </div>
-                                <!-- <div class="button-upload button-choice">
-                                    <div class="icon green">
-                                        <svg
-                                            width="32"
-                                            height="37"
-                                            viewBox="0 0 32 37"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                d="M11.894 1.183a7.716 7.716 0 0 1 8.212 0l7.788 4.835C30.435 7.595 32 10.51 32 13.665v9.67c0 3.155-1.565 6.07-4.106 7.647l-7.788 4.835a7.716 7.716 0 0 1-8.212 0l-7.788-4.835C1.566 29.404 0 26.49 0 23.335v-9.67c0-3.155 1.565-6.07 4.106-7.647l7.788-4.835z"
-                                            />
-                                        </svg>
-                                        <span class="upload"
-                                            ><i class="ri-camera-fill"></i
-                                        ></span>
-                                    </div>
-                                    <input
-                                        class="form-control"
-                                        type="file"
-                                        id="formFile"
-                                        @change="handleFileUpload"
-                                    />
-                                </div> -->
                             </div>
                         </div>
                         <div class="form-group">
@@ -695,7 +849,9 @@ export default {
                                 v-model="data.content"
                             ></textarea>
                         </div>
-                        <span class="error-message" v-if="checkMessenger">Vui lòng không sử dụng từ ngữ tục tĩu</span>
+                        <span class="error-message" v-if="checkMessenger"
+                            >Vui lòng không sử dụng từ ngữ tục tĩu</span
+                        >
                     </div>
 
                     <div class="btn-group dropup">
@@ -712,7 +868,7 @@ export default {
                             ></span>
                             <span class="name">Màu trắng</span>
                         </button>
-                        <ul class="dropdown-menu" id="dropColor">
+                        <ul class="dropdown-menu drop-color-1" id="dropColor">
                             <li
                                 v-for="(item, index) in listColor"
                                 :key="index"
@@ -730,7 +886,7 @@ export default {
                     </div>
                 </form>
             </div>
-            <div class="addPadlet pulse"  @click="handleShowForm">
+            <div class="addPadlet pulse" @click="handleShowForm">
                 <span class=""><i class="ri-add-line"></i></span>
             </div>
         </div>
@@ -754,7 +910,11 @@ export default {
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div
                 class="modal-content"
-                v-bind:style="`background-color:rgb${currentPadlets.color && currentPadlets.color != 'null' ? currentPadlets.color : '255,255,255'}})`"
+                v-bind:style="`background-color:rgb${
+                    currentPadlets.color && currentPadlets.color != 'null'
+                        ? currentPadlets.color
+                        : '255,255,255'
+                }})`"
             >
                 <button
                     type="button"
@@ -768,9 +928,37 @@ export default {
                     <div class="wrap-content">
                         <div class="content-wall pb-2">
                             <div class="header">
-                                <h5  class="title" v-if="currentPadlets.title && currentPadlets.title != 'null'">{{ currentPadlets.title }}</h5>
-                                <a class="wrap-tooltip" v-if="currentPadlets" data-bs-toggle="tooltip" data-bs-placement="bottom" :title="currentPadlets && currentPadlets.users.fullname ? currentPadlets.users.first_name+' ' +currentPadlets.users.last_name : ''">
-                                    <img :src="currentPadlets.users.avatar" :alt="currentPadlets.users.first_name+' ' +currentPadlets.users.last_name">
+                                <h5
+                                    class="title"
+                                    v-if="
+                                        currentPadlets.title &&
+                                        currentPadlets.title != 'null'
+                                    "
+                                >
+                                    {{ currentPadlets.title }}
+                                </h5>
+                                <a
+                                    class="wrap-tooltip"
+                                    v-if="currentPadlets"
+                                    data-bs-toggle="tooltip"
+                                    data-bs-placement="bottom"
+                                    :title="
+                                        currentPadlets &&
+                                        currentPadlets.users.fullname
+                                            ? currentPadlets.users.first_name +
+                                              ' ' +
+                                              currentPadlets.users.last_name
+                                            : ''
+                                    "
+                                >
+                                    <img
+                                        :src="currentPadlets.users.avatar"
+                                        :alt="
+                                            currentPadlets.users.first_name +
+                                            ' ' +
+                                            currentPadlets.users.last_name
+                                        "
+                                    />
                                     <!-- <span class="name">{{ currentPadlets.users.first_name+' ' +currentPadlets.users.last_name}}</span> -->
                                 </a>
                             </div>
@@ -823,37 +1011,141 @@ export default {
                                         : ""
                                 }}</small>
                             </span>
-                            <span class="comment"><i class="ri-chat-3-line"></i><small>{{ currentPadlets && currentPadlets.comments.length ? currentPadlets.comments.length : '' }}</small></span>
+                            <span class="comment"
+                                ><i class="ri-chat-3-line"></i
+                                ><small>{{
+                                    currentPadlets &&
+                                    currentPadlets.comments.length
+                                        ? currentPadlets.comments.length
+                                        : ""
+                                }}</small></span
+                            >
                         </div>
                         <div class="">
-                            <div class="list-messenger mt-3" v-if="currentPadlets && currentPadlets.comments.length">
-                                <div class="d-flex mt-2" v-for="comment in currentPadlets.comments" :key="comment.id">
+                            <div
+                                class="list-messenger mt-3"
+                                v-if="
+                                    currentPadlets &&
+                                    currentPadlets.comments.length
+                                "
+                            >
+                                <div
+                                    class="d-flex mt-2"
+                                    v-for="comment in currentPadlets.comments"
+                                    :key="comment.id"
+                                >
                                     <div class="avatar">
-                                        <img :src="comment.avatar" alt="">
+                                        <img :src="comment.avatar" alt="" />
                                     </div>
                                     <div class="content-messenger">
                                         <div class="">
-                                            <div class="d-flex justify-content-between">
-                                                <h6 class="name">{{ comment.fullname }}</h6>
+                                            <div
+                                                class="d-flex justify-content-between"
+                                            >
+                                                <h6 class="name">
+                                                    {{ comment.fullname }}
+                                                </h6>
                                                 <div class="more-button">
                                                     <div class="btn-group">
-                                                        <button type="button" class="btn btn-light btn-sm dropdown-toggle border-0 px-0 pb-0 pt-0" data-bs-toggle="dropdown" aria-expanded="false">
-                                                            <i class="ri-more-2-fill"></i>
+                                                        <button
+                                                            type="button"
+                                                            class="btn btn-light btn-sm dropdown-toggle border-0 px-0 pb-0 pt-0"
+                                                            data-bs-toggle="dropdown"
+                                                            aria-expanded="false"
+                                                        >
+                                                            <i
+                                                                class="ri-more-2-fill"
+                                                            ></i>
                                                         </button>
-                                                        <ul class="dropdown-menu pt-0 pb-0" v-if="dataUser.profile_id == comment.profile_id">
-                                                            <li class="d-flex px-2" @click="editComment(comment.id, currentPadlets.id)"><span><i class="ri-pencil-line"></i></span><span>Chỉnh sửa bình luận</span></li>
-                                                            <li class="d-flex px-2 color-red" @click="handleRemoveComment(comment.id, currentPadlets.id)"><span><i class="ri-delete-bin-line"></i></span><span>Xoá bình luận</span></li>
+                                                        <ul
+                                                            class="dropdown-menu pt-0 pb-0"
+                                                            v-if="
+                                                                dataUser.profile_id ==
+                                                                comment.profile_id
+                                                            "
+                                                        >
+                                                            <li
+                                                                class="d-flex px-2"
+                                                                @click="
+                                                                    editComment(
+                                                                        comment.id,
+                                                                        currentPadlets.id
+                                                                    )
+                                                                "
+                                                            >
+                                                                <span
+                                                                    ><i
+                                                                        class="ri-pencil-line"
+                                                                    ></i></span
+                                                                ><span
+                                                                    >Chỉnh sửa
+                                                                    bình
+                                                                    luận</span
+                                                                >
+                                                            </li>
+                                                            <li
+                                                                class="d-flex px-2 color-red"
+                                                                @click="
+                                                                    handleRemoveComment(
+                                                                        comment.id,
+                                                                        currentPadlets.id
+                                                                    )
+                                                                "
+                                                            >
+                                                                <span
+                                                                    ><i
+                                                                        class="ri-delete-bin-line"
+                                                                    ></i></span
+                                                                ><span
+                                                                    >Xoá bình
+                                                                    luận</span
+                                                                >
+                                                            </li>
                                                         </ul>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <p v-if="!showEditComment[comment.id]">{{ comment.content }}</p>
+                                            <p
+                                                v-if="
+                                                    !showEditComment[comment.id]
+                                                "
+                                            >
+                                                {{ comment.content }}
+                                            </p>
                                         </div>
-                                        <div class="messenger" v-if="showEditComment[comment.id]">
-                                            <textarea class="autosize" v-model="comment.content"></textarea>
-                                            <div class="d-flex justify-content-end mt-2 mb-2">
-                                                <button class="btn btn-outline-secondary btn-sm me-2"  @click="handleCancelComment(comment.id, currentPadlets.id)">Huỷ</button>
-                                                <button class="btn btn-outline-primary btn-sm" @click="handleUpdateComment(comment.id, currentPadlets.id)">Cập nhập</button>
+                                        <div
+                                            class="messenger"
+                                            v-if="showEditComment[comment.id]"
+                                        >
+                                            <textarea
+                                                class="autosize"
+                                                v-model="comment.content"
+                                            ></textarea>
+                                            <div
+                                                class="d-flex justify-content-end mt-2 mb-2"
+                                            >
+                                                <button
+                                                    class="btn btn-outline-secondary btn-sm me-2"
+                                                    @click="
+                                                        handleCancelComment(
+                                                            comment.id,
+                                                            currentPadlets.id
+                                                        )
+                                                    "
+                                                >
+                                                    Huỷ
+                                                </button>
+                                                <button
+                                                    class="btn btn-outline-primary btn-sm"
+                                                    @click="
+                                                        handleUpdateComment(
+                                                            comment.id,
+                                                            currentPadlets.id
+                                                        )
+                                                    "
+                                                >
+                                                    Cập nhập
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -861,24 +1153,185 @@ export default {
                             </div>
                             <div class="d-flex mt-3">
                                 <div class="avatar">
-                                    <img :src="dataUser.avatar" alt="">
+                                    <img :src="dataUser.avatar" alt="" />
                                 </div>
                                 <div class="form-messenger">
-                                    <textarea @click="handleGetId(currentPadlets.id)" class="autosize" v-model="comment[currentPadlets.id]" placeholder="Thêm bình luận"></textarea>
-                                    <span class="send" @click="handleAddComment(currentPadlets.id)" v-if="showSend[currentPadlets.id]"><i class="ri-arrow-right-line"></i></span>
+                                    <textarea
+                                        @click="handleGetId(currentPadlets.id)"
+                                        class="autosize"
+                                        v-model="comment[currentPadlets.id]"
+                                        placeholder="Thêm bình luận"
+                                    ></textarea>
+                                    <span
+                                        class="send"
+                                        @click="
+                                            handleAddComment(currentPadlets.id)
+                                        "
+                                        v-if="showSend[currentPadlets.id]"
+                                        ><i class="ri-arrow-right-line"></i
+                                    ></span>
                                 </div>
                             </div>
                         </div>
+                        <div class="d-flex mt-3 justify-content-end" v-if="dataUser.profile_id == currentPadlets.profile_id">
+                            <button
+                            type="button"
+                            class="btn btn-outline-primary"
+                            data-bs-toggle="modal"
+                            data-bs-target="#editPadlet"
+                            ref="editPadlet"
+                            
+                        >
+                            Edit
+                        </button>
+                        </div>
+                        
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    
+    <div
+        class="modal fade"
+        id="editPadlet"
+        aria-hidden="true"
+        aria-labelledby="editPadlet"
+        tabindex="-1"
+    >
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="wrapper-model show w-100">
+                    <form
+                        class="wrapper-form"
+                        action=""
+                        @submit.prevent="handleEditWall"
+                        
+                    >
+                        <div
+                            class="d-flex flex-row justify-content-between pt-3 pb-2 px-3"
+                        >
+                            <ul class="navbar-nav d-flex flex-row">
+                                <li
+                                    class="nav-item me-2"
+                                >
+                                    <span class="btn btn-light"  data-bs-dismiss="modal" aria-label="Close" ref="closeEditPadlet">
+                                        <i class="ri-close-line"></i>
+                                    </span>
+                                </li>
+                            </ul>
+                            <div class="d-flex fjustify-content-end ps-3">
+                                <button
+                                    ref="buttonSubmit"
+                                    type="submit"
+                                    class="btn btn-outline-primary"
+                                >
+                                    Chỉnh sửa
+                                </button>
+                            </div>
+                        </div>
+                        <div class="wrap-form-group pt-1 pb-2 px-3">
+                            <div class="form-group">
+                                <input
+                                    type="text autosize"
+                                    class="form-control"
+                                    placeholder="Chủ đề"
+                                    v-model="currentPadlets.title"
+                                />
+                            </div>
+                            <div class="form-group bg-images-file d-flex">
+                                <div class="images" v-if="currentPadlets.file_name">
+                                    <img :src="`${
+                                        publicPath + currentPadlets.file_name
+                                    }`" alt="" v-if="currentPadlets.file_name && !new_file"/>
+                                    <img :src="currentPadlets.file_name" alt="" v-if="currentPadlets.file_name && new_file"/>
+                                    <span
+                                        class="btn remove-file"
+                                        @click="handleRemoveFileEdit"
+                                        >Gỡ bỏ</span
+                                    >
+                                </div>
+                                <div
+                                    class="d-flex justify-content-center w-100 align-items-center"
+                                    v-else
+                                >
+                                    <div class="button-upload button-choice">
+                                        <div class="icon green">
+                                            <svg
+                                                width="32"
+                                                height="37"
+                                                viewBox="0 0 32 37"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                                <path
+                                                    d="M11.894 1.183a7.716 7.716 0 0 1 8.212 0l7.788 4.835C30.435 7.595 32 10.51 32 13.665v9.67c0 3.155-1.565 6.07-4.106 7.647l-7.788 4.835a7.716 7.716 0 0 1-8.212 0l-7.788-4.835C1.566 29.404 0 26.49 0 23.335v-9.67c0-3.155 1.565-6.07 4.106-7.647l7.788-4.835z"
+                                                />
+                                            </svg>
+                                            <span class="upload"
+                                                ><i class="ri-camera-fill"></i
+                                            ></span>
+                                        </div>
+                                        <input
+                                            class="form-control"
+                                            type="file"
+                                            id="formFile"
+                                            @change="handleFileUploadEdit"
+                                            accept="image/*"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <textarea
+                                    class="form-control autosize"
+                                    rows="3"
+                                    placeholder="Viết một điều gì đó..."
+                                    v-model="currentPadlets.content"
+                                ></textarea>
+                            </div>
+                            <span class="error-message" v-if="checkMessenger"
+                                >Vui lòng không sử dụng từ ngữ tục tĩu</span
+                            >
+                        </div>
+
+                        <div class="btn-group dropup">
+                            <button
+                                type="button"
+                                class="btn btn-secondary dropdown-toggle"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                                id="dropContent"
+                            >
+                                <span
+                                    class="color"
+                                    v-bind:style="`background-color:rgb(${currentPadlets.color})`"
+                                ></span>
+                                <span class="name">{{ currentPadlets.name }}</span>
+                            </button>
+                            <ul class="dropdown-menu drop-color-2" id="dropColor">
+                                <li
+                                    v-for="(item, index) in listColor"
+                                    :key="index"
+                                    class="dropdown-item"
+                                >
+                                    <span
+                                        class="color"
+                                        v-bind:style="`background-color:rgb(${item.color})`"
+                                        :data-color="`${item.color}`"
+                                        :data-name="`${item.name}`"
+                                    ></span>
+                                    <p>{{ item.name }}</p>
+                                </li>
+                            </ul>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 <style scoped lang="scss">
 .ps {
-  height: 500px;
+    height: 500px;
 }
 .add {
     position: fixed;
@@ -899,11 +1352,11 @@ export default {
         position: relative;
         padding-right: 30px;
         min-height: 30px;
-        img{
+        img {
             width: 30px;
             height: 30px;
             position: absolute;
-            right:0;
+            right: 0;
             object-fit: fill;
             top: 0;
             border-radius: 100%;
@@ -911,11 +1364,11 @@ export default {
         .wrap-tooltip {
             position: absolute;
             right: 0;
-            top:0;
+            top: 0;
             &:hover {
                 span {
                     opacity: 1;
-                    transition: all .3 ease-in-out;
+                    transition: all 0.3 ease-in-out;
                 }
             }
             span {
@@ -932,9 +1385,9 @@ export default {
                 text-align: center;
                 border-radius: 6px;
                 bottom: -63px;
-                box-shadow: 0px 0px 2px 0px rgba(0,0,0,.3); 
-                opacity: 0;           
-                transition: all .3 ease-in-out;    
+                box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.3);
+                opacity: 0;
+                transition: all 0.3 ease-in-out;
                 &::before {
                     content: "";
                     position: absolute;
@@ -945,7 +1398,7 @@ export default {
                     height: 8px;
                     transform: rotate(45deg);
                     border-top: 1px solid rgba(0, 0, 0, 0.2);
-                    border-left: 1px solid rgba(0, 0, 0, 0.2)
+                    border-left: 1px solid rgba(0, 0, 0, 0.2);
                 }
             }
         }
@@ -971,7 +1424,7 @@ export default {
             margin-right: 3px;
         }
         .ri-heart-fill {
-            color: red
+            color: red;
         }
         &:hover {
             i {
@@ -991,8 +1444,8 @@ export default {
             object-fit: fill;
         }
     }
-    .more-button{
-        .dropdown-toggle:after{
+    .more-button {
+        .dropdown-toggle:after {
             display: none;
         }
         .dropdown-menu {
@@ -1003,10 +1456,10 @@ export default {
             li {
                 cursor: pointer;
                 position: relative;
-                font-size:14px;
+                font-size: 14px;
                 padding-top: 0.5rem;
                 padding-bottom: 0.5rem;
-                span{
+                span {
                     display: inline-block;
                     &:first-child {
                         margin-right: 5px;
@@ -1016,24 +1469,23 @@ export default {
                     color: red;
                 }
                 &:first-child {
-                    &:after {                    
-                        content:none;
+                    &:after {
+                        content: none;
                     }
                 }
                 &:after {
                     position: absolute;
                     height: 1px;
-                    background: rgba(0,0,0,.2);
+                    background: rgba(0, 0, 0, 0.2);
                     left: 0.5rem;
                     width: calc(100% - 1rem);
-                    content:'';
-                    top:0
+                    content: "";
+                    top: 0;
                 }
-                
             }
         }
-        .btn-sm{
-            &.dropdown-toggle{
+        .btn-sm {
+            &.dropdown-toggle {
                 background: transparent;
             }
         }
@@ -1051,7 +1503,6 @@ export default {
             font-size: 13px;
         }
         .messenger {
-            
         }
     }
     textarea {
@@ -1074,8 +1525,20 @@ export default {
         .send {
             position: absolute;
             right: 0px;
-            top:5px;
+            top: 5px;
             cursor: pointer;
+        }
+    }
+}
+#editPadlet {
+    .modal-content {
+        background: transparent;
+        border:0;
+        .wrapper-form {
+            position: relative;
+            transform: none;
+            left: 0;
+            right: 0;
         }
     }
 }
@@ -1135,7 +1598,7 @@ export default {
 }
 .addPadlet {
     position: fixed;
-    right: 2rem ;
+    right: 2rem;
     bottom: 1rem;
     z-index: 9;
     width: 60px;
@@ -1176,6 +1639,8 @@ export default {
     left: 0;
     top: 0;
     z-index: 10;
+}
+.wrapper-model {
     &.show {
         .wrapper-form {
             box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px,
@@ -1371,14 +1836,19 @@ export default {
 //     position: absolute !important;
 // }
 .pulse {
-  animation: pulse 1s infinite ease-in-out alternate;
+    animation: pulse 1s infinite ease-in-out alternate;
 }
 @keyframes pulse {
-  from { transform: scale(0.8); }
-  to { transform: scale(1.2); }
+    from {
+        transform: scale(0.8);
+    }
+    to {
+        transform: scale(1.2);
+    }
 }
-@media screen and (max-width: 1440px){
-    .masonry-sizer, .masonry-item  {
+@media screen and (max-width: 1440px) {
+    .masonry-sizer,
+    .masonry-item {
         width: 19%;
     }
     .masonry {
@@ -1388,28 +1858,33 @@ export default {
         width: 1%;
     }
 }
-@media screen and (max-width: 1168px){
-    .masonry-sizer, .masonry-item  {
+@media screen and (max-width: 1168px) {
+    .masonry-sizer,
+    .masonry-item {
         width: 24%;
     }
 }
-@media screen and (max-width: 1168px){
-    .masonry-sizer, .masonry-item  {
+@media screen and (max-width: 1168px) {
+    .masonry-sizer,
+    .masonry-item {
         width: 24%;
     }
 }
-@media screen and (max-width: 992px){
-    .masonry-sizer, .masonry-item  {
+@media screen and (max-width: 992px) {
+    .masonry-sizer,
+    .masonry-item {
         width: 32.3333333333333333333%;
     }
 }
-@media screen and (max-width: 568px){
-    .masonry-sizer, .masonry-item  {
+@media screen and (max-width: 568px) {
+    .masonry-sizer,
+    .masonry-item {
         width: 49%;
     }
 }
-@media screen and (max-width: 568px){
-    .masonry-sizer, .masonry-item  {
+@media screen and (max-width: 568px) {
+    .masonry-sizer,
+    .masonry-item {
         width: 100%;
     }
     .masonry {
