@@ -8,14 +8,17 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Api\MediaController;
 use App\Models\Walls;
 use App\Repositories\Wall\WallRepository;
+use App\Repositories\QuestRepository;
 
 class WallController extends Controller
 {
     protected $wallRepo;
+    protected $questRepository;
 
-    public function __construct(WallRepository $wallRepo)
+    public function __construct(WallRepository $wallRepo, QuestRepository $questRepository)
     {
         $this->wallRepo = $wallRepo;
+        $this->questRepository = $questRepository;
     }
     /**
      * Display a listing of the resource.
@@ -52,7 +55,16 @@ class WallController extends Controller
             'color'       => $color,
         ];
         $results = $this->wallRepo->create($data);
-        return response()->json($results->toArray());
+        if ($results) {
+            $results->toArray();
+            $results['users'] = $user;
+            $results['comments'] = [];
+            $questType = 8;
+            $record = 1;
+            $this->questRepository->updateQuest($user, $questType, $record);
+            
+        }
+        return response()->json($results);
     }
 
     /**

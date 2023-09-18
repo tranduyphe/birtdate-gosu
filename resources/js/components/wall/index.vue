@@ -1,7 +1,7 @@
 <script>
 import WOW from "wow.js";
 import "animate.css";
-import $ from "jQuery";
+import $ from "jquery";
 import Masonry from "masonry-layout";
 import imagesLoaded from "imagesloaded";
 import "remixicon/fonts/remixicon.css";
@@ -65,17 +65,16 @@ export default {
             showEditComment:[],
             oldContentComment: [],
             showSend:[],
-            currentId : false
+            currentId : false,
         };
     },
     computed: {
         ...wallGetters,
     },
     methods: {
-        ...socketMethods,
-        ...walltMethods,
-        ...commentMethods,
+        //...socketMethods,        
         initializeMasonry() {
+            console.log("initializeMasonry")
             this.masonry = new Masonry(this.$refs.masonryContainer, {
                 itemSelector: ".masonry-item",
                 columnWidth: ".masonry-sizer",
@@ -105,10 +104,19 @@ export default {
         },
         async handleCreate() {
             const resultData = await this.createWall(this.data);
+            console.log(resultData);
             if (resultData) {
                 this.handleShowForm();
                 this.items.push(resultData);
-                //this.sendData(resultData);
+                this.data = {
+                    title: null,
+                    content: null,
+                    file: null,
+                    color: null,
+                }
+                this.$nextTick(()=>{
+                    this.initializeMasonry()
+                });
             }
         },
         handleRemoveFile() {
@@ -231,13 +239,14 @@ export default {
                     data['profile_id'] = this.dataUser.profile_id;
                     let results = await this.createComment(data);
                     if (results) {
-                        console.log('results', results);
                         this.items.filter((item) => {
                             if(id == item.id){
                                 item.comments.push(results)
                             }
                         });
-                        this.comment = []
+                        this.comment = [];
+                        this.initializeMasonry();
+                        this.showIconSendComment();
                     }
                 } catch (error) {
                     console.log('Lỗi khi post comment')
@@ -278,7 +287,6 @@ export default {
                     if(padlet_id == item.id){
                         item.comments.filter((_item) => {                            
                             if(_item.id == id){
-                                console.log('_item1', _item);
                                 newContentComment = _item.content
                             }
                         })
@@ -297,6 +305,7 @@ export default {
                     if(results){
                         this.showEditComment = [];
                         this.oldContentComment = [];
+                        this.initializeMasonry();
                     }
                 }else{
                     alert('Vui lòng nhập comment');
@@ -311,7 +320,6 @@ export default {
             try {
                 let results = await this.deleteComment(id);
                 let currentListComments = this.items.filter((item) => item.id == padlet_id);
-                console.log(currentListComments);
                 let listComment;
                 listComment = currentListComments[0]['comments'].filter((_item, index) => { 
                     return _item.id != id
@@ -321,6 +329,7 @@ export default {
                         item.comments = listComment;
                     }
                 });
+                this.initializeMasonry();
             } catch (error) {
                 console.log('Error delete comment');
             }
@@ -338,15 +347,17 @@ export default {
                     this.showSend = []
                 }
             }
-        }
+        },
+        ...walltMethods,
+        ...commentMethods,
     },
     watch: { },
-    updated() {
-        //this.handleCheckComment(id);
-        if(!this.hidden)
-        this.initializeMasonry();
-        this.handleDisabledForm();  
-        this.showIconSendComment()      
+    updated() {     
+        // this.showIconSendComment();
+        // this.$nextTick(()=>{
+        //     this.handleDisabledForm();  
+        //     //this.showIconSendComment();
+        // });
         const $this = this;
         $(document).ready(function () {
             $('.nav-main').addClass('hidden-header');
@@ -360,40 +371,34 @@ export default {
                     .find(".color")
                     .css("background-color", "rgb(" + $color + ")");
             });
+            $this.handleDisabledForm();            
             autoSizeTextArea();
             function autoSizeTextArea(){
                 var text = $('.autosize');
-
                 text.each(function(){
                     $(this).attr('rows',1);
                     resize($(this));
                 });
-
                 text.on('input', function(){
+                    $this.showIconSendComment();
                     resize($(this));
                 });
-                
                 function resize ($text) {
                     $text.css('height', 'auto');
                     $text.css('height', $text[0].scrollHeight+'px');
                 }
-            }
+            }              
         });
     },
     created() {
     },
     async mounted() {
-        const $this = this;
         this.dataUser = JSON.parse(localStorage.getItem("users") || "{}");
-        //this.connect();
-        if (Object.keys(this.dataUser).length > 0) {
-            const dataRoom = {
-                room: "padlet",
-                profile_id: this.dataUser.profile_id,
-            };
-            this.joinRoom(dataRoom);
-        }
         this.items = await this.indexWall();
+        const $this = this;
+        $(document).ready(function () {
+            $this.initializeMasonry();                      
+        })
         
         // get data from server
         /*socket.on("listen data", function (data) {
@@ -421,13 +426,7 @@ export default {
 
             // socket.removeListener('listen messenger');
         });*/
-        const wow = new WOW({
-            boxClass: "wow",
-            animateClass: "animated",
-            offset: 0,
-            live: true,
-        });
-        wow.init();
+        
     },
 };
 </script>
@@ -446,15 +445,22 @@ export default {
                 <div
                     v-for="item in items"
                     :key="item.id"
-                    :class="['masonry-item wow fadeInUp pb-2 px-2 pt-2']"
+                    :class="['masonry-item pb-2 px-2 pt-2']"
                     v-bind:style="`background-color:rgb(${item.color && item.color != 'null' ? item.color : '255,255,255'})`"
                 >
                     <div class="wrap-content">
                         <div
                             class="content-wall pb-2"
                             @click="handleShowModal(item.id)"
-                        >
-                            <h5 v-if="item.title && item.title != 'null'">{{ item.title }}</h5>
+                        >   
+                            <div class="header">
+                                <h5  class="title" v-if="item.title && item.title != 'null'">{{ item.title }}</h5>
+                                <a class="wrap-tooltip" data-bs-toggle="tooltip" data-bs-placement="bottom" :title="item.users.first_name + ' '+item.users.last_name">
+                                    <img :src="item.users.avatar" :alt="item.users.first_name + ' '+item.users.last_name">
+                                    <!-- <span class="name">{{ item.users.first_name + ' '+item.users.last_name }}</span> -->
+                                </a>
+                            </div>
+                            
                             <div class="images pt-2" v-if="item.file_name">
                                 <img
                                     :src="`${publicPath + item.file_name}`"
@@ -724,7 +730,7 @@ export default {
                     </div>
                 </form>
             </div>
-            <div class="addPadlet" @click="handleShowForm">
+            <div class="addPadlet pulse"  @click="handleShowForm">
                 <span class=""><i class="ri-add-line"></i></span>
             </div>
         </div>
@@ -761,9 +767,13 @@ export default {
                 <div class="modal-body">
                     <div class="wrap-content">
                         <div class="content-wall pb-2">
-                            <h5 v-if="currentPadlets.title  && currentPadlets.title != 'null'">
-                                {{ currentPadlets.title }}
-                            </h5>
+                            <div class="header">
+                                <h5  class="title" v-if="currentPadlets.title && currentPadlets.title != 'null'">{{ currentPadlets.title }}</h5>
+                                <a class="wrap-tooltip" v-if="currentPadlets" data-bs-toggle="tooltip" data-bs-placement="bottom" :title="currentPadlets && currentPadlets.users.fullname ? currentPadlets.users.first_name+' ' +currentPadlets.users.last_name : ''">
+                                    <img :src="currentPadlets.users.avatar" :alt="currentPadlets.users.first_name+' ' +currentPadlets.users.last_name">
+                                    <!-- <span class="name">{{ currentPadlets.users.first_name+' ' +currentPadlets.users.last_name}}</span> -->
+                                </a>
+                            </div>
                             <div
                                 class="images pt-2"
                                 v-if="currentPadlets.file_name"
@@ -885,6 +895,61 @@ export default {
     width: 14.66666667%;
 }
 .wrap-content {
+    .header {
+        position: relative;
+        padding-right: 30px;
+        min-height: 30px;
+        img{
+            width: 30px;
+            height: 30px;
+            position: absolute;
+            right:0;
+            object-fit: fill;
+            top: 0;
+            border-radius: 100%;
+        }
+        .wrap-tooltip {
+            position: absolute;
+            right: 0;
+            top:0;
+            &:hover {
+                span {
+                    opacity: 1;
+                    transition: all .3 ease-in-out;
+                }
+            }
+            span {
+                background: #fff;
+                color: #777;
+                font-size: 14px;
+                font-weight: bold;
+                text-decoration: none;
+                position: absolute;
+                right: 0;
+                min-width: 100px;
+                padding: 3px 5px;
+                font-size: 12px;
+                text-align: center;
+                border-radius: 6px;
+                bottom: -63px;
+                box-shadow: 0px 0px 2px 0px rgba(0,0,0,.3); 
+                opacity: 0;           
+                transition: all .3 ease-in-out;    
+                &::before {
+                    content: "";
+                    position: absolute;
+                    top: -5px;
+                    right: 9px;
+                    background-color: #fff;
+                    width: 8px;
+                    height: 8px;
+                    transform: rotate(45deg);
+                    border-top: 1px solid rgba(0, 0, 0, 0.2);
+                    border-left: 1px solid rgba(0, 0, 0, 0.2)
+                }
+            }
+        }
+    }
     color: rbg(17, 17, 17);
     h5 {
         color: rbg(17, 17, 17);
@@ -904,6 +969,9 @@ export default {
         align-items: center;
         i {
             margin-right: 3px;
+        }
+        .ri-heart-fill {
+            color: red
         }
         &:hover {
             i {
@@ -1067,22 +1135,23 @@ export default {
 }
 .addPadlet {
     position: fixed;
-    right: 10px;
-    bottom: 10px;
+    right: 2rem ;
+    bottom: 1rem;
     z-index: 9;
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
     border-radius: 100%;
     background: rgb(200, 71, 53);
     transition: all 0.3s ease-in-out;
     transform: rotate(360deg);
     text-align: center;
-    line-height: 50px;
+    line-height: 60px;
+    color: #fff;
     cursor: pointer;
     i {
         transform: rotate(0deg);
         transition: all 0.3s ease-in-out;
-        font-size: 20px;
+        font-size: 30px;
         &::before {
             transform: rotate(0deg);
             transition: all 0.3s ease-in-out;
@@ -1295,7 +1364,19 @@ export default {
     scrollbar-color: rgba(0, 0, 0, 0.5) #fff;
     scrollbar-width: thin;
 }
-
+// .wrap-padlet {
+//     padding-top: 83px;
+// }
+// .nav-main {
+//     position: absolute !important;
+// }
+.pulse {
+  animation: pulse 1s infinite ease-in-out alternate;
+}
+@keyframes pulse {
+  from { transform: scale(0.8); }
+  to { transform: scale(1.2); }
+}
 @media screen and (max-width: 1440px){
     .masonry-sizer, .masonry-item  {
         width: 19%;
