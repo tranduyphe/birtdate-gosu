@@ -734,6 +734,7 @@ button.close-button:focus-visible {
     white-space: nowrap;
     transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
     flex-direction: column;
+    background-color: rgba(0, 0, 0, 0.8);
 }
 
 .landscape-notification img {
