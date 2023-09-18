@@ -17,6 +17,7 @@ use App\Models\MinigameQuests;
 use App\Models\User;
 use App\Models\UserInvite;
 use App\Models\LogActivity;
+use App\Models\LogItem;
 
 use Exception;
 use Illuminate\Support\Facades\Log;
@@ -343,13 +344,20 @@ class QuestController extends Controller
         $getQuestOrder[] = $getQuest[7];
         $getQuestOrder[] = $getQuest[8];
         $getQuestOrder[] = $getQuest[9];
+        $logTiemLong = LogItem::selectRaw('log_item.user_id, log_item.reason, users.name, DATE_FORMAT(log_item.created_at, "%Y-%m-%d %H:%i:%s") as formatted_created_at')
+            ->join('users', 'users.id', '=', 'log_item.user_id')
+            ->where('log_item.user_id', $user->id)
+            ->where('log_item.item_type', 3) // tìm item tìm long
+            // ->limit(30) // Thêm dòng này để giới hạn kết quả thành 30 hàng
+            ->first();
                 $response = [
                     "status" => 200,
                     "message" => "Bạn đã nhận được " . $record . " Đá mặt trăng",
                     "data" => [
                         'quests' => $getQuestOrder,
                         'user' => $user,
-                        'log_activity'=>$logActivities
+                        'log_activity'=>$logActivities,
+                        'log_item'=>$logTiemLong
                     ],
                     "success" => true
                 ];

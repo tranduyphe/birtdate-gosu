@@ -216,6 +216,7 @@ export default {
             friendCode: "",
             nhiemvu: [],
             logActivity: [],
+            logTiemLong: [],
             topFeathers: [],
             isDivVisible: true,
             clickedThanhThanhTuu: false,
@@ -324,6 +325,15 @@ export default {
                         let dataLog = response.data.data.log_activity ?? [];
 
                         self.logActivity = [];
+                        let dataLogTiemLong = response.data.data.log_item;
+                        if(dataLogTiemLong){
+                            self.logActivity.push({
+                                "reason": response.data.data.log_item.reason,
+                                "log_item": [{'item_id':3,"record":1}],
+                                "name": response.data.data.log_item.name,
+                                "formatted_created_at": response.data.data.log_item.formatted_created_at
+                            });
+                        }
                         dataLog.forEach(element => {
                             self.logActivity.push({
                                 "reason": element.reason,
