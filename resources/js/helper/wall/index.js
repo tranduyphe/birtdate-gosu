@@ -28,6 +28,20 @@ const index = async (data) => {
 
 const update = async (data) => {
     try {
+        if (data.file) {
+            const formData = new FormData();
+            formData.append('file', data.file);
+            formData.append('title', data.title);
+            formData.append('content', data.content);
+            formData.append('color', data.color);
+            formData.append('id', data.id);
+            let results = await axios.post(`/api/wall/update/${data['id']}`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            return results;
+        }
         let results = await axios.post(`/api/wall/update/${data['id']}`, data);
         return results;
     } catch (error) {
