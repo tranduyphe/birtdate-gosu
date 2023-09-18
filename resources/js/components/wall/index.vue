@@ -65,17 +65,16 @@ export default {
             showEditComment:[],
             oldContentComment: [],
             showSend:[],
-            currentId : false
+            currentId : false,
         };
     },
     computed: {
         ...wallGetters,
     },
     methods: {
-        ...socketMethods,
-        ...walltMethods,
-        ...commentMethods,
+        //...socketMethods,        
         initializeMasonry() {
+            console.log("initializeMasonry")
             this.masonry = new Masonry(this.$refs.masonryContainer, {
                 itemSelector: ".masonry-item",
                 columnWidth: ".masonry-sizer",
@@ -105,10 +104,19 @@ export default {
         },
         async handleCreate() {
             const resultData = await this.createWall(this.data);
+            console.log(resultData);
             if (resultData) {
                 this.handleShowForm();
                 this.items.push(resultData);
-                //this.sendData(resultData);
+                this.data = {
+                    title: null,
+                    content: null,
+                    file: null,
+                    color: null,
+                }
+                this.$nextTick(()=>{
+                    this.initializeMasonry()
+                });
             }
         },
         handleRemoveFile() {
@@ -231,13 +239,14 @@ export default {
                     data['profile_id'] = this.dataUser.profile_id;
                     let results = await this.createComment(data);
                     if (results) {
-                        console.log('results', results);
                         this.items.filter((item) => {
                             if(id == item.id){
                                 item.comments.push(results)
                             }
                         });
-                        this.comment = []
+                        this.comment = [];
+                        this.initializeMasonry();
+                        this.showIconSendComment();
                     }
                 } catch (error) {
                     console.log('Lỗi khi post comment')
@@ -278,7 +287,6 @@ export default {
                     if(padlet_id == item.id){
                         item.comments.filter((_item) => {                            
                             if(_item.id == id){
-                                console.log('_item1', _item);
                                 newContentComment = _item.content
                             }
                         })
@@ -297,6 +305,7 @@ export default {
                     if(results){
                         this.showEditComment = [];
                         this.oldContentComment = [];
+                        this.initializeMasonry();
                     }
                 }else{
                     alert('Vui lòng nhập comment');
@@ -311,7 +320,6 @@ export default {
             try {
                 let results = await this.deleteComment(id);
                 let currentListComments = this.items.filter((item) => item.id == padlet_id);
-                console.log(currentListComments);
                 let listComment;
                 listComment = currentListComments[0]['comments'].filter((_item, index) => { 
                     return _item.id != id
@@ -321,6 +329,7 @@ export default {
                         item.comments = listComment;
                     }
                 });
+                this.initializeMasonry();
             } catch (error) {
                 console.log('Error delete comment');
             }
@@ -338,15 +347,17 @@ export default {
                     this.showSend = []
                 }
             }
-        }
+        },
+        ...walltMethods,
+        ...commentMethods,
     },
     watch: { },
-    updated() {
-        //this.handleCheckComment(id);
-        if(!this.hidden)
-        this.initializeMasonry();
-        this.handleDisabledForm();  
-        this.showIconSendComment()      
+    updated() {     
+        // this.showIconSendComment();
+        // this.$nextTick(()=>{
+        //     this.handleDisabledForm();  
+        //     //this.showIconSendComment();
+        // });
         const $this = this;
         $(document).ready(function () {
             $('.nav-main').addClass('hidden-header');
@@ -360,40 +371,34 @@ export default {
                     .find(".color")
                     .css("background-color", "rgb(" + $color + ")");
             });
+            $this.handleDisabledForm();            
             autoSizeTextArea();
             function autoSizeTextArea(){
                 var text = $('.autosize');
-
                 text.each(function(){
                     $(this).attr('rows',1);
                     resize($(this));
                 });
-
                 text.on('input', function(){
+                    $this.showIconSendComment();
                     resize($(this));
                 });
-                
                 function resize ($text) {
                     $text.css('height', 'auto');
                     $text.css('height', $text[0].scrollHeight+'px');
                 }
-            }
+            }              
         });
     },
     created() {
     },
     async mounted() {
-        const $this = this;
         this.dataUser = JSON.parse(localStorage.getItem("users") || "{}");
-        //this.connect();
-        if (Object.keys(this.dataUser).length > 0) {
-            const dataRoom = {
-                room: "padlet",
-                profile_id: this.dataUser.profile_id,
-            };
-            this.joinRoom(dataRoom);
-        }
         this.items = await this.indexWall();
+        const $this = this;
+        $(document).ready(function () {
+            $this.initializeMasonry();                      
+        })
         
         // get data from server
         /*socket.on("listen data", function (data) {
@@ -421,13 +426,7 @@ export default {
 
             // socket.removeListener('listen messenger');
         });*/
-        const wow = new WOW({
-            boxClass: "wow",
-            animateClass: "animated",
-            offset: 0,
-            live: true,
-        });
-        wow.init();
+        
     },
 };
 </script>
@@ -446,7 +445,7 @@ export default {
                 <div
                     v-for="item in items"
                     :key="item.id"
-                    :class="['masonry-item wow fadeInUp pb-2 px-2 pt-2']"
+                    :class="['masonry-item pb-2 px-2 pt-2']"
                     v-bind:style="`background-color:rgb(${item.color && item.color != 'null' ? item.color : '255,255,255'})`"
                 >
                     <div class="wrap-content">

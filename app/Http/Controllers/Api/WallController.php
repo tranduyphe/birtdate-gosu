@@ -58,6 +58,7 @@ class WallController extends Controller
         if ($results) {
             $results->toArray();
             $results['users'] = $user;
+            $results['comments'] = [];
             $questType = 8;
             $record = 1;
             $this->questRepository->updateQuest($user, $questType, $record);
