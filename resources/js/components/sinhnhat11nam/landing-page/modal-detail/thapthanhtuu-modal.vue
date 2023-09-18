@@ -141,6 +141,8 @@
                                         width="30">
                                     <img v-if="item.log_item && item.log_item[0].item_id == 2" :src="iconKimcuong" alt=""
                                         width="30">
+                                    <img v-if="item.log_item && item.log_item[0].item_id == 3" :src="iconTheTiemLong" alt=""
+                                        width="30">
                                 </div>
                             </div>
                         </div>
@@ -800,6 +802,7 @@ export default {
             iconBtn: '/images/sinhnhat11nam/img_main/icon-button-task.png',
             iconLongvu: '/images/sinhnhat11nam/img_main/icon-longvu.png',
             iconKimcuong: '/images/sinhnhat11nam/img_main/icon-da-mat-trang.png',
+            iconTheTiemLong: '/images/sinhnhat11nam/img_main/img_chauthanhtich.png',
             img_chauthanhtich: '/images/sinhnhat11nam/img_main/321.png',
             img_rank1: '/images/sinhnhat11nam/img_main/rank1.png',
             img_rank2: '/images/sinhnhat11nam/img_main/rank2.png',
@@ -915,9 +918,19 @@ export default {
                                     self.$emit("updateAttrKimcuong", response.data.data.user.diamond);
                                     self.$emit("updateAttrLongvu", response.data.data.user.feathers);
                                 }
+                                
                                 if (response.data.data.log_activity) {
                                     let dataLog = response.data.data.log_activity ?? [];
                                     let logActivity = []
+                                    let dataLogTiemLong = response.data.data.log_item;
+                                    if(dataLogTiemLong){
+                                        logActivity.push({
+                                            "reason": response.data.data.log_item.reason,
+                                            "log_item": [{'item_id':3,"record":1}],
+                                            "name": response.data.data.log_item.name,
+                                            "formatted_created_at": response.data.data.log_item.formatted_created_at
+                                        });
+                                    }
                                     dataLog.forEach(element => {
                                         logActivity.push({
                                             "reason": element.reason,

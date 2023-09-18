@@ -64,7 +64,7 @@ export default {
             <img class="mb-3" :src="date_login" alt="" data-aos="fade-down">
             <img class="mb-3" :src="line_login" alt="" data-aos="fade-up">
             <div class="banner-login text-center">
-                <button type="button" class="" data-bs-toggle="modal" data-bs-target="#modalLogin" data-aos="fade-up">
+                <button type="button" class="" data-bs-toggle="modal" data-bs-target="#modalLogin">
                     <img :src="btn_login" alt="" width="" class="banner">
                 </button>
             </div>
