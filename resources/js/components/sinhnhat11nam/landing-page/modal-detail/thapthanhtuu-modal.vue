@@ -135,14 +135,16 @@
                                 <div class="item-reason col-8 p-2">
                                     <p class="m-0">{{ item.reason }}</p>
                                 </div>
-                                <div class="item-reason p-1 col-1 d-flex justify-content-evenly">
+                                <div class="item-reason p-1 col-1 d-flex justify-content-evenly align-items-center">
                                     <p v-if="item.log_item" class="m-0">{{ item.log_item[0].record ?? 0 }}</p>
                                     <img v-if="item.log_item && item.log_item[0].item_id == 1" :src="iconLongvu" alt=""
                                         width="30">
                                     <img v-if="item.log_item && item.log_item[0].item_id == 2" :src="iconKimcuong" alt=""
                                         width="30">
-                                    <img v-if="item.log_item && item.log_item[0].item_id == 3" :src="iconTheTiemLong" alt=""
-                                        width="30">
+                                    <div v-if="item.log_item && item.log_item[0].item_id == 3" class="thetiemlong">
+                                        <img :src="iconTheTiemLong" alt="" width="30">
+                                        <div class="info-the">Thẻ Tiềm Long</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1390,6 +1392,26 @@ button.goto{
 #v-tabs-thu-thach .item-task:hover:nth-child(2) .point button.goto,
 #v-tabs-thu-thach .item-task:hover:nth-child(3) .point button.goto,
 #v-tabs-thu-thach .item-task:hover:nth-child(4) .point button.goto{
+    display: block;
+}
+
+.thetiemlong{
+    position: relative;
+}
+
+.info-the{
+    display: none;
+    position: absolute;
+    width: 120px;
+    right: 130%;
+    top: -5%;
+    background-color: #efe4a3;
+    padding: 5px;
+    border-radius: 3px;
+    border: 1px solid;
+}
+
+.thetiemlong:hover img + .info-the{
     display: block;
 }
 </style>
