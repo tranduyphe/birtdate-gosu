@@ -42,6 +42,7 @@ class AuthController extends Controller
             $success['user_code'] =  $authUser->user_code;
             $success['fullname'] =  $authUser->first_name.' '.$authUser->last_name;
             $success['profile_id'] =  $authUser->profile_id;
+            $success['user_id'] =  $authUser->id;
             $results = array(
                 'message' => 'Đăng nhập thành công.',
                 'data' => $success,
@@ -76,6 +77,7 @@ class AuthController extends Controller
                         $success['user_code'] =  $authUser->user_code;
                         $success['fullname'] =  $authUser->first_name.' '.$authUser->last_name;
                         $success['profile_id'] =  $authUser->profile_id;
+                        $success['user_id'] =  $authUser->id;
                         $results = array(
                             'message' => 'Đăng nhập thành công.',
                             'data' => $success,

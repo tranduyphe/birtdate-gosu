@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Api\MediaController;
 use App\Models\Walls;
+use App\Models\User;
 use App\Repositories\Wall\WallRepository;
 use App\Repositories\QuestRepository;
 
@@ -26,7 +27,7 @@ class WallController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
+    {        
         $results = $this->wallRepo->getAllWall();
         return response()->json($results->toArray());
     }
@@ -109,12 +110,32 @@ class WallController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $liked = $request->has('liked') ? $request->get('liked') : false;
-        $arr = [
-            'liked' => $liked,
-            'data_like' => json_encode($request->get('data_like')),
-        ];
-        $results = $this->wallRepo->update($id, $arr);
+        if ($request->has('liked')) {
+            $liked = $request->has('liked') ? $request->get('liked') : false;
+            $arr = [
+                'liked' => $liked,
+                'data_like' => json_encode($request->get('data_like')),
+            ];
+        }else{            
+            $title = $request->has('title') ? $request->input('title') : '';
+            $content = $request->has('content') ? $request->input('content') : '';
+            $color = $request->has('color') ? $request->input('color') : '255,255,255';
+            $file_name = $request->has('file_name') ? $request->input('file_name') : '';
+            $data = [
+                'title'       => $title,
+                'content'     => $content,
+                'color'       => $color,
+                'file_name'       => $file_name,
+            ];
+            if ($request->has('file')) {
+                $media = MediaController::create($request);
+                $fileName = $media ? $media['name'] : '';
+                $data['file_name'] = $fileName;
+            }
+            
+        }
+        $results = $this->wallRepo->update($id, $data);
+        $results = $this->wallRepo->getWallById($id);
         return response()->json($results->toArray()); 
     }
 
