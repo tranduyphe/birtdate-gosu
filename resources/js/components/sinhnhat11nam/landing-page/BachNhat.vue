@@ -22,7 +22,7 @@ export default {
             minutes: "",
             hours: "",
             days: "",
-            targetDate: new Date("2023-09-18T00:00:00"), // Ngày đích đến
+            targetDate: new Date("2023-12-27T00:00:00"), // Ngày đích đến
             countdown: "", // Chuỗi đếm ngược
         }
     },
