@@ -157,7 +157,6 @@ export default {
                 dataUpdated['color'] = this.currentPadlets.color;
                 dataUpdated['id'] = this.currentPadlets.id;
                 dataUpdated['file_name'] = this.currentPadlets.file_name;
-            console.log(dataUpdated);
             const resultData = await this.updateWall(dataUpdated);
             if (resultData) {
                 this.currentPadlets.file_name = resultData.file_name ? resultData.file_name : '';
