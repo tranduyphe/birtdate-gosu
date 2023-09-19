@@ -77,7 +77,8 @@ export default {
             oldContentComment: [],
             showSend: [],
             currentId: false,
-            load:false
+            load:false,
+            showScroll: false,
         };
     },
     computed: {
@@ -410,6 +411,7 @@ export default {
         ...commentMethods,
         async infiniteHandler(){           
             if (this.paginations['current-page']) {
+                this.showScroll = true;
                 this.load = true;
                 let page = parseInt(this.paginations['current-page']) + 1;
                 let data = {};
@@ -434,6 +436,17 @@ export default {
                 }
                 
             }
+        },
+        scrollToTop() {
+            var element = document.getElementById("wrapper-padlet");
+            var top = element.offsetTop;
+            element.scrollTo(0, top);
+            element.scrollTo({
+                top: 0,
+                left: 0,
+                behavior: "smooth",
+            });
+            this.showScroll = false;
         }
     },
     watch: {},
@@ -533,7 +546,7 @@ export default {
 };
 </script>
 <template>
-    <div class="wrap-padlet">
+    <div class="wrap-padlet" id="wrapper-padlet">
         <div class="main-padlet">
             <div class="header-padlet container-fluid py-4 px-5">
                 <Header></Header>
@@ -925,7 +938,7 @@ export default {
             </div>
             <div class="addPadlet pulse" @click="handleShowForm">
                 <span class=""><i class="ri-add-line"></i></span>
-            </div>
+            </div>            
             <infinite-loading  @infinite="infiniteHandler"></infinite-loading>
             <!-- <div class="d-flex justify-content-center" v-if="load">
                 <div class="spinner-border text-success" role="status">
@@ -935,6 +948,9 @@ export default {
             <!-- InfiniteLoading -->
         </div>
     </div>
+    <div class="addPadlet scrolltop" @click="scrollToTop" v-if="showScroll">
+                <span class=""><i class="ri-arrow-up-s-line"></i></span>
+            </div>
     <button
         type="button"
         class="btn btn-primary showModal"
@@ -1638,6 +1654,27 @@ export default {
         font-weight: bold;
         right: 1rem;
         bottom: 1rem;
+    }
+}
+.scrolltop.addPadlet {
+    bottom: calc(1rem + 70px);
+    border: 2px solid transparent;
+    transition: all 0.1s ease;
+    transform: none;
+    &:hover {
+        background: #fff;
+        color:rgb(200, 71, 53);
+        border-color: rgb(200, 71, 53);
+        transition: all 0.1s ease;
+        i {
+            transform: none;
+            transition: all 0.1s ease;
+            &::before {
+                transform: none;
+                transition: all 0.1s ease;
+                content: "\ea78" !important;
+            }
+        }
     }
 }
 .addPadlet {
