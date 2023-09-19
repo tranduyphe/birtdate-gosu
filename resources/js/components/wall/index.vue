@@ -152,7 +152,6 @@ export default {
                 dataUpdated['color'] = this.currentPadlets.color;
                 dataUpdated['id'] = this.currentPadlets.id;
                 dataUpdated['file_name'] = this.currentPadlets.file_name;
-            console.log(dataUpdated);
             const resultData = await this.updateWall(dataUpdated);
             if (resultData) {
                 this.currentPadlets.file_name = resultData.file_name ? resultData.file_name : '';
@@ -1173,16 +1172,16 @@ export default {
                                 </div>
                             </div>
                         </div>
-                        <div class="d-flex mt-3 justify-content-end" v-if="dataUser.profile_id == currentPadlets.profile_id">
+                        <div class="d-flex mt-3 justify-content-end" v-if="currentPadlets && dataUser.profile_id == currentPadlets.users.profile_id">
                             <button
                             type="button"
-                            class="btn btn-outline-primary"
+                            class="btn btn-outline-primary btn-sm"
                             data-bs-toggle="modal"
                             data-bs-target="#editPadlet"
                             ref="editPadlet"
                             
                         >
-                            Edit
+                            Sửa
                         </button>
                         </div>
                         
