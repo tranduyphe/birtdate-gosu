@@ -157,6 +157,7 @@
 .frmLogin button{
     font-family: 'UVNLacLongQuan' !important;
 }
+
 .main-bachnhat .countdown-part{
     font-family: 'Barlow';
     background-image: url('../images/sinhnhat11nam/img_main/bg-countdown.png');
@@ -165,4 +166,8 @@
     background-size: 135px;
     width: 135px;
     height: 135px;
+}
+
+.hidden-header {
+    display: none;
 }

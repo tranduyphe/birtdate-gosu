@@ -59,10 +59,10 @@ export default {
     </div>
     <div class="effect">
         <div class="content-login d-flex flex-column align-items-center justify-content-center">
-            <img :src="logo_login" alt="" class="mb-5" data-aos="fade-down">
-            <img class="mb-5" :src="title_login" alt="" data-aos="fade-down">
-            <img class="mb-3" :src="date_login" alt="" data-aos="fade-down">
-            <img class="mb-3" :src="line_login" alt="" data-aos="fade-up">
+            <img :src="logo_login" alt="" class="mb-5" >
+            <img class="mb-5" :src="title_login" alt="" >
+            <img class="mb-3" :src="date_login" alt="" >
+            <img class="mb-3" :src="line_login" alt="" >
             <div class="banner-login text-center">
                 <button type="button" class="" data-bs-toggle="modal" data-bs-target="#modalLogin">
                     <img :src="btn_login" alt="" width="" class="banner">

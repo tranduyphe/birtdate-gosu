@@ -1,4 +1,4 @@
-const base_url = "/images/sinhnhat11nam/img_main/manh-ghep/";
+const base_url = "/images/sinhnhat11nam/img_main/manh-ghep-sua/";
 
 export const list_back = [
   {id: 1, name: 'manh', image: base_url+'A1.png'},
