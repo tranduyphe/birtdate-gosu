@@ -77,6 +77,7 @@ export default {
             oldContentComment: [],
             showSend: [],
             currentId: false,
+            load:false
         };
     },
     computed: {
@@ -408,8 +409,9 @@ export default {
         },
         ...walltMethods,
         ...commentMethods,
-        async infiniteHandler(){
+        async infiniteHandler(){           
             if (this.paginations['current-page']) {
+                this.load = true;
                 let page = parseInt(this.paginations['current-page']) + 1;
                 let data = {};
                 data['page'] = page;
@@ -427,12 +429,12 @@ export default {
                             this.$nextTick(() => {
                                 this.initializeMasonry();
                             });
+                            this.load = false;
                         }
                     }
                 }
                 
             }
-            
         }
     },
     watch: {},
@@ -534,9 +536,6 @@ export default {
 <template>
     <div class="wrap-padlet">
         <div class="main-padlet">
-            <!-- <DetailPadlet :currentPadlet="demoTest"></DetailPadlet> -->
-            <!-- <textarea v-model="postContent" placeholder="Nhập nội dung bài viết"></textarea>
-            <button @click="postToFacebook">Đăng lên Facebook</button> -->
             <div class="header-padlet container-fluid py-4 px-5">
                 <Header></Header>
             </div>
@@ -929,6 +928,11 @@ export default {
                 <span class=""><i class="ri-add-line"></i></span>
             </div>
             <infinite-loading  @infinite="infiniteHandler"></infinite-loading>
+            <!-- <div class="d-flex justify-content-center" v-if="load">
+                <div class="spinner-border text-success" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div> -->
             <!-- InfiniteLoading -->
         </div>
     </div>
@@ -1214,16 +1218,16 @@ export default {
                                 </div>
                             </div>
                         </div>
-                        <div class="d-flex mt-3 justify-content-end" v-if="dataUser.profile_id == currentPadlets.profile_id">
+                        <div class="d-flex mt-3 justify-content-end" v-if="currentPadlets && dataUser.profile_id == currentPadlets.users.profile_id">
                             <button
                             type="button"
-                            class="btn btn-outline-primary"
+                            class="btn btn-outline-primary btn-sm"
                             data-bs-toggle="modal"
                             data-bs-target="#editPadlet"
                             ref="editPadlet"
                             
                         >
-                            Edit
+                            Sửa
                         </button>
                         </div>
                         
