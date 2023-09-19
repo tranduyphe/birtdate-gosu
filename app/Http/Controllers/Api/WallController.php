@@ -26,9 +26,10 @@ class WallController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {        
-        $results = $this->wallRepo->getAllWall();
+        $page = $request->has('page') ? $request->input('page') : 1;
+        $results = $this->wallRepo->getAllWall($page);
         return response()->json($results->toArray());
     }
 

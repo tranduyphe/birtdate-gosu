@@ -18,7 +18,7 @@ const create = async (data) => {
 };
 const index = async (data) => {
     try {
-        let results = await axios.post('/api/wall');
+        let results = await axios.post('/api/wall', data);
         return results;
     } catch (error) {
         console.error('Lỗi lấy tất cả dữ liệu wall', error);
