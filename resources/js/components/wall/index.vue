@@ -1,4 +1,6 @@
 <script>
+import InfiniteLoading from "v3-infinite-loading";
+import "v3-infinite-loading/lib/style.css";
 import WOW from "wow.js";
 import "animate.css";
 import $ from "jquery";
@@ -20,9 +22,11 @@ export default {
         name: "MasonryLayout",
         DetailPadlet,
         Header,
+        InfiniteLoading
     },
     data: () => {
         return {
+            paginations:false,
             publicPath: process.env.PUBLIC_URL + "uploads/",
             items: [],
             listColor: [
@@ -404,6 +408,32 @@ export default {
         },
         ...walltMethods,
         ...commentMethods,
+        async infiniteHandler(){
+            if (this.paginations['current-page']) {
+                let page = parseInt(this.paginations['current-page']) + 1;
+                let data = {};
+                data['page'] = page;
+                if (page <= parseInt(this.paginations['total-page'])) {
+                    let dataFetch = await this.indexWall(data);
+                    if (dataFetch.data) {
+                        this.paginations = {}
+                        this.paginations['current-page'] = page;
+                        this.paginations['total-page'] = dataFetch.last_page;
+                        if (dataFetch.data.length > 0) {
+                            for (let index = 0; index < dataFetch.data.length; index++) {
+                                const element = dataFetch.data[index];
+                                this.items.push(element);
+                            }
+                            this.$nextTick(() => {
+                                this.initializeMasonry();
+                            });
+                        }
+                    }
+                }
+                
+            }
+            
+        }
     },
     watch: {},
     updated() {
@@ -442,7 +472,16 @@ export default {
     created() {},
     async mounted() {
         this.dataUser = JSON.parse(localStorage.getItem("users") || "{}");
-        this.items = await this.indexWall();
+        // let dataFetch = await this.indexWall();
+        // this.items = await this.indexWall();
+        let dataFetch = await this.indexWall();
+        if (dataFetch.data) {
+            this.paginations = {}
+            this.paginations['current-page'] = dataFetch.current_page;
+            this.paginations['total-page'] = dataFetch.last_page;
+            this.items = dataFetch.data;
+        }
+
         const $this = this;
         $(document).ready(function () {
             $this.initializeMasonry();
@@ -889,6 +928,8 @@ export default {
             <div class="addPadlet pulse" @click="handleShowForm">
                 <span class=""><i class="ri-add-line"></i></span>
             </div>
+            <infinite-loading  @infinite="infiniteHandler"></infinite-loading>
+            <!-- InfiniteLoading -->
         </div>
     </div>
     <button
