@@ -22,6 +22,10 @@ mix.js('resources/js/app.js', 'public/assets/js')
         resolve: {
             alias: {
                 '@': path.resolve(__dirname, 'resources/js/'),
+                "v3-infinite-loading$": path.resolve(
+                    __dirname,
+                    "node_modules/v3-infinite-loading/lib/v3-infinite-loading.es.js",
+                ),
             },
             extensions: [".*",".wasm",".mjs",".js",".jsx",".json",".vue"]
         },

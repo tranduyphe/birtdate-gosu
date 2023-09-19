@@ -20,7 +20,7 @@ class WallRepository extends BaseRepository implements WallRepositoryInterface
     }
 
     public function getAllWall($page){
-        $perPage = 20;
+        $perPage = 30;
         return $this->model->with(['comments', 'users'])->paginate($perPage, ['*'], 'page', $page);
     }
 
