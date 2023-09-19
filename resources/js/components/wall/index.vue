@@ -481,6 +481,13 @@ export default {
                     $text.css("height", $text[0].scrollHeight + "px");
                 }
             }
+            $('#wrapper-padlet').scroll(function() {
+                if ($(this).scrollTop() > 500) {
+                    $this.showScroll = true
+                } else {
+                    $this.showScroll = false
+                }
+            });
         });
     },
     created() {},
