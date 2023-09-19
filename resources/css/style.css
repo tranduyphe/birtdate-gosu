@@ -171,3 +171,7 @@
 .hidden-header {
     display: none;
 }
+
+.spinner {
+    display: none !important;
+}
