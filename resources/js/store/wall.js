@@ -15,8 +15,8 @@ const actions = {
             return results.data;
         }
     },
-    async indexWall({ commit }) {
-        let results = await index();
+    async indexWall({ commit }, data) {
+        let results = await index(data);
         if (results.status == 200) {
             commit('SET_LISTWALL', results.data);
             return results.data;

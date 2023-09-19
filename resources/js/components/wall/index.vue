@@ -1,4 +1,6 @@
 <script>
+import InfiniteLoading from "v3-infinite-loading";
+import "v3-infinite-loading/lib/style.css";
 import WOW from "wow.js";
 import "animate.css";
 import $ from "jquery";
@@ -20,9 +22,11 @@ export default {
         name: "MasonryLayout",
         DetailPadlet,
         Header,
+        InfiniteLoading
     },
     data: () => {
         return {
+            paginations:false,
             publicPath: process.env.PUBLIC_URL + "uploads/",
             items: [],
             listColor: [
@@ -73,6 +77,7 @@ export default {
             oldContentComment: [],
             showSend: [],
             currentId: false,
+            load:false
         };
     },
     computed: {
@@ -404,6 +409,33 @@ export default {
         },
         ...walltMethods,
         ...commentMethods,
+        async infiniteHandler(){           
+            if (this.paginations['current-page']) {
+                this.load = true;
+                let page = parseInt(this.paginations['current-page']) + 1;
+                let data = {};
+                data['page'] = page;
+                if (page <= parseInt(this.paginations['total-page'])) {
+                    let dataFetch = await this.indexWall(data);
+                    if (dataFetch.data) {
+                        this.paginations = {}
+                        this.paginations['current-page'] = page;
+                        this.paginations['total-page'] = dataFetch.last_page;
+                        if (dataFetch.data.length > 0) {
+                            for (let index = 0; index < dataFetch.data.length; index++) {
+                                const element = dataFetch.data[index];
+                                this.items.push(element);
+                            }
+                            this.$nextTick(() => {
+                                this.initializeMasonry();
+                            });
+                            this.load = false;
+                        }
+                    }
+                }
+                
+            }
+        }
     },
     watch: {},
     updated() {
@@ -442,7 +474,16 @@ export default {
     created() {},
     async mounted() {
         this.dataUser = JSON.parse(localStorage.getItem("users") || "{}");
-        this.items = await this.indexWall();
+        // let dataFetch = await this.indexWall();
+        // this.items = await this.indexWall();
+        let dataFetch = await this.indexWall();
+        if (dataFetch.data) {
+            this.paginations = {}
+            this.paginations['current-page'] = dataFetch.current_page;
+            this.paginations['total-page'] = dataFetch.last_page;
+            this.items = dataFetch.data;
+        }
+
         const $this = this;
         $(document).ready(function () {
             $this.initializeMasonry();
@@ -495,9 +536,6 @@ export default {
 <template>
     <div class="wrap-padlet">
         <div class="main-padlet">
-            <!-- <DetailPadlet :currentPadlet="demoTest"></DetailPadlet> -->
-            <!-- <textarea v-model="postContent" placeholder="Nhập nội dung bài viết"></textarea>
-            <button @click="postToFacebook">Đăng lên Facebook</button> -->
             <div class="header-padlet container-fluid py-4 px-5">
                 <Header></Header>
             </div>
@@ -889,6 +927,13 @@ export default {
             <div class="addPadlet pulse" @click="handleShowForm">
                 <span class=""><i class="ri-add-line"></i></span>
             </div>
+            <infinite-loading  @infinite="infiniteHandler"></infinite-loading>
+            <!-- <div class="d-flex justify-content-center" v-if="load">
+                <div class="spinner-border text-success" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div> -->
+            <!-- InfiniteLoading -->
         </div>
     </div>
     <button
@@ -1173,16 +1218,16 @@ export default {
                                 </div>
                             </div>
                         </div>
-                        <div class="d-flex mt-3 justify-content-end" v-if="dataUser.profile_id == currentPadlets.profile_id">
+                        <div class="d-flex mt-3 justify-content-end" v-if="currentPadlets && dataUser.profile_id == currentPadlets.users.profile_id">
                             <button
                             type="button"
-                            class="btn btn-outline-primary"
+                            class="btn btn-outline-primary btn-sm"
                             data-bs-toggle="modal"
                             data-bs-target="#editPadlet"
                             ref="editPadlet"
                             
                         >
-                            Edit
+                            Sửa
                         </button>
                         </div>
                         
