@@ -131,7 +131,8 @@ export default {
             const resultData = await this.createWall(this.data);
             if (resultData) {
                 this.handleShowForm();
-                this.items.push(resultData);
+                //this.items.push(resultData);
+                this.items.unshift(resultData);
                 this.data = {
                     title: null,
                     content: null,

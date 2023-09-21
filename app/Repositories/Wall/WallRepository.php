@@ -21,7 +21,7 @@ class WallRepository extends BaseRepository implements WallRepositoryInterface
 
     public function getAllWall($page){
         $perPage = 30;
-        return $this->model->with(['comments', 'users'])->paginate($perPage, ['*'], 'page', $page);
+        return $this->model->with(['comments', 'users'])->orderBy('id', 'DESC')->paginate($perPage, ['*'], 'page', $page);
     }
 
     public function getWallById($id){
