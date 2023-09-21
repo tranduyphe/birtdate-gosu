@@ -111,21 +111,21 @@ class HomeController extends Controller
         for ($i = 0; $i < 198; $i++) {
 
             
-            // $data[] = [
-            //     "user_id" => 0,
-            //     "is_open" => 1
-            // ];
-            if (!empty($result[$i])) {
-                $data[] = [
-                    "user_id" => $result[$i]['id'],
-                    "is_open" => $result[$i]['is_open']
-                ];
-            } else {
-                $data[] = [
-                    "user_id" => 0,
-                    "is_open" => 0
-                ];
-            }
+            $data[] = [
+                "user_id" => 0,
+                "is_open" => 1
+            ];
+            // if (!empty($result[$i])) {
+            //     $data[] = [
+            //         "user_id" => $result[$i]['id'],
+            //         "is_open" => $result[$i]['is_open']
+            //     ];
+            // } else {
+            //     $data[] = [
+            //         "user_id" => 0,
+            //         "is_open" => 0
+            //     ];
+            // }
         }
         $response = [
             "status" => 200,
