@@ -165,6 +165,6 @@ export default {
 
 .brightness-manhghep{
     opacity: 1 !important;
-    filter: brightness(140%) !important;
+    filter: brightness(120%) !important;
 }
 </style>
