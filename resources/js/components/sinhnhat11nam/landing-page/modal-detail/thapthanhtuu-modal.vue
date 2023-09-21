@@ -136,7 +136,11 @@
                                     <p class="m-0">{{ item.reason }}</p>
                                 </div>
                                 <div class="item-reason p-1 col-1 d-flex justify-content-evenly align-items-center">
-                                    <p v-if="item.log_item" class="m-0">{{ item.log_item[0].record ?? 0 }}</p>
+
+
+                                    <p v-if="item.log_item && item.reason =='Tham gia thử thách Bài Trùng tại Nhà Thi Đấu Xoẹt Xoẹt.'" class="m-0">{{ item.log_item[0].record * (-1) ?? 0 }}</p>
+                                    <p v-if="item.log_item && item.reason !=='Tham gia thử thách Bài Trùng tại Nhà Thi Đấu Xoẹt Xoẹt.'" class="m-0">{{ item.log_item[0].record ?? 0 }}</p>
+
                                     <img v-if="item.log_item && item.log_item[0].item_id == 1" :src="iconLongvu" alt=""
                                         width="30">
                                     <img v-if="item.log_item && item.log_item[0].item_id == 2" :src="iconKimcuong" alt=""
